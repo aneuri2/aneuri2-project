@@ -1,9 +1,316 @@
-/* Custom CSS & Glassmorphism styles */
+/* ============================================================
+   오늘의 빵 추첨기 (Jonghwan's Bakery Picker) Stylesheet
+   다크모드 / 화이트모드 테마 시스템 & 반응형 디자인
+   ============================================================ */
+
+:root {
+  /* 화이트 모드 (기본) */
+  --bg-radial-1: #fce8d5;
+  --bg-radial-2: #f6dfc9;
+  --cream: #fff8ed;
+  --paper: #ffffff;
+  --brown: #493326;
+  --muted: #8b7768;
+  --orange: #d97745;
+  --orange-dark: #b95e31;
+  --peach: #f8e3d2;
+  --peach-text: #b95e31;
+  --line: #f0dfcf;
+  --result-bg: linear-gradient(145deg, #fff2e5, #fce4d1);
+  --result-border: #f4d7c0;
+  --bread-desc: #806b5c;
+  --shadow: 0 22px 65px rgba(92, 57, 30, 0.12);
+  --chip-bg: #fff4e9;
+  --chip-border: #f0dfcf;
+  --chip-text: #493326;
+  --toggle-bg: #ffffff;
+  --toggle-border: #ebd7c4;
+  --toggle-text: #493326;
+  --toggle-shadow: 0 6px 18px rgba(92, 57, 30, 0.1);
+  --btn-shadow: 0 9px 22px rgba(217, 119, 69, 0.28);
+}
+
+[data-theme="dark"] {
+  /* 다크 모드 */
+  --bg-radial-1: #241c17;
+  --bg-radial-2: #2b2019;
+  --cream: #171311;
+  --paper: #231b16;
+  --brown: #f5ede4;
+  --muted: #ad9a8c;
+  --orange: #e88554;
+  --orange-dark: #f59768;
+  --peach: #3d2a20;
+  --peach-text: #f8b087;
+  --line: #3d2e25;
+  --result-bg: linear-gradient(145deg, #2c221c, #352820);
+  --result-border: #4a372c;
+  --bread-desc: #c7b5a7;
+  --shadow: 0 22px 65px rgba(0, 0, 0, 0.55);
+  --chip-bg: #2e231d;
+  --chip-border: #44342a;
+  --chip-text: #f5ede4;
+  --toggle-bg: #2b211a;
+  --toggle-border: #4a372c;
+  --toggle-text: #f5ede4;
+  --toggle-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --btn-shadow: 0 9px 24px rgba(232, 133, 84, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 30px 20px;
+  color: var(--brown);
+  background:
+    radial-gradient(circle at 12% 12%, var(--bg-radial-1) 0 8%, transparent 8.2%),
+    radial-gradient(circle at 90% 85%, var(--bg-radial-2) 0 10%, transparent 10.2%),
+    var(--cream);
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+/* 테마 토글 버튼 컨테이너 */
+.theme-switch-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--toggle-bg);
+  border: 1px solid var(--toggle-border);
+  color: var(--toggle-text);
+  border-radius: 9999px;
+  padding: 9px 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--toggle-shadow);
+  transition: all 0.22s ease;
+  width: auto;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.theme-icon {
+  font-size: 1.15rem;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* 메인 앱 카드 */
+.app {
+  width: min(560px, 100%);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  padding: 38px 30px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.label {
+  display: inline-block;
+  background: var(--peach);
+  color: var(--peach-text);
+  border-radius: 999px;
+  padding: 7px 15px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1 {
+  margin: 18px 0 8px;
+  font-size: clamp(1.9rem, 6.5vw, 2.6rem);
+  letter-spacing: -0.05em;
+  color: var(--brown);
+  font-weight: 900;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin: 0 0 25px;
+  font-size: 0.98rem;
+  transition: color 0.3s ease;
+}
+
+/* 추첨 결과 영역 */
+.result {
+  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: var(--result-bg);
+  border: 1px solid var(--result-border);
+  border-radius: 26px;
+  padding: 28px 20px;
+  margin: 22px 0;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.bread {
+  font-size: 6.2rem;
+  line-height: 1.2;
+  filter: drop-shadow(0 8px 6px rgba(0, 0, 0, 0.15));
+  user-select: none;
+  transform-origin: center bottom;
+}
+
+@keyframes breadPop {
+  0% { transform: scale(0.5) rotate(-12deg); opacity: 0; }
+  60% { transform: scale(1.18) rotate(5deg); opacity: 1; }
+  85% { transform: scale(0.95) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.bread.pop {
+  animation: breadPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bread-name {
+  font-size: 1.85rem;
+  font-weight: 900;
+  margin-top: 14px;
+  color: var(--brown);
+  letter-spacing: -0.03em;
+}
+
+.bread-desc {
+  color: var(--bread-desc);
+  margin-top: 8px;
+  font-size: 0.96rem;
+  max-width: 90%;
+  line-height: 1.45;
+  transition: color 0.3s ease;
+}
+
+/* 추첨 버튼 */
+.btn-pick {
+  width: 100%;
+  border: 0;
+  border-radius: 18px;
+  padding: 17px 22px;
+  background: var(--orange);
+  color: #ffffff;
+  font-size: 1.12rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: var(--btn-shadow);
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  letter-spacing: -0.02em;
+}
+
+.btn-pick:hover {
+  background: var(--orange-dark);
+  transform: translateY(-2px);
+}
+
+.btn-pick:active {
+  transform: translateY(1px);
+}
+
+.hint {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  transition: color 0.3s ease;
+}
+
+/* 최근 기록 섹션 */
+.history {
+  margin-top: 28px;
+  text-align: left;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.history-header h2 {
+  font-size: 1.02rem;
+  margin: 0;
+  font-weight: 800;
+  color: var(--brown);
+}
+
+.btn-clear {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-clear:hover {
+  color: var(--orange);
+  text-decoration: underline;
+}
+
+#historyList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background: var(--chip-bg);
+  border: 1px solid var(--chip-border);
+  color: var(--chip-text);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  animation: fadeIn 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.chip-empty {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 스크롤바 커스텀 */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -11,15 +318,35 @@ html {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.4);
+  background: var(--line);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(156, 163, 175, 0.7);
+  background: var(--muted);
 }
 
-/* Subtle selection */
-::selection {
-  background: #3b82f6;
-  color: #ffffff;
+/* 반응형 스타일 */
+@media (max-width: 480px) {
+  body {
+    padding: 20px 14px;
+    padding-top: 70px;
+  }
+  .theme-switch-container {
+    top: 14px;
+    right: 14px;
+  }
+  .app {
+    padding: 28px 18px;
+    border-radius: 26px;
+  }
+  .result {
+    min-height: 230px;
+    padding: 20px 14px;
+  }
+  .bread {
+    font-size: 5rem;
+  }
+  .bread-name {
+    font-size: 1.55rem;
+  }
 }

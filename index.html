@@ -1,138 +1,53 @@
-from pathlib import Path
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>오늘의 빵 추첨기 🥐</title>
-  <style>
-    :root {
-      --cream: #fff8ed;
-      --paper: #fffdf9;
-      --brown: #493326;
-      --muted: #8b7768;
-      --orange: #d97745;
-      --orange-dark: #b95e31;
-      --peach: #f8e3d2;
-      --line: #f0dfcf;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh; display: grid; place-items: center;
-      padding: 24px; color: var(--brown); background:
-      radial-gradient(circle at 12% 12%, #fce8d5 0 8%, transparent 8.2%),
-      radial-gradient(circle at 90% 85%, #f6dfc9 0 10%, transparent 10.2%),
-      var(--cream);
-      font-family: "Pretendard", "Noto Sans KR", system-ui, sans-serif;
-    }
-    .app {
-      width: min(560px, 100%); background: var(--paper); border: 1px solid var(--line);
-      border-radius: 30px; padding: 34px 28px; text-align: center;
-      box-shadow: 0 22px 65px rgba(92, 57, 30, .12);
-    }
-    .label {
-      display: inline-block; background: var(--peach); color: var(--orange-dark);
-      border-radius: 999px; padding: 7px 13px; font-size: .82rem; font-weight: 800;
-      letter-spacing: .04em;
-    }
-    h1 { margin: 17px 0 8px; font-size: clamp(2rem, 7vw, 2.8rem); letter-spacing: -.06em; }
-    .subtitle { color: var(--muted); margin: 0 0 25px; }
-    .result {
-      min-height: 260px; display: flex; flex-direction: column; justify-content: center;
-      align-items: center; background: linear-gradient(145deg, #fff2e5, #fce4d1);
-      border: 1px solid #f4d7c0; border-radius: 24px; padding: 24px; margin: 20px 0;
-    }
-    .bread { font-size: 6rem; line-height: 1.2; filter: drop-shadow(0 8px 5px rgba(90,50,20,.12)); }
-    .bread-name { font-size: 1.8rem; font-weight: 900; margin-top: 12px; }
-    .bread-desc { color: #806b5c; margin-top: 7px; font-size: .95rem; }
-    button {
-      width: 100%; border: 0; border-radius: 15px; padding: 16px 20px;
-      background: var(--orange); color: white; font-size: 1.08rem; font-weight: 900;
-      cursor: pointer; box-shadow: 0 9px 20px rgba(217,119,69,.23);
-      transition: transform .18s, background .18s;
-    }
-    button:hover { background: var(--orange-dark); transform: translateY(-2px); }
-    button:active { transform: translateY(1px); }
-    .hint { margin: 17px 0 0; color: var(--muted); font-size: .82rem; }
-    .history { margin-top: 25px; text-align: left; }
-    .history h2 { font-size: 1rem; margin: 0 0 10px; }
-    #historyList { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip { background: #fff4e9; border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; font-size: .82rem; }
-    @media (max-width: 420px) { .app { padding: 28px 18px; } .result { min-height: 230px; } }
-  </style>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 </head>
 <body>
+  <!-- 다크모드 / 화이트모드 토글 버튼 -->
+  <aside class="theme-switch-container">
+    <button id="themeToggle" class="theme-toggle-btn" type="button" aria-label="테마 전환" title="다크모드 / 화이트모드 전환">
+      <span class="theme-icon" id="themeIcon">🌙</span>
+      <span class="theme-label" id="themeLabel">다크모드</span>
+    </button>
+  </aside>
+
+  <!-- 메인 앱 카드 -->
   <main class="app">
-    <span class="label">JONGHWAN'S BAKERY PICKER</span>
+    <div class="header-tags">
+      <span class="label">JONGHWAN'S BAKERY PICKER</span>
+    </div>
     <h1>오늘은 무슨 빵 먹지? 🥐</h1>
     <p class="subtitle">고민은 그만! 버튼을 눌러 오늘의 빵을 뽑아보세요.</p>
 
+    <!-- 추첨 결과 -->
     <section class="result" aria-live="polite" aria-atomic="true">
       <div class="bread" id="breadEmoji">🍞</div>
       <div class="bread-name" id="breadName">오늘의 빵을 기다리는 중!</div>
       <div class="bread-desc" id="breadDesc">아래 버튼을 눌러 빵을 추첨해 보세요.</div>
     </section>
 
-    <button id="pickButton" type="button">🎲 빵 랜덤 추첨하기!</button>
-    <p class="hint">총 15가지 빵 중 하나를 무작위로 추천해 드려요.</p>
+    <!-- 추첨 액션 버튼 -->
+    <button id="pickButton" class="btn-pick" type="button">🎲 빵 랜덤 추첨하기!</button>
+    <p class="hint">총 15가지 맛있는 빵 중 하나를 무작위로 추천해 드려요.</p>
 
+    <!-- 최근 추첨 기록 -->
     <section class="history">
-      <h2>최근 뽑은 빵</h2>
-      <div id="historyList"><span class="chip">아직 추첨 기록이 없어요.</span></div>
+      <div class="history-header">
+        <h2>최근 뽑은 빵</h2>
+        <button id="clearHistoryBtn" type="button" class="btn-clear" title="추첨 기록 비우기">기록 비우기</button>
+      </div>
+      <div id="historyList">
+        <span class="chip chip-empty">아직 추첨 기록이 없어요.</span>
+      </div>
     </section>
   </main>
 
-  <script>
-    const breads = [
-      { name: "크루아상", emoji: "🥐", desc: "겉은 바삭하고 속은 결대로 부드러운 클래식!" },
-      { name: "소금빵", emoji: "🥖", desc: "고소한 버터 향과 짭짤한 소금의 조합." },
-      { name: "베이글", emoji: "🥯", desc: "쫄깃하고 든든해서 한 끼로도 좋아요." },
-      { name: "식빵", emoji: "🍞", desc: "그냥 먹어도, 구워 먹어도 맛있는 기본의 맛." },
-      { name: "단팥빵", emoji: "🥯", desc: "달콤한 팥 앙금이 가득한 추억의 빵." },
-      { name: "크림빵", emoji: "🍞", desc: "부드럽고 달콤한 크림으로 기분 전환!" },
-      { name: "소보로빵", emoji: "🧁", desc: "바삭바삭한 소보로 토핑이 매력적이에요." },
-      { name: "마늘빵", emoji: "🥖", desc: "마늘과 버터의 풍미가 입맛을 깨워줘요." },
-      { name: "앙버터", emoji: "🥐", desc: "팥과 버터의 달콤짭짤한 환상 조합." },
-      { name: "치아바타", emoji: "🥖", desc: "담백하고 쫄깃한 이탈리아식 빵." },
-      { name: "멜론빵", emoji: "🍈", desc: "겉면의 달콤하고 바삭한 쿠키 반죽이 포인트." },
-      { name: "슈크림빵", emoji: "🍮", desc: "커스터드 크림이 부드럽게 가득!" },
-      { name: "꽈배기", emoji: "🍩", desc: "설탕 솔솔 뿌린 쫀득하고 친근한 간식." },
-      { name: "바게트", emoji: "🥖", desc: "바삭한 껍질과 담백한 속살을 즐겨보세요." },
-      { name: "에그타르트", emoji: "🥧", desc: "바삭한 페이스트리와 달콤한 커스터드의 만남." }
-    ];
-
-    const pickButton = document.getElementById("pickButton");
-    const breadEmoji = document.getElementById("breadEmoji");
-    const breadName = document.getElementById("breadName");
-    const breadDesc = document.getElementById("breadDesc");
-    const historyList = document.getElementById("historyList");
-    const history = [];
-
-    pickButton.addEventListener("click", () => {
-      // 이전 결과와 다른 빵이 나오도록 선택지를 구성합니다.
-      const choices = breads.filter(bread => bread.name !== breadName.textContent);
-      const picked = choices[Math.floor(Math.random() * choices.length)];
-
-      breadEmoji.textContent = picked.emoji;
-      breadName.textContent = picked.name;
-      breadDesc.textContent = picked.desc;
-
-      history.unshift(picked);
-      if (history.length > 5) history.pop();
-      historyList.innerHTML = "";
-      history.forEach(item => {
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = `${item.emoji} ${item.name}`;
-        historyList.appendChild(chip);
-      });
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
-'''
-
-path = Path("/mnt/data/index.html")
-path.write_text(html, encoding="utf-8")
-print("빵 랜덤 추첨기 index.html 파일을 만들었습니다.")
