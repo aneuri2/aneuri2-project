@@ -52,8 +52,13 @@
     #map { flex: 1; height: 100%; z-index: 1; background: #e5e3df; }
     
     /* custom marker & popup */
-    .custom-marker { background: #e86a33; border: 2px solid #fff; border-radius: 50%; width: 34px !important; height: 34px !important; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 3px 8px rgba(0,0,0,0.3); font-size: 16px; transition: transform 0.2s; }
-    .custom-marker:hover { transform: scale(1.15); background: #2c1810; }
+    .custom-marker-wrap { background: transparent !important; border: none !important; }
+    .custom-marker { background: #e86a33; border: 2.5px solid #fff; border-radius: 50%; width: 36px !important; height: 36px !important; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 15px; transition: transform 0.2s, background 0.2s; cursor: pointer; }
+    .custom-marker:hover { transform: scale(1.2); background: #2c1810; }
+    
+    /* 지도 레이어 컨트롤 스타일 */
+    .leaflet-control-layers { border-radius: 10px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.12) !important; border: 1px solid #ebd9c8 !important; font-family: 'Pretendard', sans-serif !important; font-size: 12px !important; font-weight: 600 !important; }
+    .leaflet-control-layers-expanded { padding: 10px 14px !important; color: #2c1810 !important; }
     
     .leaflet-popup-content-wrapper { padding: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: none; }
     .leaflet-popup-content { margin: 0; width: 280px !important; font-family: 'Pretendard', sans-serif; }
@@ -198,11 +203,31 @@
     // 줌 컨트롤 위치 조정
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    // Leaflet 타일 레이어 (CartoDB Positron - 감성적이고 깔끔한 지도)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      maxZoom: 19
-    }).addTo(map);
+    // Leaflet 타일 레이어 (대한민국 한글 지명 및 상세 도로망 완벽 지원, API 키/워터마크 없음)
+    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+    });
+
+    const osmHotLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors, Humanitarian style'
+    });
+
+    const esriLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: 'Tiles &copy; Esri'
+    });
+
+    // 기본 지도 적용
+    osmLayer.addTo(map);
+
+    // 우측 상단 지도 레이어 컨트롤 추가
+    L.control.layers({
+      "기본 한글 지도": osmLayer,
+      "따뜻한 감성 지도": osmHotLayer,
+      "상세 도로 지도": esriLayer
+    }, null, { position: 'topright' }).addTo(map);
 
     let markers = [];
     let currentData = [...rawData];
@@ -219,9 +244,10 @@
 
         const customIcon = L.divIcon({
           className: 'custom-marker-wrap',
-          html: `<div class="custom-marker"><i class="fa-solid fa-bread-slice"></i></div>`,
-          iconSize: [34, 34],
-          iconAnchor: [17, 17]
+          html: `<div class="custom-marker" title="${item.name}"><i class="fa-solid fa-bread-slice"></i></div>`,
+          iconSize: [36, 36],
+          iconAnchor: [18, 18],
+          popupAnchor: [0, -18]
         });
 
         const marker = L.marker([item.lat, item.lng], { icon: customIcon }).addTo(map);
@@ -336,10 +362,12 @@
         
         // 필터 전환 시 지도 카메라 이동
         const reg = e.target.dataset.region;
-        if(reg === '서울') map.flyTo([37.55, 126.98], 11);
-        else if(reg === '대전') map.flyTo([36.33, 127.38], 12);
-        else if(reg === '청주/충청') map.flyTo([36.65, 127.46], 11);
-        else if(reg === '전체') map.flyTo([35.8, 127.8], 7);
+        if(reg === '서울') map.flyTo([37.55, 126.98], 11, { duration: 1 });
+        else if(reg === '대전') map.flyTo([36.33, 127.38], 12, { duration: 1 });
+        else if(reg === '청주/충청') map.flyTo([36.65, 127.46], 11, { duration: 1 });
+        else if(reg === '경상/전라') map.flyTo([35.6, 128.2], 8, { duration: 1 });
+        else if(reg === '해외/기타') map.flyTo([35.65, 139.7], 11, { duration: 1 });
+        else if(reg === '전체') map.flyTo([35.8, 127.8], 7, { duration: 1 });
         
         filterData();
       });
