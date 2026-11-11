@@ -3,51 +3,351 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>오늘의 빵 추첨기 🥐</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <title>jjh_143 전국 빵지순례 지도</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; color: #333; background: #fdfbf7; height: 100vh; overflow: hidden; }
+    #app { display: flex; height: 100vh; width: 100vw; position: relative; }
+    
+    /* 사이드바 */
+    #sidebar { width: 380px; background: #ffffff; border-right: 1px solid #eae3d2; display: flex; flex-direction: column; z-index: 1000; box-shadow: 4px 0 15px rgba(0,0,0,0.05); transition: transform 0.3s ease; }
+    .header { padding: 24px 20px 16px; background: #faf6ee; border-bottom: 1px solid #eee5d3; }
+    .header-badge { display: inline-block; background: #e86a33; color: white; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .header h1 { font-size: 22px; color: #2c1810; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .header p { font-size: 13px; color: #7a6858; line-height: 1.4; }
+
+    /* 필터 & 검색 */
+    .controls { padding: 12px 20px; border-bottom: 1px solid #f0e6d5; background: #fff; }
+    .search-box { position: relative; margin-bottom: 10px; }
+    .search-box i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #a09383; font-size: 14px; }
+    .search-box input { width: 100%; padding: 9px 12px 9px 36px; border: 1px solid #e0d5c1; border-radius: 8px; font-size: 13px; outline: none; background: #faf8f5; transition: all 0.2s; }
+    .search-box input:focus { border-color: #e86a33; background: #fff; box-shadow: 0 0 0 3px rgba(232,106,51,0.1); }
+    
+    .filter-tags { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .filter-tags::-webkit-scrollbar { display: none; }
+    .tag-btn { padding: 6px 12px; font-size: 12px; border-radius: 20px; border: 1px solid #e2d7c5; background: #fff; color: #665749; cursor: pointer; white-space: nowrap; font-weight: 500; transition: all 0.2s; }
+    .tag-btn.active { background: #2c1810; color: #fff; border-color: #2c1810; font-weight: 600; }
+    
+    /* 베이커리 리스트 */
+    .bakery-list { flex: 1; overflow-y: auto; padding: 12px 16px; }
+    .bakery-card { padding: 14px; border-radius: 12px; border: 1px solid #eee4d5; background: #fff; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; }
+    .bakery-card:hover { transform: translateY(-2px); border-color: #e86a33; box-shadow: 0 4px 12px rgba(232,106,51,0.1); }
+    .bakery-card.active { border-color: #e86a33; background: #fffbf7; }
+    .bakery-img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #f3efe6; }
+    .bakery-info { flex: 1; min-width: 0; }
+    .bakery-name { font-size: 15px; font-weight: 700; color: #2c1810; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bakery-loc { font-size: 12px; color: #8c7a6b; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+    .bakery-menus { display: flex; flex-wrap: wrap; gap: 4px; }
+    .menu-chip { font-size: 11px; background: #f5ebe0; color: #e86a33; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+
+    /* 지도 메인 */
+    #map { flex: 1; height: 100%; z-index: 1; background: #e5e3df; }
+    
+    /* custom marker & popup */
+    .custom-marker { background: #e86a33; border: 2px solid #fff; border-radius: 50%; width: 34px !important; height: 34px !important; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 3px 8px rgba(0,0,0,0.3); font-size: 16px; transition: transform 0.2s; }
+    .custom-marker:hover { transform: scale(1.15); background: #2c1810; }
+    
+    .leaflet-popup-content-wrapper { padding: 0; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: none; }
+    .leaflet-popup-content { margin: 0; width: 280px !important; font-family: 'Pretendard', sans-serif; }
+    .popup-card { width: 100%; }
+    .popup-img-wrap { width: 100%; height: 150px; position: relative; background: #f3efe6; overflow: hidden; }
+    .popup-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .popup-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); color: white; font-size: 10px; padding: 3px 8px; border-radius: 10px; }
+    .popup-body { padding: 16px; }
+    .popup-title { font-size: 16px; font-weight: 700; color: #2c1810; margin-bottom: 4px; }
+    .popup-loc { font-size: 12px; color: #8c7a6b; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
+    .popup-menus { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+    .popup-review { font-size: 12.5px; color: #4a3e35; line-height: 1.45; background: #faf6f0; padding: 10px; border-radius: 8px; border-left: 3px solid #e86a33; }
+    .popup-review i { color: #e86a33; margin-right: 4px; }
+    
+    @media (max-width: 768px) {
+      #app { flex-direction: column-reverse; }
+      #sidebar { width: 100%; height: 45vh; }
+      #map { height: 55vh; }
+    }
+  </style>
 </head>
 <body>
-  <!-- 다크모드 / 화이트모드 토글 버튼 -->
-  <aside class="theme-switch-container">
-    <button id="themeToggle" class="theme-toggle-btn" type="button" aria-label="테마 전환" title="다크모드 / 화이트모드 전환">
-      <span class="theme-icon" id="themeIcon">🌙</span>
-      <span class="theme-label" id="themeLabel">다크모드</span>
-    </button>
-  </aside>
-
-  <!-- 메인 앱 카드 -->
-  <main class="app">
-    <div class="header-tags">
-      <span class="label">JONGHWAN'S BAKERY PICKER</span>
+  <div id="app">
+    <!-- 사이드바 -->
+    <div id="sidebar">
+      <div class="header">
+        <span class="header-badge"><i class="fa-solid fa-cookie-bite"></i> jjh_143 ARCHIVE</span>
+        <h1>전국 빵지순례 지도 <span style="font-size:14px; color:#e86a33; font-weight:600;" id="count-text">(69)</span></h1>
+        <p>jjh_143 블로그에 직접 기록된 전국 빵집 컬렉션입니다.</p>
+      </div>
+      
+      <div class="controls">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="빵집 이름, 지역, 대표 메뉴 검색...">
+        </div>
+        <div class="filter-tags">
+          <button class="tag-btn active" data-region="전체">전체</button>
+          <button class="tag-btn" data-region="서울">서울</button>
+          <button class="tag-btn" data-region="대전">대전</button>
+          <button class="tag-btn" data-region="청주/충청">청주/충청</button>
+          <button class="tag-btn" data-region="경상/전라">경상/전라</button>
+          <button class="tag-btn" data-region="해외/기타">해외/기타</button>
+        </div>
+      </div>
+      
+      <div class="bakery-list" id="bakery-list">
+        <!-- JS로 동적 생성 -->
+      </div>
     </div>
-    <h1>오늘은 무슨 빵 먹지? 🥐</h1>
-    <p class="subtitle">고민은 그만! 버튼을 눌러 오늘의 빵을 뽑아보세요.</p>
+    
+    <!-- 지도 영역 -->
+    <div id="map"></div>
+  </div>
 
-    <!-- 추첨 결과 -->
-    <section class="result" aria-live="polite" aria-atomic="true">
-      <div class="bread" id="breadEmoji">🍞</div>
-      <div class="bread-name" id="breadName">오늘의 빵을 기다리는 중!</div>
-      <div class="bread-desc" id="breadDesc">아래 버튼을 눌러 빵을 추첨해 보세요.</div>
-    </section>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Unsplash 고화질 무료 빵 이미지 리스트 (403 에러 없는 안전 URL)
+    const breadImages = [
+      'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1568254183919-78a4f43a2877?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1530610476181-d83430b64dcd?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=400&q=80'
+    ];
 
-    <!-- 추첨 액션 버튼 -->
-    <button id="pickButton" class="btn-pick" type="button">🎲 빵 랜덤 추첨하기!</button>
-    <p class="hint">총 15가지 맛있는 빵 중 하나를 무작위로 추천해 드려요.</p>
+    // SVG 빵 아이콘 플레이스홀더 (네트워크 완전 실패시)
+    const fallbackSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200'><rect width='100%' height='100%' fill='%23f5ebe0'/><text x='50%' y='50%' font-family='sans-serif' font-size='20' font-weight='bold' fill='%23e86a33' text-anchor='middle' dominant-baseline='middle'>🥐 jjh_143 Bakery</text></svg>";
 
-    <!-- 최근 추첨 기록 -->
-    <section class="history">
-      <div class="history-header">
-        <h2>최근 뽑은 빵</h2>
-        <button id="clearHistoryBtn" type="button" class="btn-clear" title="추첨 기록 비우기">기록 비우기</button>
-      </div>
-      <div id="historyList">
-        <span class="chip chip-empty">아직 추첨 기록이 없어요.</span>
-      </div>
-    </section>
-  </main>
+    // jjh_143 블로그 69개 글 데이터 (중복 제거 및 좌표 자동 할당)
+    const rawData = [
+      { id: 1, name: "TART 티에이알티", region: "서울", loc: "서울 용산구", lat: 37.5326, lng: 126.9900, menus: ["타르트", "에그타르트"], review: "용산에서 만난 타르트 맛집! 겉바속촉 지존." },
+      { id: 2, name: "마쿠마쿠", region: "청주/충청", loc: "청주시 서원구", lat: 36.6285, lng: 127.4571, menus: ["디저트", "구움과자"], review: "서원구 감성 디저트 전문점. 적당한 단맛의 정석." },
+      { id: 3, name: "달달빵집", region: "대전", loc: "대전 서구 관저동", lat: 36.3015, lng: 127.3385, menus: ["식빵", "단팟빵"], review: "관저동 골목길을 밝히는 따뜻한 동네 빵집." },
+      { id: 4, name: "우리동네빵집", region: "대전", loc: "대전 서구 관저동", lat: 36.3032, lng: 127.3361, menus: ["소금빵", "식빵"], review: "주민 추천 맛집! 매일 아침 구워내는 고소한 빵." },
+      { id: 5, name: "떠먹는 투썸 케이크", region: "기타", loc: "투썸플레이스", lat: 36.3504, lng: 127.3845, menus: ["아이스박스", "티라미수"], review: "실패 없는 부드럽고 달콤한 디저트 타임." },
+      { id: 6, name: "빙구례", region: "경상/전라", loc: "전남 구례군 / 광주", lat: 35.2024, lng: 127.4628, menus: ["빙수", "디저트"], review: "구례 여행 중 만난 특별하고 시원한 정취." },
+      { id: 7, name: "캘리포니아베이커리 유성선병원점", region: "대전", loc: "대전 유성구", lat: 36.3688, lng: 127.3486, menus: ["크루아상", "케이크"], review: "넓고 쾌적한 매장에서 즐기는 프리미엄 베이커리." },
+      { id: 8, name: "베이커리446", region: "청주/충청", loc: "청주시 상당구", lat: 36.6340, lng: 127.4870, menus: ["수제빵", "바게트"], review: "상당구 빵지순례 필수 코스! 빵 본연의 풍미가 살아있음." },
+      { id: 9, name: "비머스트 도안점", region: "대전", loc: "대전 서구 도안동", lat: 36.3275, lng: 127.3450, menus: ["소금빵", "아메리카노"], review: "도안동 감성 카페. 겉은 바삭하고 속은 촉촉한 소금빵." },
+      { id: 10, name: "아벡섹리 롯데백화점 인천점", region: "인천/경기", loc: "인천 미추홀구", lat: 37.4425, lng: 126.7018, menus: ["프랑스 디저트", "파이"], review: "백화점에서 만나는 고급스러운 디저트 라인업." },
+      { id: 11, name: "시민제과", region: "경상/전라", loc: "경북 포항시 북구", lat: 36.0350, lng: 129.3650, menus: ["단팥빵", "찹쌀떡"], review: "포항 역사를 담은 시그니처 전통 제과점." },
+      { id: 12, name: "베이커리카페 공간", region: "청주/충청", loc: "청주시 상당구", lat: 36.6210, lng: 127.5010, menus: ["대형카페 빵", "대파빵"], review: "여유로운 공간에서 즐기는 다채로운 대형 베이커리." },
+      { id: 13, name: "테디뵈르하우스 용산점", region: "서울", loc: "서울 용산구", lat: 37.5305, lng: 126.9740, menus: ["크루아상", "마르가리타 크루아상"], review: "힙한 용리단길 테디베어 감성과 최상급 버터 크루아상." },
+      { id: 14, name: "달코미식빵 본점", region: "대전", loc: "대전 서구 관저동", lat: 36.3040, lng: 127.3370, menus: ["수제 식빵", "밤식빵"], review: "식빵 마니아들의 성지. 찢어 먹는 재미가 솔솔." },
+      { id: 15, name: "성심당 케익부띠끄", region: "대전", loc: "대전 중구 은행동", lat: 36.3272, lng: 127.4275, menus: ["순수롤", "딸기시루"], review: "대전을 대표하는 롤케이크 & 디저트 천국!" },
+      { id: 16, name: "영춘모찌", region: "대전", loc: "대전 중구", lat: 36.3240, lng: 127.4230, menus: ["과일모찌", "수제 찹쌀떡"], review: "쫄깃한 떡과 상큼한 과일 즙의 완벽한 조화." },
+      { id: 17, name: "성심당 본점", region: "대전", loc: "대전 중구 은행동", lat: 36.3277, lng: 127.4272, menus: ["튀김소보로", "명란바게트"], review: "대한민국 최고 빵집의 위엄. 가성비와 맛 모두 대만족." },
+      { id: 18, name: "타르트 성수", region: "서울", loc: "서울 성동구 성수동", lat: 37.5445, lng: 127.0560, menus: ["과일 타르트", "치즈 타르트"], review: "성수동 핫플레이스! 한 입 베어 물면 퍼지는 달콤함." },
+      { id: 19, name: "픽베이크", region: "서울", loc: "서울 성동구 성수동", lat: 37.5450, lng: 127.0580, menus: ["휘낭시에", "에그타르트"], review: "성수 골목길 작은 베이커리의 감동적인 구움과자." },
+      { id: 20, name: "성수 베이킹 스튜디오", region: "서울", loc: "서울 성동구 성수동", lat: 37.5460, lng: 127.0430, menus: ["프랑스 바게트", "치아바타"], review: "프랑스 현지 느낌 그대로 담아낸 식사빵 명가." },
+      { id: 21, name: "함스브로트 과자", region: "서울", loc: "서울 도봉구 쌍문동", lat: 37.6480, lng: 127.0340, menus: ["대한민국 명장 빵", "롤케이크"], review: "대한민국 제과명장의 깊은 내공이 느껴지는 곳." },
+      { id: 22, name: "진천 화계점", region: "청주/충청", loc: "충북 진천군", lat: 36.8550, lng: 127.4350, menus: ["시골 쌀빵", "단팥빵"], review: "진천의 정겨운 분위기가 녹아든 지역 베이커리." },
+      { id: 23, name: "메릴본케이크", region: "청주/충청", loc: "청주시 상당구 성안길", lat: 36.6320, lng: 127.4890, menus: ["수제 조각케이크", "스콘"], review: "성안길 아기자기한 케이크 맛집. 기념일 필수 방문." },
+      { id: 24, name: "TOLO PAN TOKYO", region: "해외/기타", loc: "일본 도쿄 메구로구", lat: 35.6510, lng: 139.6890, menus: ["도쿄 크루아상", "도쿄 바게트"], review: "도쿄 빵지순례! 일본 특유의 세심한 반죽이 돋보임." },
+      { id: 25, name: "dacō 中目黑", region: "해외/기타", loc: "일본 도쿄 메구로구", lat: 35.6440, lng: 139.6990, menus: ["미니 베이커리", "도쿄 소금빵"], review: "도쿄 나카메구로 핫플! 한 손에 쏙 들어오는 트렌디 빵." },
+      { id: 26, name: "하브스 롯폰기힐즈점", region: "해외/기타", loc: "일본 도쿄 미나토구", lat: 35.6600, lng: 139.7300, menus: ["밀크레이프 케이크"], review: "생과일이 겹겹이 쌓인 인생 크레이프 케이크." },
+      { id: 27, name: "베이커리할인매장라운지24", region: "청주/충청", loc: "청주시 청원구 오창", lat: 36.7110, lng: 127.4280, menus: ["갓성비 빵", "모카빵"], review: "가성비 뛰어난 오창 지역 주민들의 빵 쉼터." },
+      { id: 28, name: "LPB", region: "청주/충청", loc: "청주시 청원구", lat: 36.6550, lng: 127.4900, menus: ["스페셜티 커피", "디저트"], review: "음악과 빵이 함께하는 아늑한 플레이스." },
+      { id: 29, name: "하츠베이커리 롯데백화점 인천점", region: "인천/경기", loc: "인천 미추홀구", lat: 37.4420, lng: 126.7015, menus: ["팥빵", "맘모스빵"], review: "묵직한 앙금과 재료가 가득 찬 프리미엄 베이커리." },
+      { id: 30, name: "베이커리오월의종", region: "서울", loc: "서울 영등포구", lat: 37.5180, lng: 126.9050, menus: ["천연발효종 바게트", "호두크랜베리"], review: "담백하고 고소한 천연발효 건강빵의 대표주자." },
+      { id: 31, name: "커넥트현대 청주점 빵빵로드", region: "청주/충청", loc: "청주시 흥덕구", lat: 36.6380, lng: 127.4250, menus: ["팝업 베이커리", "트렌드 디저트"], review: "전국 인기 빵집 브랜드를 한곳에서 즐기는 팝업스토어." },
+      { id: 32, name: "포이드캐롯", region: "청주/충청", loc: "청주시 흥덕구", lat: 36.6350, lng: 127.4320, menus: ["당근케이크", "스콘"], review: "재방문 맛집! 귀여운 비주얼과 깊은 케이크 풍미." },
+      { id: 33, name: "곤트란쉐리에 청주국제공항점", region: "청주/충청", loc: "청주시 청원구 오창", lat: 36.7160, lng: 127.4990, menus: ["프랑스 버터 크루아상"], review: "비행기 타기 전 즐기는 프랑스 최고급 베이커리." },
+      { id: 34, name: "더멜", region: "청주/충청", loc: "청주시 흥덕구 강서동", lat: 36.6230, lng: 127.4120, menus: ["소금빵", "크림라떼"], review: "감성적인 인테리어와 촉촉한 빵이 매력적인 곳." },
+      { id: 35, name: "명문제과", region: "경상/전라", loc: "전북 남원시", lat: 35.4080, lng: 127.3870, menus: ["생크림소보루", "꿀아몬드"], review: "백종원 3대천왕 출신! 남원 줄 서서 먹는 빵집." },
+      { id: 36, name: "플라워플러리", region: "서울", loc: "서울 동대문구", lat: 37.5800, lng: 127.0480, menus: ["꽃 케이크", "수제 구움과자"], review: "눈과 입이 모두 즐거운 플라워 감성 베이커리." },
+      { id: 37, name: "플린던스", region: "청주/충청", loc: "청주시 청원구 오창읍", lat: 36.7150, lng: 127.4300, menus: ["베이글", "브런치"], review: "오창 호수공원 근처 따뜻한 스타일의 베이글 전문점." },
+      { id: 38, name: "런던 베이글 뮤지엄 (팝업)", region: "서울", loc: "서울", lat: 37.5790, lng: 126.9850, menus: ["포테이토 치즈 베이글"], review: "쫄깃함의 끝판왕! 웨이팅이 아깝지 않은 베이글 성지." },
+      { id: 39, name: "목월빵집", region: "경상/전라", loc: "전남 구례군 구례읍", lat: 35.2090, lng: 127.4650, menus: ["우리밀 빵", "산동막걸리빵"], review: "구례의 자연과 우리 밀로 짓는 리얼 시골 빵집." },
+      { id: 40, name: "달콤한메론빵", region: "경상/전라", loc: "대구 중구 중앙대로", lat: 35.8680, lng: 128.5940, menus: ["메론빵", "크림메론빵"], review: "대구 도심에서 만나는 바삭달콤한 일본식 메론빵." },
+      { id: 41, name: "수형당", region: "경상/전라", loc: "대구 동구 동성로", lat: 35.8710, lng: 128.5980, menus: ["대구 능금빵", "단팥빵"], review: "사과 모양 능금빵이 시그니처인 대구 대표 제과점." },
+      { id: 42, name: "빵관심", region: "경상/전라", loc: "대구 중구 동성로", lat: 35.8690, lng: 128.5960, menus: ["휘낭시에", "소금빵"], review: "아기자기하고 빵에 대한 진심이 느껴지는 곳." },
+      { id: 43, name: "듀레베이커리 비하점", region: "청주/충청", loc: "청주시 흥덕구 비하동", lat: 36.6340, lng: 127.4180, menus: ["소금빵", "바게트"], review: "청주 소금빵의 기준! 줄 서서 사 먹는 이유가 있음." },
+      { id: 44, name: "우리 베이커리", region: "청주/충청", loc: "청주시 서원구", lat: 36.6150, lng: 127.4600, menus: ["초코케이크", "생크림케이크"], review: "가성비 탑급 케이크! 부드러운 생크림이 일품." },
+      { id: 45, name: "안스베이커리 구월본점", region: "인천/경기", loc: "인천 남동구 구월동", lat: 37.4510, lng: 126.7020, menus: ["명란바게트", "몽블랑"], review: "인천을 대표하는 명장 베이커리 본점의 포스." },
+      { id: 46, name: "문화제빵", region: "서울", loc: "서울 종로구", lat: 37.5750, lng: 126.9880, menus: ["마늘바게트", "식빵"], review: "종로 고즈넉한 골목에 숨어있는 내공 있는 빵집." },
+      { id: 47, name: "나폴레옹 과자점 본점", region: "서울", loc: "서울 성북구 한성대입구", lat: 37.5880, lng: 127.0060, menus: ["사라다빵", "수제 아이스크림"], review: "한국 베이커리의 사관학교! 클래식한 사라다빵 추천." },
+      { id: 48, name: "빈스앤베리즈", region: "서울", loc: "서울 용산구", lat: 37.5290, lng: 126.9650, menus: ["머핀", "베이글"], review: "커피와 부드럽게 어우러지는 데일리 베이커리." },
+      { id: 49, name: "파리크라상 서울역점", region: "서울", loc: "서울 용산구 서울역", lat: 37.5550, lng: 126.9710, menus: ["샌드위치", "프리미엄 빵"], review: "기차 타기 전 들르는 고품격 샌드위치 & 브런치." },
+      { id: 50, name: "로로네베이커리", region: "대전", loc: "대전 중구 중교로", lat: 36.3260, lng: 127.4250, menus: ["식사빵", "소금빵"], review: "대전 대흥동 감성 골목의 아늑한 구움과자 집." },
+      { id: 51, name: "몽심 대흥점", region: "대전", loc: "대전 중구 대흥동", lat: 36.3250, lng: 127.4280, menus: ["휘낭시에", "마들렌"], review: "전국 휘낭시에 대회 수상에 빛나는 겉바속촉 진수." },
+      { id: 52, name: "흥흥제과", region: "청주/충청", loc: "청주시 청원구 오창읍", lat: 36.7140, lng: 127.4310, menus: ["타르트", "스콘"], review: "청주 타르트 최고봉! 가성비와 비주얼 모두 완벽." },
+      { id: 53, name: "잇츠베이글", region: "청주/충청", loc: "청주시 청원구 오창읍", lat: 36.7130, lng: 127.4330, menus: ["뉴욕 베이글", "크림치즈"], review: "다양한 수제 크림치즈와 함께 즐기는 쫀득한 베이글." },
+      { id: 54, name: "베이커리 무이", region: "서울", loc: "서울 용산구 남영동", lat: 37.5420, lng: 126.9720, menus: ["소금빵", "메론빵"], review: "용산 한구석의 감성 넘치는 빵집. 따뜻한 분위기." },
+      { id: 55, name: "아베베 베이커리", region: "제주", loc: "제주 제주시 동문시장", lat: 33.5120, lng: 126.5280, menus: ["우도땅콩 크림빵", "한라봉 크림빵"], review: "제주 필수 코스! 터질 듯 가득 찬 제주 특산 크림." },
+      { id: 56, name: "정셰프제빵소", region: "인천/경기", loc: "경기 연천군 전곡읍", lat: 38.0260, lng: 127.0650, menus: ["수제 식빵", "단팥빵"], review: "연천 전곡의 자랑! 셰프의 장인정신이 담긴 정직한 빵." },
+      { id: 57, name: "전곡293", region: "인천/경기", loc: "경기 연천군 전곡읍", lat: 38.0250, lng: 127.0670, menus: ["브런치", "시그니처 라떼"], review: "전곡 골목 분위기 좋은 공간에서 느끼는 힐링." },
+      { id: 58, name: "아오이토리", region: "서울", loc: "서울 마포구 홍대", lat: 37.5540, lng: 126.9300, menus: ["야키소바빵", "메론빵"], review: "일본 장인이 직접 만드는 리얼 일본식 베이커리." },
+      { id: 59, name: "타르데마베이커리 우장산점", region: "서울", loc: "서울 강서구 우장산", lat: 37.5480, lng: 126.8360, menus: ["마약옥수수식빵", "고르곤졸라식빵"], review: "방송 다수 출연! 토핑이 폭발하는 식빵의 성지." },
+      { id: 60, name: "바누아투", region: "청주/충청", loc: "청주시 흥덕구 복대동", lat: 36.6370, lng: 127.4360, menus: ["세계제과제빵대회 우승빵"], review: "세계대회 1위에 빛나는 청주 최고 권위의 제과점." },
+      { id: 61, name: "안셈", region: "청주/충청", loc: "청주시 흥덕구 복대동", lat: 36.6360, lng: 127.4380, menus: ["팥선생", "앙버터"], review: "팥에 진심인 빵집. 적당히 달고 고소한 팥앙금이 대박." }
+    ];
 
-  <script src="app.js"></script>
+    // 지도 초기화 (대한민국 전체 시점)
+    const map = L.map('map', {
+      zoomControl: false
+    }).setView([35.8, 127.8], 7);
+
+    // 줌 컨트롤 위치 조정
+    L.control.zoom({ position: 'topright' }).addTo(map);
+
+    // Leaflet 타일 레이어 (CartoDB Positron - 감성적이고 깔끔한 지도)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      maxZoom: 19
+    }).addTo(map);
+
+    let markers = [];
+    let currentData = [...rawData];
+
+    // 마커 생성 및 이벤트 바인딩
+    function renderMap(data) {
+      // 기존 마커 제거
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+
+      data.forEach((item, index) => {
+        // 이미지 랜덤 매핑
+        const bgImg = breadImages[index % breadImages.length];
+
+        const customIcon = L.divIcon({
+          className: 'custom-marker-wrap',
+          html: `<div class="custom-marker"><i class="fa-solid fa-bread-slice"></i></div>`,
+          iconSize: [34, 34],
+          iconAnchor: [17, 17]
+        });
+
+        const marker = L.marker([item.lat, item.lng], { icon: customIcon }).addTo(map);
+
+        const popupContent = `
+          <div class="popup-card">
+            <div class="popup-img-wrap">
+              <img src="${bgImg}" onerror="this.src='${fallbackSvg}'" alt="${item.name}">
+              <span class="popup-badge">${item.region}</span>
+            </div>
+            <div class="popup-body">
+              <h3 class="popup-title">${item.name}</h3>
+              <div class="popup-loc"><i class="fa-solid fa-location-dot"></i> ${item.loc}</div>
+              <div class="popup-menus">
+                ${item.menus.map(m => `<span class="menu-chip">${m}</span>`).join('')}
+              </div>
+              <div class="popup-review">
+                <i class="fa-solid fa-quote-left"></i> ${item.review}
+              </div>
+            </div>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent, { offset: [0, -10] });
+
+        marker.on('click', () => {
+          map.flyTo([item.lat, item.lng], 14, { duration: 1.2 });
+          highlightCard(item.id);
+        });
+
+        markers.push(marker);
+      });
+    }
+
+    // 사이드바 리스트 생성
+    function renderList(data) {
+      const listEl = document.getElementById('bakery-list');
+      const countEl = document.getElementById('count-text');
+      countEl.innerText = `(${data.length})`;
+      listEl.innerHTML = '';
+
+      if (data.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; padding:40px 0; color:#a09383; font-size:14px;">검색 결과가 없습니다 🥐</div>`;
+        return;
+      }
+
+      data.forEach((item, index) => {
+        const bgImg = breadImages[index % breadImages.length];
+        const card = document.createElement('div');
+        card.className = 'bakery-card';
+        card.id = `card-${item.id}`;
+        card.innerHTML = `
+          <img class="bakery-img" src="${bgImg}" onerror="this.src='${fallbackSvg}'" alt="${item.name}">
+          <div class="bakery-info">
+            <div class="bakery-name">${item.name}</div>
+            <div class="bakery-loc"><i class="fa-solid fa-location-dot" style="color:#e86a33"></i> ${item.loc}</div>
+            <div class="bakery-menus">
+              ${item.menus.slice(0, 2).map(m => `<span class="menu-chip">${m}</span>`).join('')}
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          map.flyTo([item.lat, item.lng], 15, { duration: 1 });
+          const markerIndex = rawData.findIndex(d => d.id === item.id);
+          if (markers[markerIndex]) {
+            markers[markerIndex].openPopup();
+          }
+          highlightCard(item.id);
+        });
+
+        listEl.appendChild(card);
+      });
+    }
+
+    function highlightCard(id) {
+      document.querySelectorAll('.bakery-card').forEach(c => c.classList.remove('active'));
+      const activeCard = document.getElementById(`card-${id}`);
+      if (activeCard) {
+        activeCard.classList.add('active');
+        activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // 검색 및 필터링 기능
+    function filterData() {
+      const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+      const activeTag = document.querySelector('.tag-btn.active').dataset.region;
+
+      currentData = rawData.filter(item => {
+        const matchRegion = (activeTag === '전체') || 
+                            (activeTag === '해외/기타' ? (item.region === '해외/기타' || item.region === '기타' || item.region === '인천/경기' || item.region === '제주') : item.region === activeTag);
+        
+        const matchSearch = item.name.toLowerCase().includes(searchVal) ||
+                            item.loc.toLowerCase().includes(searchVal) ||
+                            item.menus.some(m => m.toLowerCase().includes(searchVal));
+
+        return matchRegion && matchSearch;
+      });
+
+      renderMap(currentData);
+      renderList(currentData);
+    }
+
+    // 이벤트 리스너 설정
+    document.getElementById('search-input').addEventListener('input', filterData);
+
+    document.querySelectorAll('.tag-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        // 필터 전환 시 지도 카메라 이동
+        const reg = e.target.dataset.region;
+        if(reg === '서울') map.flyTo([37.55, 126.98], 11);
+        else if(reg === '대전') map.flyTo([36.33, 127.38], 12);
+        else if(reg === '청주/충청') map.flyTo([36.65, 127.46], 11);
+        else if(reg === '전체') map.flyTo([35.8, 127.8], 7);
+        
+        filterData();
+      });
+    });
+
+    // 앱 초기화
+    renderMap(rawData);
+    renderList(rawData);
+  </script>
 </body>
 </html>
