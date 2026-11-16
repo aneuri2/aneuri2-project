@@ -769,6 +769,148 @@
       letter-spacing: 0.04em;
     }
 
+    /* ==========================================================================
+       [불가사의 선택 드래프트 페이즈 UI]
+       ========================================================================== */
+    .wonder-draft-container {
+      background: radial-gradient(circle at 50% 20%, #FFFDF9 0%, #F9F2E7 100%);
+      border: 2px dashed #E5D5C3;
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      margin-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: inset 0 2px 10px rgba(44, 24, 16, 0.03);
+    }
+
+    .draft-header-area {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .draft-round-tag {
+      display: inline-block;
+      background: #8E44AD;
+      color: #FFFFFF;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .draft-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-espresso);
+      margin-bottom: 6px;
+    }
+
+    .draft-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 580px;
+    }
+
+    .draft-cards-pool {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 980px;
+    }
+
+    .draft-card {
+      background: #FFFFFF;
+      border: 2px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+    }
+
+    .draft-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 14px 28px rgba(44, 24, 16, 0.15);
+      border-color: #8E44AD;
+    }
+
+    .draft-card-img-wrap {
+      width: 100%;
+      height: 110px;
+      overflow: hidden;
+      position: relative;
+      background: #2C1810;
+    }
+
+    .draft-card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .draft-card:hover .draft-card-img-wrap img {
+      transform: scale(1.08);
+    }
+
+    .draft-card-cost-pill {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #F1C40F;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(4px);
+    }
+
+    .draft-card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .draft-card-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-espresso);
+      line-height: 1.25;
+    }
+
+    .draft-card-benefit {
+      font-size: 0.78rem;
+      color: var(--text-body);
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .draft-select-btn {
+      margin-top: 8px;
+      padding: 6px 0;
+      border-radius: 6px;
+      background: #8E44AD;
+      color: #FFFFFF;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .draft-card:hover .draft-select-btn {
+      background: #732D91;
+    }
+
     /* 상단 플레이어 스탯 & 군사 트랙 대시보드 */
     .game-dashboard {
       display: grid;
@@ -968,7 +1110,7 @@
       border-radius: var(--radius-lg);
       padding: 30px 16px;
       margin-bottom: 30px;
-      min-height: 480px;
+      min-height: 520px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -985,17 +1127,17 @@
       width: 100%;
     }
 
-    /* 카드 스타일 */
+    /* 카드 스타일 (실제 사진 썸네일 탑재) */
     .duel-card {
-      width: 110px;
-      height: 145px;
+      width: 115px;
+      height: 168px;
       border-radius: 10px;
       background: #FFFFFF;
       border: 2px solid var(--border-warm);
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      padding: 8px 6px;
+      overflow: hidden;
       position: relative;
       cursor: pointer;
       user-select: none;
@@ -1050,70 +1192,80 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
-    /* 카드 유형별 테두리 및 헤더 */
-    .card-type-military { border-top: 5px solid var(--game-military); }
-    .card-type-science { border-top: 5px solid var(--game-science); }
-    .card-type-civic { border-top: 5px solid var(--game-civic); }
-    .card-type-commerce { border-top: 5px solid var(--game-commerce); }
-    .card-type-resource { border-top: 5px solid var(--game-resource); }
-
-    .card-header-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 4px;
+    /* 카드 상단 실제 사진 썸네일 */
+    .card-photo-header {
+      width: 100%;
+      height: 52px;
+      position: relative;
+      overflow: hidden;
+      background: #2C1810;
+      flex-shrink: 0;
     }
 
-    .card-cost {
-      font-size: 0.72rem;
+    .card-photo-header img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-photo-cost {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #FEFCBF;
+      font-size: 0.68rem;
       font-weight: 800;
-      color: #B7791F;
-      background: #FEFCBF;
-      padding: 1px 5px;
-      border-radius: 4px;
+      padding: 1px 6px;
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(2px);
+    }
+    .card-photo-cost.free {
+      color: #9AE6B4;
+    }
+
+    .card-photo-type-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
       display: flex;
       align-items: center;
-      gap: 2px;
+      justify-content: center;
+      font-size: 0.72rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     }
 
-    .card-cost.free {
-      color: #276749;
-      background: #C6F6D5;
-    }
-
-    .card-type-icon {
-      font-size: 0.82rem;
-    }
-    .card-type-military .card-type-icon { color: var(--game-military); }
-    .card-type-science .card-type-icon { color: var(--game-science); }
-    .card-type-civic .card-type-icon { color: var(--game-civic); }
-    .card-type-commerce .card-type-icon { color: var(--game-commerce); }
-    .card-type-resource .card-type-icon { color: var(--game-resource); }
+    .card-type-military { border-top: 4px solid var(--game-military); }
+    .card-type-science { border-top: 4px solid var(--game-science); }
+    .card-type-civic { border-top: 4px solid var(--game-civic); }
+    .card-type-commerce { border-top: 4px solid var(--game-commerce); }
+    .card-type-resource { border-top: 4px solid var(--game-resource); }
 
     .card-body-content {
+      padding: 8px 6px;
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: 4px;
-    }
-
-    .card-main-symbol {
-      font-size: 1.5rem;
-      margin-bottom: 2px;
+      gap: 3px;
     }
 
     .card-title {
       font-size: 0.78rem;
       font-weight: 800;
       color: var(--text-espresso);
-      line-height: 1.15;
+      line-height: 1.2;
     }
 
     .card-benefit-badge {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 700;
       padding: 2px 6px;
       border-radius: 4px;
@@ -1128,38 +1280,41 @@
       pointer-events: none;
     }
 
-    /* 하단 불가사의 슬롯 영역 */
+    /* ==========================================================================
+       [하단 불가사의 슬롯 영역 (실제 사진 탑재)]
+       ========================================================================== */
     .wonders-section {
       background: var(--bg-subtle);
       border: 1px solid var(--border-warm);
       border-radius: var(--radius-md);
-      padding: 20px;
+      padding: 24px;
     }
 
     .wonders-header {
-      font-size: 0.98rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: var(--text-espresso);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .wonders-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+      gap: 16px;
     }
 
     .wonder-card {
       background: var(--bg-card);
       border: 1px solid var(--border-warm);
       border-radius: var(--radius-md);
-      padding: 14px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 8px;
       position: relative;
       box-shadow: var(--shadow-sm);
     }
@@ -1169,6 +1324,21 @@
       background: #F4ECF7;
     }
 
+    .wonder-card-img {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .wonder-card-body {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
     .wonder-card-top {
       display: flex;
       align-items: center;
@@ -1176,7 +1346,7 @@
     }
 
     .wonder-owner-tag {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       padding: 2px 8px;
       border-radius: var(--radius-full);
@@ -1191,7 +1361,7 @@
     }
 
     .wonder-name {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 800;
       color: var(--text-espresso);
       display: flex;
@@ -1200,20 +1370,21 @@
     }
 
     .wonder-benefit {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       color: var(--text-body);
-      line-height: 1.4;
+      line-height: 1.35;
       flex: 1;
     }
 
     .wonder-stamp {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 800;
       color: #8E44AD;
       background: #E8DAEF;
-      padding: 4px 8px;
+      padding: 3px 6px;
       border-radius: 4px;
       text-align: center;
+      margin-top: 4px;
     }
 
     /* 카드 액션 모달창 */
@@ -1278,17 +1449,18 @@
       margin-bottom: 24px;
     }
 
-    .preview-card-icon {
-      width: 52px;
-      height: 68px;
+    .preview-card-img-wrap {
+      width: 64px;
+      height: 80px;
       border-radius: 8px;
-      background: #FFFFFF;
-      border: 1px solid var(--border-accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.6rem;
+      overflow: hidden;
       flex-shrink: 0;
+      border: 1px solid var(--border-accent);
+    }
+    .preview-card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .preview-card-info h4 {
@@ -1390,7 +1562,7 @@
     }
 
     /* ==========================================================================
-       [6. 추천 도서 섹션 (Curated Bookshelf)]
+       [6. 추천 도서 섹션 (실제 사진 표지 탑재)]
        ========================================================================== */
     .books-section {
       background-color: var(--bg-subtle);
@@ -1422,99 +1594,62 @@
       border-color: var(--point-terracotta);
     }
 
-    /* 3D 북커버 그래픽 */
+    /* 3D 실제 사진 북커버 스테이지 */
     .book-cover-stage {
-      height: 220px;
+      height: 250px;
       display: flex;
       align-items: center;
       justify-content: center;
-      perspective: 800px;
+      perspective: 900px;
       margin-bottom: 24px;
     }
 
-    .book-3d {
-      width: 140px;
-      height: 195px;
+    .book-3d-photo {
+      width: 160px;
+      height: 230px;
       border-radius: 4px 10px 10px 4px;
       position: relative;
       transform: rotateY(-18deg) rotateX(4deg);
       transform-style: preserve-3d;
-      box-shadow: 10px 12px 25px rgba(44, 24, 16, 0.22);
+      box-shadow: 12px 16px 30px rgba(44, 24, 16, 0.25);
       transition: transform 0.4s ease, box-shadow 0.4s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 16px 14px;
-      color: #FFFFFF;
       overflow: hidden;
+      background: #2C1810;
     }
 
-    .book-card:hover .book-3d {
+    .book-card:hover .book-3d-photo {
       transform: rotateY(-6deg) rotateX(2deg) scale(1.05);
-      box-shadow: 14px 18px 30px rgba(44, 24, 16, 0.28);
+      box-shadow: 16px 22px 35px rgba(44, 24, 16, 0.32);
     }
 
-    /* 책등 입체 효과 */
-    .book-3d::before {
-      content: '';
+    /* 실제 책 표지 이미지 */
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 입체 책등 그라데이션 오버레이 */
+    .book-spine-overlay {
       position: absolute;
       top: 0;
       left: 0;
-      width: 12px;
+      width: 16px;
       height: 100%;
-      background: linear-gradient(to right, rgba(0,0,0,0.35), transparent);
+      background: linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 60%, transparent 100%);
+      pointer-events: none;
     }
 
-    /* 책 1: 모스크바의 신사 (클래식 버건디 & 골드) */
-    .cover-gentleman {
-      background: linear-gradient(145deg, #781d28 0%, #4a0d15 100%);
-      border: 1px solid #9c2e3c;
-    }
-    .cover-gentleman .book-badge { color: #F1C40F; border: 1px solid rgba(241, 196, 15, 0.4); }
-
-    /* 책 2: 용의자 X의 헌신 (미드나잇 블루 & 실버 지오메트릭) */
-    .cover-suspect-x {
-      background: linear-gradient(145deg, #1b263b 0%, #0d1b2a 100%);
-      border: 1px solid #415a77;
-    }
-    .cover-suspect-x .book-badge { color: #A0C4FF; border: 1px solid rgba(160, 196, 255, 0.4); }
-
-    /* 책 3: 죽음의 수용소에서 (차콜 & 앰버 골드 촛불) */
-    .cover-meaning {
-      background: linear-gradient(145deg, #3d3a45 0%, #201e25 100%);
-      border: 1px solid #5a5666;
-    }
-    .cover-meaning .book-badge { color: #F39C12; border: 1px solid rgba(243, 156, 18, 0.4); }
-
-    .book-spine-line {
+    .book-spine-line-groove {
       position: absolute;
-      left: 12px;
+      left: 14px;
       top: 0;
       bottom: 0;
       width: 1px;
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .book-mini-tag {
-      font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding-left: 6px;
-    }
-
-    .book-cover-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      line-height: 1.25;
-      padding-left: 6px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    }
-
-    .book-cover-author {
-      font-size: 0.72rem;
-      opacity: 0.85;
-      padding-left: 6px;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 1px 0 2px rgba(0,0,0,0.3);
+      pointer-events: none;
     }
 
     .book-meta {
@@ -1716,6 +1851,9 @@
       .wonders-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+      .draft-cards-pool {
+        grid-template-columns: repeat(2, 1fr);
+      }
       .books-grid {
         grid-template-columns: 1fr;
         gap: 24px;
@@ -1768,18 +1906,20 @@
         justify-content: center;
       }
       .duel-card {
-        width: 82px;
-        height: 120px;
-        padding: 6px 4px;
+        width: 86px;
+        height: 140px;
+      }
+      .card-photo-header {
+        height: 40px;
       }
       .card-title {
         font-size: 0.68rem;
       }
-      .card-main-symbol {
-        font-size: 1.2rem;
-      }
       .pyramid-row {
         gap: 8px;
+      }
+      .draft-cards-pool {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -1791,13 +1931,11 @@
        ========================================================================== -->
   <header class="navbar" id="navbar">
     <div class="container nav-inner">
-      <!-- 좌측 로고 -->
       <a href="#" class="nav-logo">
         <span class="logo-badge"><i class="fa-solid fa-wheat-awn"></i></span>
         <span>jjh_143 ARCHIVE</span>
       </a>
 
-      <!-- 우측 데스크톱 네비게이션 메뉴 -->
       <nav>
         <ul class="nav-menu">
           <li><a href="#about" class="nav-link">About</a></li>
@@ -1809,13 +1947,11 @@
         </ul>
       </nav>
 
-      <!-- 모바일 메뉴 열기 버튼 -->
       <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="메뉴 열기">
         <i class="fa-solid fa-bars"></i>
       </button>
     </div>
 
-    <!-- 모바일 드롭다운 메뉴 -->
     <div class="mobile-nav" id="mobile-nav">
       <ul class="mobile-nav-list">
         <li><a href="#about" class="mobile-nav-link">About</a></li>
@@ -1835,7 +1971,6 @@
     <div class="container">
       <div class="hero-wrapper">
         
-        <!-- 좌측 소개 문구 영역 -->
         <div class="hero-text-area">
           <div class="hero-badge-wrap">
             <i class="fa-solid fa-circle-check"></i>
@@ -1848,8 +1983,6 @@
             <span class="highlight">정종환</span>입니다.
           </h1>
 
-          <!-- 서브 소개 문구 -->
-          <!-- 수정 위치: 히어로 서브 소개 문구를 원하는 문장으로 자유롭게 다듬으세요 -->
           <p class="hero-desc">
             의학적 진단과 치료의 눈이 되는 <strong>방사선학</strong>을 깊이 있게 탐구하며,<br>
             전국 곳곳의 정성 가득한 베이커리를 직접 방문하여 기록하는 <strong>빵지순례자</strong>입니다.<br>
@@ -1868,24 +2001,18 @@
           </div>
         </div>
 
-        <!-- 우측 프로필 요약 카드 -->
         <div class="hero-profile-card">
           <div class="profile-card-header">
-            <!-- 프로필 아바타 -->
-            <!-- 수정 위치: 실제 본인 사진으로 교체하고 싶으실 경우 <img> 태그 src를 넣어주세요 -->
             <div class="profile-avatar">
               <i class="fa-solid fa-bread-slice"></i>
             </div>
             
             <div class="profile-meta">
-              <!-- 수정 위치: 이름 및 계정명 수정 가능 -->
               <h3>정종환 <span style="font-size: 0.95rem; font-weight: 500; color: var(--point-terracotta);">(jjh_143)</span></h3>
               <p><i class="fa-solid fa-graduation-cap"></i> 건양대학교 방사선학과 재학</p>
             </div>
           </div>
 
-          <!-- 상태 및 아카이브 요약 스탯 -->
-          <!-- 수정 위치: 관심 키워드 및 현황 스탯 수치 수정 -->
           <div class="profile-stats-grid">
             <div class="stat-item">
               <span class="stat-label">Major Study</span>
@@ -1924,11 +2051,8 @@
         </p>
       </div>
 
-      <!-- 2개 카드 레이아웃 -->
       <div class="about-cards-grid">
         
-        <!-- [카드 1: 전공 학업] -->
-        <!-- 수정 위치: 건양대 방사선학과 세부 학업, 관심 연구 분야, 취득 예정 자격증 등을 추가해보세요 -->
         <div class="about-card">
           <div class="card-top-bar">
             <div class="card-icon-box">
@@ -1943,7 +2067,6 @@
             환자의 안전을 최우선으로 생각하며 첨단 의료 기술을 탐구하는 예비 방사선사로 성장 중입니다.
           </p>
 
-          <!-- 전공 관련 키워드 태그 -->
           <ul class="keyword-list">
             <li class="keyword-pill">#의료영상학</li>
             <li class="keyword-pill">#방사선물리학</li>
@@ -1953,8 +2076,6 @@
           </ul>
         </div>
 
-        <!-- [카드 2: 취미 & 빵지순례 아카이브] -->
-        <!-- 수정 위치: 전국 빵지순례 활동 내용, 좋아하는 빵 종류(사워도우, 소금빵 등)를 추가해보세요 -->
         <div class="about-card">
           <div class="card-top-bar">
             <div class="card-icon-box">
@@ -1969,7 +2090,6 @@
             단순히 맛보는 것에 그치지 않고, 각 빵집의 시그니처 메뉴와 풍미, 공간의 매력을 블로그에 상세히 기록하고 인터랙티브 웹 지도로 시각화하여 공유하고 있습니다.
           </p>
 
-          <!-- 빵지순례 관련 키워드 태그 -->
           <ul class="keyword-list">
             <li class="keyword-pill">#전국빵지순례</li>
             <li class="keyword-pill">#베이커리아카이빙</li>
@@ -1991,7 +2111,6 @@
     <div class="container">
       
       <div class="project-card-container">
-        <!-- 프로젝트 헤더 바 -->
         <div class="project-header-bar">
           <div class="project-title-area">
             <span class="section-eyebrow">FEATURED INTERACTIVE PROJECT</span>
@@ -2005,14 +2124,12 @@
             </p>
           </div>
 
-          <!-- 새 탭에서 전체 화면으로 지도 보기 버튼 -->
           <a href="./bread-map/index.html" target="_blank" rel="noopener noreferrer" class="map-external-btn">
             <span>전체 화면으로 지도 보기</span>
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
           </a>
         </div>
 
-        <!-- 지도 iframe 임베드 영역 -->
         <div class="iframe-wrapper">
           <iframe 
             src="./bread-map/index.html" 
@@ -2021,7 +2138,6 @@
           </iframe>
         </div>
 
-        <!-- 지도 하단 보조 팁 & 상태 안내 -->
         <div class="map-notice-footer">
           <div class="tip">
             <i class="fa-solid fa-circle-info" style="color: var(--point-terracotta);"></i>
@@ -2047,7 +2163,7 @@
         <span class="section-eyebrow">INTERACTIVE BOARD GAME</span>
         <h2 class="section-title">세븐 원더스 듀얼 (7 Wonders Duel)</h2>
         <p class="section-subtitle">
-          2인 전용 전략 보드게임인 &lt;세븐 원더스 듀얼&gt;의 핵심 메커니즘(카드 피라미드 드래프팅, 자원 관리, 군사 줄다리기, 과학 상징 수집, 불가사의 건설)을 웹에서 직접 플레이할 수 있도록 구현한 미니 게임입니다.
+          2인 전용 전략 보드게임인 &lt;세븐 원더스 듀얼&gt;의 핵심 메커니즘(불가사의 드래프트, 카드 피라미드 드래프팅, 자원 관리, 군사 줄다리기, 과학 상징 수집)을 실제 고화질 유적 사진과 함께 구현한 웹 미니게임입니다.
         </p>
       </div>
 
@@ -2078,128 +2194,148 @@
         <div class="turn-status-banner">
           <div class="current-turn-label">
             <span class="turn-badge"></span>
-            <span id="turn-display-text">🚩 플레이어 1 (정종환)의 턴입니다.</span>
+            <span id="turn-display-text">🚩 불가사의 드래프트가 진행 중입니다.</span>
           </div>
-          <span class="current-age-badge" id="current-age-badge">제 1 시대 (Age I)</span>
+          <span class="current-age-badge" id="current-age-badge">초반 드래프트</span>
         </div>
 
-        <!-- 스탯 대시보드 (Player 1 | 군사 줄다리기 | Player 2 / AI) -->
-        <div class="game-dashboard">
-          
-          <!-- Player 1 박스 -->
-          <div class="player-stat-box active-turn" id="p1-stat-box">
-            <div class="player-header">
-              <div class="player-name">
-                <i class="fa-solid fa-user" style="color: var(--point-terracotta);"></i>
-                <span>P1 (정종환)</span>
-              </div>
-              <span style="font-size: 0.75rem; font-weight: 700; color: var(--point-terracotta);">YOU</span>
-            </div>
-
-            <div class="stat-pills-row">
-              <div class="stat-pill coins">
-                <i class="fa-solid fa-coins"></i>
-                <span id="p1-coins">7</span> 코인
-              </div>
-              <div class="stat-pill vp">
-                <i class="fa-solid fa-trophy"></i>
-                <span id="p1-vp">0</span> VP
-              </div>
-            </div>
-
-            <div class="science-symbols-wrap">
-              <span class="science-label">과학 상징 (<span id="p1-science-count">0</span>/6)</span>
-              <div class="science-icons-row" id="p1-science-slots">
-                <div class="science-slot" data-symbol="globe" title="천구의">🌐</div>
-                <div class="science-slot" data-symbol="compass" title="컴퍼스">📐</div>
-                <div class="science-slot" data-symbol="scale" title="저울">⚖️</div>
-                <div class="science-slot" data-symbol="tablet" title="서판">📜</div>
-                <div class="science-slot" data-symbol="gear" title="톱니바퀴">⚙️</div>
-                <div class="science-slot" data-symbol="mortar" title="약사발">🧪</div>
-              </div>
-            </div>
+        <!-- [초반 불가사의 드래프트 페이즈 영역] -->
+        <div class="wonder-draft-container" id="wonder-draft-container">
+          <div class="draft-header-area">
+            <span class="draft-round-tag" id="draft-round-tag">불가사의 드래프트: 라운드 1/2</span>
+            <h3 class="draft-title" id="draft-turn-title">플레이어 1 (정종환)의 선택 차례</h3>
+            <p class="draft-desc" id="draft-turn-desc">
+              공개된 4장의 고대 불가사의 중 원하는 1장을 클릭하여 획득하세요. (선택 순서: P1 1장 ➔ P2 2장 ➔ P1 1장)
+            </p>
           </div>
 
-          <!-- 중앙 군사 트랙 -->
-          <div class="military-track-box">
-            <div class="military-title">
-              <i class="fa-solid fa-shield-halved" style="color: var(--game-military);"></i>
-              <span>군사 줄다리기 트랙</span>
-            </div>
+          <!-- 4장 후보 카드 슬롯 -->
+          <div class="draft-cards-pool" id="draft-cards-pool">
+            <!-- 자바스크립트로 4장의 후보 카드가 동적 생성됩니다 -->
+          </div>
+        </div>
 
-            <div class="military-track-container">
-              <div class="military-scale">
-                <span class="p2-side">◀ P2/AI 승리 (-9)</span>
-                <span>0 (중립)</span>
-                <span class="p1-side">(+9) P1 승리 ▶</span>
+        <!-- [메인 게임 영역: 스탯 대시보드 + 피라미드 보드] -->
+        <div id="main-gameplay-area" style="display: none;">
+          
+          <!-- 스탯 대시보드 (Player 1 | 군사 줄다리기 | Player 2 / AI) -->
+          <div class="game-dashboard">
+            
+            <!-- Player 1 박스 -->
+            <div class="player-stat-box active-turn" id="p1-stat-box">
+              <div class="player-header">
+                <div class="player-name">
+                  <i class="fa-solid fa-user" style="color: var(--point-terracotta);"></i>
+                  <span>P1 (정종환)</span>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--point-terracotta);">YOU</span>
               </div>
 
-              <div class="military-bar-rail">
-                <div class="military-center-marker"></div>
-                <!-- 이동하는 군사 방패 토큰 (초기 중앙 50%) -->
-                <div class="military-token" id="military-token" style="left: 50%;">
-                  <i class="fa-solid fa-shield"></i>
+              <div class="stat-pills-row">
+                <div class="stat-pill coins">
+                  <i class="fa-solid fa-coins"></i>
+                  <span id="p1-coins">7</span> 코인
+                </div>
+                <div class="stat-pill vp">
+                  <i class="fa-solid fa-trophy"></i>
+                  <span id="p1-vp">0</span> VP
+                </div>
+              </div>
+
+              <div class="science-symbols-wrap">
+                <span class="science-label">과학 상징 (<span id="p1-science-count">0</span>/6)</span>
+                <div class="science-icons-row" id="p1-science-slots">
+                  <div class="science-slot" data-symbol="globe" title="천구의">🌐</div>
+                  <div class="science-slot" data-symbol="compass" title="컴퍼스">📐</div>
+                  <div class="science-slot" data-symbol="scale" title="저울">⚖️</div>
+                  <div class="science-slot" data-symbol="tablet" title="서판">📜</div>
+                  <div class="science-slot" data-symbol="gear" title="톱니바퀴">⚙️</div>
+                  <div class="science-slot" data-symbol="mortar" title="약사발">🧪</div>
                 </div>
               </div>
             </div>
 
-            <p class="military-info-desc" id="military-status-desc">
-              현재 트랙 수치: <strong>0</strong> (어느 한쪽이 +9 또는 -9에 도달하면 즉시 군사 승리)
-            </p>
+            <!-- 중앙 군사 트랙 -->
+            <div class="military-track-box">
+              <div class="military-title">
+                <i class="fa-solid fa-shield-halved" style="color: var(--game-military);"></i>
+                <span>군사 줄다리기 트랙</span>
+              </div>
+
+              <div class="military-track-container">
+                <div class="military-scale">
+                  <span class="p2-side">◀ P2/AI 승리 (-9)</span>
+                  <span>0 (중립)</span>
+                  <span class="p1-side">(+9) P1 승리 ▶</span>
+                </div>
+
+                <div class="military-bar-rail">
+                  <div class="military-center-marker"></div>
+                  <div class="military-token" id="military-token" style="left: 50%;">
+                    <i class="fa-solid fa-shield"></i>
+                  </div>
+                </div>
+              </div>
+
+              <p class="military-info-desc" id="military-status-desc">
+                현재 트랙 수치: <strong>0</strong> (어느 한쪽이 +9 또는 -9에 도달하면 즉시 군사 승리)
+              </p>
+            </div>
+
+            <!-- Player 2 / AI 박스 -->
+            <div class="player-stat-box" id="p2-stat-box">
+              <div class="player-header">
+                <div class="player-name">
+                  <i class="fa-solid fa-robot" id="p2-icon" style="color: var(--game-civic);"></i>
+                  <span id="p2-name-label">AI 봇</span>
+                </div>
+                <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);" id="p2-role-label">OPPONENT</span>
+              </div>
+
+              <div class="stat-pills-row">
+                <div class="stat-pill coins">
+                  <i class="fa-solid fa-coins"></i>
+                  <span id="p2-coins">7</span> 코인
+                </div>
+                <div class="stat-pill vp">
+                  <i class="fa-solid fa-trophy"></i>
+                  <span id="p2-vp">0</span> VP
+                </div>
+              </div>
+
+              <div class="science-symbols-wrap">
+                <span class="science-label">과학 상징 (<span id="p2-science-count">0</span>/6)</span>
+                <div class="science-icons-row" id="p2-science-slots">
+                  <div class="science-slot" data-symbol="globe" title="천구의">🌐</div>
+                  <div class="science-slot" data-symbol="compass" title="컴퍼스">📐</div>
+                  <div class="science-slot" data-symbol="scale" title="저울">⚖️</div>
+                  <div class="science-slot" data-symbol="tablet" title="서판">📜</div>
+                  <div class="science-slot" data-symbol="gear" title="톱니바퀴">⚙️</div>
+                  <div class="science-slot" data-symbol="mortar" title="약사발">🧪</div>
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Player 2 / AI 박스 -->
-          <div class="player-stat-box" id="p2-stat-box">
-            <div class="player-header">
-              <div class="player-name">
-                <i class="fa-solid fa-robot" id="p2-icon" style="color: var(--game-civic);"></i>
-                <span id="p2-name-label">AI 봇</span>
-              </div>
-              <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);" id="p2-role-label">OPPONENT</span>
-            </div>
-
-            <div class="stat-pills-row">
-              <div class="stat-pill coins">
-                <i class="fa-solid fa-coins"></i>
-                <span id="p2-coins">7</span> 코인
-              </div>
-              <div class="stat-pill vp">
-                <i class="fa-solid fa-trophy"></i>
-                <span id="p2-vp">0</span> VP
-              </div>
-            </div>
-
-            <div class="science-symbols-wrap">
-              <span class="science-label">과학 상징 (<span id="p2-science-count">0</span>/6)</span>
-              <div class="science-icons-row" id="p2-science-slots">
-                <div class="science-slot" data-symbol="globe" title="천구의">🌐</div>
-                <div class="science-slot" data-symbol="compass" title="컴퍼스">📐</div>
-                <div class="science-slot" data-symbol="scale" title="저울">⚖️</div>
-                <div class="science-slot" data-symbol="tablet" title="서판">📜</div>
-                <div class="science-slot" data-symbol="gear" title="톱니바퀴">⚙️</div>
-                <div class="science-slot" data-symbol="mortar" title="약사발">🧪</div>
-              </div>
-            </div>
+          <!-- 중앙 카드 피라미드 보드 (실제 사진 탑재) -->
+          <div class="pyramid-board-wrap" id="pyramid-board">
+            <!-- 자바스크립트로 시대별 피라미드 카드가 동적으로 렌더링됩니다 -->
           </div>
 
         </div>
 
-        <!-- 중앙 카드 피라미드 드래프트 보드 -->
-        <div class="pyramid-board-wrap" id="pyramid-board">
-          <!-- 자바스크립트로 시대별 피라미드 카드가 동적으로 렌더링됩니다 -->
-        </div>
-
-        <!-- 하단 불가사의 (Wonders) 영역 -->
+        <!-- 하단 드래프트된 불가사의 (Wonders) 보관소 -->
         <div class="wonders-section">
           <div class="wonders-header">
-            <span><i class="fa-solid fa-monument" style="color: #8E44AD;"></i> 플레이어 불가사의 (Wonders)</span>
-            <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">
-              카드를 가져올 때 카드를 소비하여 불가사의를 건설할 수 있습니다.
+            <span><i class="fa-solid fa-monument" style="color: #8E44AD;"></i> 내 손안의 불가사의 (My Wonders)</span>
+            <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">
+              초반 드래프트로 획득한 불가사의 목록입니다. 카드를 가져올 때 카드를 소비하여 건설할 수 있습니다.
             </span>
           </div>
 
           <div class="wonders-grid" id="wonders-grid">
-            <!-- 자바스크립트로 P1 / P2의 불가사의가 동적 렌더링됩니다 -->
+            <!-- 자바스크립트로 선택 완료된 불가사의가 실제 사진과 함께 렌더링됩니다 -->
           </div>
         </div>
 
@@ -2209,7 +2345,7 @@
   </section>
 
   <!-- ==========================================================================
-       [6. 추천 도서 섹션 (Curated Bookshelf)]
+       [6. 추천 도서 섹션 (실제 사진 북커버 적용)]
        ========================================================================== -->
   <section class="section-padding books-section" id="books-section">
     <div class="container">
@@ -2222,26 +2358,22 @@
         </p>
       </div>
 
-      <!-- 3열 반응형 그리드 카드 -->
+      <!-- 3열 반응형 그리드 카드 (실제 표지 사진 적용) -->
       <div class="books-grid">
         
         <!-- [도서 1: 모스크바의 신사] -->
         <div class="book-card">
-          <!-- 감성적인 3D 북커버 -->
+          <!-- 3D 입체 실제 사진 북커버 -->
           <div class="book-cover-stage">
-            <div class="book-3d cover-gentleman">
-              <div class="book-spine-line"></div>
-              <div>
-                <span class="book-mini-tag">CLASSIC NOVEL</span>
-                <div style="font-size: 1.3rem; margin-top: 6px; padding-left: 6px;">🗝️</div>
-              </div>
-              <div>
-                <h4 class="book-cover-title">모스크바의<br>신사</h4>
-                <p class="book-cover-author">Amor Towles</p>
-              </div>
-              <div style="text-align: right;">
-                <span class="book-tag book-badge" style="font-size: 0.65rem;">METROPOL</span>
-              </div>
+            <div class="book-3d-photo">
+              <img 
+                src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788972758945.jpg" 
+                alt="모스크바의 신사 실제 도서 표지" 
+                class="book-cover-img"
+                loading="lazy"
+              />
+              <div class="book-spine-overlay"></div>
+              <div class="book-spine-line-groove"></div>
             </div>
           </div>
 
@@ -2253,7 +2385,7 @@
             </div>
 
             <h3 class="book-title">모스크바의 신사</h3>
-            <p class="book-author">에이모 토울스 (Amor Towles)</p>
+            <p class="book-author">에이모 토울스 (Amor Towles) | 현대문학</p>
 
             <div class="book-quote-box">
               <i class="fa-solid fa-quote-left"></i>
@@ -2264,21 +2396,17 @@
 
         <!-- [도서 2: 용의자 X의 헌신] -->
         <div class="book-card">
-          <!-- 감성적인 3D 북커버 -->
+          <!-- 3D 입체 실제 사진 북커버 -->
           <div class="book-cover-stage">
-            <div class="book-3d cover-suspect-x">
-              <div class="book-spine-line"></div>
-              <div>
-                <span class="book-mini-tag">MYSTERY & MATH</span>
-                <div style="font-size: 1.3rem; margin-top: 6px; padding-left: 6px;">📐</div>
-              </div>
-              <div>
-                <h4 class="book-cover-title">용의자 X의<br>헌신</h4>
-                <p class="book-cover-author">Keigo Higashino</p>
-              </div>
-              <div style="text-align: right;">
-                <span class="book-tag book-badge" style="font-size: 0.65rem;">f(x) = DEVOTION</span>
-              </div>
+            <div class="book-3d-photo">
+              <img 
+                src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788972753698.jpg" 
+                alt="용의자 X의 헌신 실제 도서 표지" 
+                class="book-cover-img"
+                loading="lazy"
+              />
+              <div class="book-spine-overlay"></div>
+              <div class="book-spine-line-groove"></div>
             </div>
           </div>
 
@@ -2290,7 +2418,7 @@
             </div>
 
             <h3 class="book-title">용의자 X의 헌신</h3>
-            <p class="book-author">히가시노 게이고 (Keigo Higashino)</p>
+            <p class="book-author">히가시노 게이고 (Keigo Higashino) | 현대문학</p>
 
             <div class="book-quote-box">
               <i class="fa-solid fa-quote-left"></i>
@@ -2301,21 +2429,17 @@
 
         <!-- [도서 3: 죽음의 수용소에서] -->
         <div class="book-card">
-          <!-- 감성적인 3D 북커버 -->
+          <!-- 3D 입체 실제 사진 북커버 -->
           <div class="book-cover-stage">
-            <div class="book-3d cover-meaning">
-              <div class="book-spine-line"></div>
-              <div>
-                <span class="book-mini-tag">LOGOTHERAPY</span>
-                <div style="font-size: 1.3rem; margin-top: 6px; padding-left: 6px;">🕯️</div>
-              </div>
-              <div>
-                <h4 class="book-cover-title">죽음의<br>수용소에서</h4>
-                <p class="book-cover-author">Viktor E. Frankl</p>
-              </div>
-              <div style="text-align: right;">
-                <span class="book-tag book-badge" style="font-size: 0.65rem;">MEANING OF LIFE</span>
-              </div>
+            <div class="book-3d-photo">
+              <img 
+                src="https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9788936812607.jpg" 
+                alt="죽음의 수용소에서 실제 도서 표지" 
+                class="book-cover-img"
+                loading="lazy"
+              />
+              <div class="book-spine-overlay"></div>
+              <div class="book-spine-line-groove"></div>
             </div>
           </div>
 
@@ -2327,7 +2451,7 @@
             </div>
 
             <h3 class="book-title">죽음의 수용소에서</h3>
-            <p class="book-author">빅터 프랭클 (Viktor E. Frankl)</p>
+            <p class="book-author">빅터 프랭클 (Viktor E. Frankl) | 청아출판사</p>
 
             <div class="book-quote-box">
               <i class="fa-solid fa-quote-left"></i>
@@ -2348,7 +2472,6 @@
     <div class="container">
       <div class="footer-content">
         
-        <!-- 좌측: 브랜드 및 프로필 소개 -->
         <div class="footer-brand">
           <h2>jjh_143 ARCHIVE</h2>
           <p>
@@ -2368,12 +2491,10 @@
           </div>
         </div>
 
-        <!-- 우측: 소셜 및 아카이브 바로가기 링크 버튼들 -->
         <div class="footer-links-col">
           <h4>ARCHIVE & CHANNELS</h4>
           <div class="social-btn-group">
             
-            <!-- 블로그 링크 버튼 -->
             <a href="https://blog.naver.com" target="_blank" rel="noopener noreferrer" class="social-btn">
               <div class="social-btn-left">
                 <i class="fa-solid fa-blog"></i>
@@ -2382,7 +2503,6 @@
               <i class="fa-solid fa-arrow-right"></i>
             </a>
 
-            <!-- 깃허브 링크 버튼 -->
             <a href="https://github.com/aneuri2" target="_blank" rel="noopener noreferrer" class="social-btn">
               <div class="social-btn-left">
                 <i class="fa-brands fa-github"></i>
@@ -2391,7 +2511,6 @@
               <i class="fa-solid fa-arrow-right"></i>
             </a>
 
-            <!-- 빵지순례 지도 단독 페이지 바로가기 버튼 -->
             <a href="./bread-map/index.html" target="_blank" rel="noopener noreferrer" class="social-btn">
               <div class="social-btn-left">
                 <i class="fa-solid fa-map"></i>
@@ -2400,7 +2519,6 @@
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
 
-            <!-- 보드게임 바로가기 -->
             <a href="#boardgame-section" class="social-btn">
               <div class="social-btn-left">
                 <i class="fa-solid fa-chess-rook"></i>
@@ -2414,7 +2532,6 @@
 
       </div>
 
-      <!-- 하단 저작권 및 최상단 이동 버튼 -->
       <div class="footer-bottom">
         <p>© 2026 Jeong Jong-hwan. All rights reserved. Powered by jjh_143 Archive.</p>
         
@@ -2443,19 +2560,16 @@
       </div>
 
       <div class="modal-actions-list">
-        <!-- 행동 1: 건물 건설 -->
         <button class="action-choice-btn build" id="btn-action-build">
           <span><i class="fa-solid fa-hammer"></i> 건물 건설하기</span>
           <span id="action-build-cost-text">필요: 0 코인</span>
         </button>
 
-        <!-- 행동 2: 카드 버리고 코인 획득 -->
         <button class="action-choice-btn discard" id="btn-action-discard">
           <span><i class="fa-solid fa-coins"></i> 카드 버리고 코인 받기</span>
           <span>+2 코인 획득</span>
         </button>
 
-        <!-- 행동 3: 불가사의 건설 -->
         <button class="action-choice-btn wonder" id="btn-action-wonder">
           <span><i class="fa-solid fa-monument"></i> 불가사의 건설에 사용</span>
           <span id="action-wonder-cost-text">선택 가능</span>
@@ -2466,7 +2580,7 @@
 
   <!-- 2. 게임 룰 안내 모달 -->
   <div class="game-modal-overlay" id="rules-modal">
-    <div class="game-modal-card" style="max-width: 540px;">
+    <div class="game-modal-card" style="max-width: 560px;">
       <div class="game-modal-header">
         <h3 class="game-modal-title">세븐 원더스 듀얼 간단 규칙</h3>
         <button id="close-rules-modal-btn" style="font-size: 1.2rem; color: var(--text-muted);">
@@ -2475,12 +2589,14 @@
       </div>
 
       <div style="font-size: 0.92rem; color: var(--text-body); line-height: 1.7; display: flex; flex-direction: column; gap: 14px;">
-        <p><strong>1. 피라미드 드래프트:</strong><br>다른 카드에 덮이지 않은 앞면 카드만 클릭하여 가져올 수 있습니다. 카드가 제거되어 위에 덮고 있던 카드가 치워지면 뒷면 카드가 뒤집혀 공개됩니다.</p>
-        <p><strong>2. 3가지 카드 행동:</strong><br>
+        <p><strong>1. 초반 불가사의 드래프트 (Wonder Draft):</strong><br>
+        게임 시작 시 총 8장의 불가사의 중 4장씩 두 차례 공개되며, P1과 P2가 번갈아 가며 각각 4장씩의 불가사의를 직접 선택하여 보유합니다.</p>
+        <p><strong>2. 피라미드 드래프트:</strong><br>다른 카드에 덮이지 않은 앞면 카드만 클릭하여 가져올 수 있습니다. 카드가 제거되어 위에 덮고 있던 카드가 치워지면 뒷면 카드가 뒤집혀 공개됩니다.</p>
+        <p><strong>3. 3가지 카드 행동:</strong><br>
         • <strong>건물 건설:</strong> 코인을 지불하여 군사, 과학, 시민, 자원 등의 혜택을 얻습니다.<br>
         • <strong>버리기:</strong> 카드를 버리고 즉시 <strong>코인 2개</strong>를 받습니다.<br>
         • <strong>불가사의 건설:</strong> 카드를 소모하여 강력한 불가사의 건물을 완성합니다.</p>
-        <p><strong>3. 승리 조건:</strong><br>
+        <p><strong>4. 승리 조건:</strong><br>
         • <strong>군사 우위 승리:</strong> 군사 트랙 끝(+9 또는 -9) 도달 시 즉시 승리!<br>
         • <strong>과학 우위 승리:</strong> 서로 다른 과학 상징 6종을 먼저 모으면 즉시 승리!<br>
         • <strong>시민 승리:</strong> 3시대 종료 후 승점(VP) + 코인(3원당 1점) 총합이 높은 플레이어 승리!</p>
@@ -2584,71 +2700,76 @@
     });
 
     /* --------------------------------------------------------------------------
-       2. 세븐 원더스 듀얼 (7 Wonders Duel) 웹 게임 엔진
+       2. 세븐 원더스 듀얼 (7 Wonders Duel) 데이터 및 실제 사진 세팅
        -------------------------------------------------------------------------- */
-    // 카드 데이터베이스 (Age 1, 2, 3)
+    // 피라미드 일반 건물 카드 (실제 고화질 유적/건축 사진 매핑)
     const CARD_DATABASE = {
       1: [
-        { id: "a1_m1", name: "주둔지", type: "military", cost: 0, shield: 1, vp: 0, icon: "⚔️" },
-        { id: "a1_m2", name: "감시탑", type: "military", cost: 1, shield: 1, vp: 0, icon: "🏰" },
-        { id: "a1_s1", name: "작업장", type: "science", symbol: "gear", cost: 0, vp: 1, icon: "⚙️" },
-        { id: "a1_s2", name: "약초방", type: "science", symbol: "mortar", cost: 0, vp: 1, icon: "🧪" },
-        { id: "a1_s3", name: "필사실", type: "science", symbol: "tablet", cost: 1, vp: 1, icon: "📜" },
-        { id: "a1_c1", name: "극장", type: "civic", cost: 0, vp: 3, icon: "🎭" },
-        { id: "a1_c2", name: "목욕탕", type: "civic", cost: 1, vp: 3, icon: "🏛️" },
-        { id: "a1_k1", name: "선술집", type: "commerce", cost: 0, coins: 4, vp: 0, icon: "🍺" },
-        { id: "a1_k2", name: "시장", type: "commerce", cost: 0, coins: 3, vp: 0, icon: "🏺" },
-        { id: "a1_r1", name: "벌목장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🪵" },
-        { id: "a1_r2", name: "점토 채취장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🧱" },
-        { id: "a1_r3", name: "채석장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🪨" },
-        { id: "a1_m3", name: "성벽", type: "military", cost: 2, shield: 1, vp: 1, icon: "🛡️" },
-        { id: "a1_s4", name: "천문대", type: "science", symbol: "globe", cost: 2, vp: 1, icon: "🌐" }
+        { id: "a1_m1", name: "주둔지", type: "military", cost: 0, shield: 1, vp: 0, icon: "⚔️", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" },
+        { id: "a1_m2", name: "감시탑", type: "military", cost: 1, shield: 1, vp: 0, icon: "🏰", img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&q=80" },
+        { id: "a1_s1", name: "작업장", type: "science", symbol: "gear", cost: 0, vp: 1, icon: "⚙️", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80" },
+        { id: "a1_s2", name: "약초방", type: "science", symbol: "mortar", cost: 0, vp: 1, icon: "🧪", img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80" },
+        { id: "a1_s3", name: "필사실", type: "science", symbol: "tablet", cost: 1, vp: 1, icon: "📜", img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80" },
+        { id: "a1_c1", name: "극장", type: "civic", cost: 0, vp: 3, icon: "🎭", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80" },
+        { id: "a1_c2", name: "목욕탕", type: "civic", cost: 1, vp: 3, icon: "🏛️", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80" },
+        { id: "a1_k1", name: "선술집", type: "commerce", cost: 0, coins: 4, vp: 0, icon: "🍺", img: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=300&q=80" },
+        { id: "a1_k2", name: "시장", type: "commerce", cost: 0, coins: 3, vp: 0, icon: "🏺", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80" },
+        { id: "a1_r1", name: "벌목장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🪵", img: "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?w=300&q=80" },
+        { id: "a1_r2", name: "점토 채취장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🧱", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&q=80" },
+        { id: "a1_r3", name: "채석장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🪨", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=80" },
+        { id: "a1_m3", name: "성벽", type: "military", cost: 2, shield: 1, vp: 1, icon: "🛡️", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80" },
+        { id: "a1_s4", name: "천문대", type: "science", symbol: "globe", cost: 2, vp: 1, icon: "🌐", img: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=300&q=80" }
       ],
       2: [
-        { id: "a2_m1", name: "연병장", type: "military", cost: 2, shield: 2, vp: 0, icon: "🛡️" },
-        { id: "a2_m2", name: "궁술장", type: "military", cost: 3, shield: 2, vp: 0, icon: "🏹" },
-        { id: "a2_s1", name: "도서관", type: "science", symbol: "tablet", cost: 2, vp: 2, icon: "📜" },
-        { id: "a2_s2", name: "법원", type: "science", symbol: "scale", cost: 2, vp: 2, icon: "⚖️" },
-        { id: "a2_s3", name: "실험실", type: "science", symbol: "mortar", cost: 2, vp: 2, icon: "🧪" },
-        { id: "a2_c1", name: "신전", type: "civic", cost: 2, vp: 4, icon: "⛩️" },
-        { id: "a2_c2", name: "조각상", type: "civic", cost: 3, vp: 5, icon: "🗿" },
-        { id: "a2_k1", name: "세관", type: "commerce", cost: 1, coins: 4, vp: 1, icon: "🪙" },
-        { id: "a2_k2", name: "양조장", type: "commerce", cost: 0, coins: 5, vp: 0, icon: "🍷" },
-        { id: "a2_s4", name: "학당", type: "science", symbol: "compass", cost: 2, vp: 2, icon: "📐" },
-        { id: "a2_m3", name: "병영", type: "military", cost: 2, shield: 1, vp: 1, icon: "⚔️" },
-        { id: "a2_c3", name: "수로", type: "civic", cost: 2, vp: 5, icon: "⛲" },
-        { id: "a2_s5", name: "연구소", type: "science", symbol: "gear", cost: 3, vp: 2, icon: "⚙️" },
-        { id: "a2_k3", name: "포럼", type: "commerce", cost: 2, coins: 3, vp: 2, icon: "🏛️" }
+        { id: "a2_m1", name: "연병장", type: "military", cost: 2, shield: 2, vp: 0, icon: "🛡️", img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&q=80" },
+        { id: "a2_m2", name: "궁술장", type: "military", cost: 3, shield: 2, vp: 0, icon: "🏹", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" },
+        { id: "a2_s1", name: "도서관", type: "science", symbol: "tablet", cost: 2, vp: 2, icon: "📜", img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=300&q=80" },
+        { id: "a2_s2", name: "법원", type: "science", symbol: "scale", cost: 2, vp: 2, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=300&q=80" },
+        { id: "a2_s3", name: "실험실", type: "science", symbol: "mortar", cost: 2, vp: 2, icon: "🧪", img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80" },
+        { id: "a2_c1", name: "신전", type: "civic", cost: 2, vp: 4, icon: "⛩️", img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=300&q=80" },
+        { id: "a2_c2", name: "조각상", type: "civic", cost: 3, vp: 5, icon: "🗿", img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&q=80" },
+        { id: "a2_k1", name: "세관", type: "commerce", cost: 1, coins: 4, vp: 1, icon: "🪙", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80" },
+        { id: "a2_k2", name: "양조장", type: "commerce", cost: 0, coins: 5, vp: 0, icon: "🍷", img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=300&q=80" },
+        { id: "a2_s4", name: "학당", type: "science", symbol: "compass", cost: 2, vp: 2, icon: "📐", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80" },
+        { id: "a2_m3", name: "병영", type: "military", cost: 2, shield: 1, vp: 1, icon: "⚔️", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80" },
+        { id: "a2_c3", name: "수로", type: "civic", cost: 2, vp: 5, icon: "⛲", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80" },
+        { id: "a2_s5", name: "연구소", type: "science", symbol: "gear", cost: 3, vp: 2, icon: "⚙️", img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80" },
+        { id: "a2_k3", name: "포럼", type: "commerce", cost: 2, coins: 3, vp: 2, icon: "🏛️", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80" }
       ],
       3: [
-        { id: "a3_m1", name: "요새", type: "military", cost: 4, shield: 2, vp: 1, icon: "🏰" },
-        { id: "a3_m2", name: "공성무기", type: "military", cost: 5, shield: 3, vp: 0, icon: "☄️" },
-        { id: "a3_s1", name: "아카데미", type: "science", symbol: "compass", cost: 3, vp: 3, icon: "📐" },
-        { id: "a3_s2", name: "연구원", type: "science", symbol: "globe", cost: 3, vp: 3, icon: "🌐" },
-        { id: "a3_s3", name: "대법원", type: "science", symbol: "scale", cost: 3, vp: 3, icon: "⚖️" },
-        { id: "a3_c1", name: "판테온", type: "civic", cost: 4, vp: 6, icon: "🏛️" },
-        { id: "a3_c2", name: "궁전", type: "civic", cost: 5, vp: 7, icon: "👑" },
-        { id: "a3_c3", name: "정원", type: "civic", cost: 3, vp: 6, icon: "🌳" },
-        { id: "a3_k1", name: "항구", type: "commerce", cost: 2, coins: 6, vp: 3, icon: "⛵" },
-        { id: "a3_k2", name: "상인길드", type: "commerce", cost: 3, coins: 5, vp: 4, icon: "🤝" },
-        { id: "a3_m3", name: "경기장", type: "military", cost: 4, shield: 2, vp: 2, icon: "🏟️" },
-        { id: "a3_s4", name: "대학", type: "science", symbol: "tablet", cost: 4, vp: 3, icon: "📜" },
-        { id: "a3_c4", name: "오벨리스크", type: "civic", cost: 3, vp: 5, icon: "🗽" },
-        { id: "a3_m4", name: "친위대", type: "military", cost: 3, shield: 2, vp: 1, icon: "🛡️" }
+        { id: "a3_m1", name: "요새", type: "military", cost: 4, shield: 2, vp: 1, icon: "🏰", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80" },
+        { id: "a3_m2", name: "공성무기", type: "military", cost: 5, shield: 3, vp: 0, icon: "☄️", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" },
+        { id: "a3_s1", name: "아카데미", type: "science", symbol: "compass", cost: 3, vp: 3, icon: "📐", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80" },
+        { id: "a3_s2", name: "연구원", type: "science", symbol: "globe", cost: 3, vp: 3, icon: "🌐", img: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=300&q=80" },
+        { id: "a3_s3", name: "대법원", type: "science", symbol: "scale", cost: 3, vp: 3, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=300&q=80" },
+        { id: "a3_c1", name: "판테온", type: "civic", cost: 4, vp: 6, icon: "🏛️", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80" },
+        { id: "a3_c2", name: "궁전", type: "civic", cost: 5, vp: 7, icon: "👑", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80" },
+        { id: "a3_c3", name: "정원", type: "civic", cost: 3, vp: 6, icon: "🌳", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=300&q=80" },
+        { id: "a3_k1", name: "항구", type: "commerce", cost: 2, coins: 6, vp: 3, icon: "⛵", img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=300&q=80" },
+        { id: "a3_k2", name: "상인길드", type: "commerce", cost: 3, coins: 5, vp: 4, icon: "🤝", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80" },
+        { id: "a3_m3", name: "경기장", type: "military", cost: 4, shield: 2, vp: 2, icon: "🏟️", img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&q=80" },
+        { id: "a3_s4", name: "대학", type: "science", symbol: "tablet", cost: 4, vp: 3, icon: "📜", img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=300&q=80" },
+        { id: "a3_c4", name: "오벨리스크", type: "civic", cost: 3, vp: 5, icon: "🗽", img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=300&q=80" },
+        { id: "a3_m4", name: "친위대", type: "military", cost: 3, shield: 2, vp: 1, icon: "🛡️", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" }
       ]
     };
 
-    // 불가사의 풀 (Wonders)
-    const WONDERS_DATA = [
-      { id: "w_pyramids", name: "피라미드", owner: 1, cost: 4, vp: 9, shield: 0, coins: 0, built: false, desc: "승점 9점 획득" },
-      { id: "w_colossus", name: "콜로서스", owner: 1, cost: 3, vp: 3, shield: 2, coins: 0, built: false, desc: "군사 방패 2개, 승점 3점" },
-      { id: "w_lighthouse", name: "알렉산드리아 등대", owner: 2, cost: 3, vp: 4, shield: 0, coins: 6, built: false, desc: "코인 6개, 승점 4점" },
-      { id: "w_zeus", name: "제우스 신상", owner: 2, cost: 3, vp: 3, shield: 1, coins: 0, built: false, desc: "군사 방패 1개, 상대 코인 2개 파괴, 승점 3점" }
+    // 8종 고대 세계의 불가사의 마스터 풀 (실제 사진 매핑)
+    const ALL_WONDERS_MASTER = [
+      { id: "w_pyramids", name: "기자의 대피라미드", cost: 4, vp: 9, shield: 0, coins: 0, built: false, img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=400&q=80", desc: "영원불멸의 피라미드: 승점 9점 획득" },
+      { id: "w_colossus", name: "로도스의 거상", cost: 3, vp: 3, shield: 2, coins: 0, built: false, img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80", desc: "태양신의 수호: 군사 방패 2개, 승점 3점" },
+      { id: "w_lighthouse", name: "알렉산드리아 등대", cost: 3, vp: 4, shield: 0, coins: 6, built: false, img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=400&q=80", desc: "파로스 섬의 빛: 코인 6개 즉시 획득, 승점 4점" },
+      { id: "w_zeus", name: "올림피아 제우스 신상", cost: 3, vp: 3, shield: 1, coins: 0, built: false, img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=400&q=80", desc: "신들의 왕: 군사 방패 1개, 상대 코인 2개 파괴, 승점 3점" },
+      { id: "w_gardens", name: "바빌론의 공중정원", cost: 3, vp: 3, shield: 0, coins: 6, built: false, img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80", desc: "전설의 테라스 정원: 코인 6개 즉시 획득, 승점 3점" },
+      { id: "w_artemis", name: "아르테미스 신전", cost: 2, vp: 2, shield: 0, coins: 5, built: false, img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400&q=80", desc: "풍요의 여신: 코인 5개 즉시 획득, 승점 2점" },
+      { id: "w_library", name: "알렉산드리아 대도서관", cost: 4, vp: 4, shield: 0, coins: 0, built: false, img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400&q=80", desc: "고대 지식의 전당: 승점 4점 획득" },
+      { id: "w_circus", name: "키르쿠스 막시무스", cost: 2, vp: 3, shield: 1, coins: 0, built: false, img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&q=80", desc: "로마 대경기장: 군사 방패 1개, 승점 3점" }
     ];
 
-    // 게임 상태 객체
+    // 전체 게임 상태
     let gameState = {
       mode: 'ai',           // 'ai' or 'pvp'
+      phase: 'draft',       // 'draft' (초반 불가사의 선택) or 'play' (본게임 피라미드 드래프트)
       currentAge: 1,
       turn: 1,              // 1 (P1) or 2 (P2 / AI)
       militaryTrack: 0,     // -9 (P2 win) ~ 0 ~ +9 (P1 win)
@@ -2658,26 +2779,178 @@
         1: { name: "P1 (정종환)", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] },
         2: { name: "AI 봇", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] }
       },
-      wonders: JSON.parse(JSON.stringify(WONDERS_DATA)),
-      pyramid: [] // 피라미드 노드 리스트
+      wonders: [], // 게임에 배정된 8장의 불가사의
+      draft: {
+        round: 1,           // 라운드 1 or 라운드 2
+        step: 0,            // 드래프트 단계
+        pool1: [],          // 라운드 1 후보 4장
+        pool2: [],          // 라운드 2 후보 4장
+        currentPool: [],    // 현재 공개된 후보들
+        activePicker: 1     // 현재 집을 플레이어 (1 or 2)
+      },
+      pyramid: []
     };
 
-    // 피라미드 노드 생성 함수
-    // 4개 층: 
-    // Row 0: 2장 (뒷면)
-    // Row 1: 3장 (앞면)
-    // Row 2: 4장 (뒷면)
-    // Row 3: 5장 (앞면)
+    /* --------------------------------------------------------------------------
+       3. 초반 불가사의 드래프트 (Wonder Draft Phase) 엔진
+       -------------------------------------------------------------------------- */
+    function initWonderDraft() {
+      gameState.phase = 'draft';
+      gameState.wonders = [];
+      
+      // 8장의 불가사의를 무작위로 섞어 4장씩 분할
+      const shuffled = [...ALL_WONDERS_MASTER].sort(() => Math.random() - 0.5);
+      gameState.draft.pool1 = shuffled.slice(0, 4);
+      gameState.draft.pool2 = shuffled.slice(4, 8);
+      gameState.draft.round = 1;
+      gameState.draft.step = 0;
+      gameState.draft.currentPool = [...gameState.draft.pool1];
+      gameState.draft.activePicker = 1; // P1부터 시작
+
+      document.getElementById('wonder-draft-container').style.display = 'flex';
+      document.getElementById('main-gameplay-area').style.display = 'none';
+
+      renderWonderDraftUI();
+    }
+
+    function renderWonderDraftUI() {
+      const container = document.getElementById('wonder-draft-container');
+      const roundTag = document.getElementById('draft-round-tag');
+      const title = document.getElementById('draft-turn-title');
+      const desc = document.getElementById('draft-turn-desc');
+      const poolContainer = document.getElementById('draft-cards-pool');
+
+      roundTag.textContent = `불가사의 드래프트: 라운드 ${gameState.draft.round}/2`;
+
+      const pickerName = gameState.draft.activePicker === 1 ? "플레이어 1 (정종환)" : (gameState.mode === 'ai' ? "AI 봇" : "플레이어 2");
+      title.textContent = `${pickerName}의 선택 차례`;
+
+      if (gameState.draft.round === 1) {
+        desc.textContent = "라운드 1 (선택 순서: P1 1장 ➔ P2/AI 2장 ➔ P1 남은 1장)";
+      } else {
+        desc.textContent = "라운드 2 (선택 순서: P2/AI 1장 ➔ P1 2장 ➔ P2/AI 남은 1장)";
+      }
+
+      poolContainer.innerHTML = '';
+
+      gameState.draft.currentPool.forEach(wonder => {
+        const cardEl = document.createElement('div');
+        cardEl.className = 'draft-card';
+        cardEl.innerHTML = `
+          <div class="draft-card-img-wrap">
+            <img src="${wonder.img}" alt="${wonder.name}" loading="lazy">
+            <span class="draft-card-cost-pill">${wonder.cost} 코인</span>
+          </div>
+          <div class="draft-card-body">
+            <h4 class="draft-card-title">${wonder.name}</h4>
+            <p class="draft-card-benefit">${wonder.desc}</p>
+            <div class="draft-select-btn">
+              <i class="fa-solid fa-hand-pointer"></i> 불가사의 선택
+            </div>
+          </div>
+        `;
+
+        cardEl.addEventListener('click', () => {
+          if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') return; // AI 턴 동안 인간 클릭 차단
+          onWonderCardSelected(wonder);
+        });
+
+        poolContainer.appendChild(cardEl);
+      });
+
+      renderWonders();
+      updateTurnBanner();
+
+      // AI 차례일 경우 자동 선택 트리거
+      if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') {
+        setTimeout(playAIWonderPick, 650);
+      }
+    }
+
+    function onWonderCardSelected(wonder) {
+      const picker = gameState.draft.activePicker;
+      
+      // 불가사의 소유자 배정 및 보관소 추가
+      const clonedWonder = { ...wonder, owner: picker, built: false };
+      gameState.wonders.push(clonedWonder);
+
+      // 현재 풀에서 제거
+      gameState.draft.currentPool = gameState.draft.currentPool.filter(w => w.id !== wonder.id);
+      gameState.draft.step++;
+
+      // 드래프트 순서 규칙:
+      // 라운드 1 (step 0: P1, step 1: P2, step 2: P2, step 3: P1 자동)
+      // 라운드 2 (step 0: P2, step 1: P1, step 2: P1, step 3: P2 자동)
+      if (gameState.draft.round === 1) {
+        if (gameState.draft.step === 1) {
+          gameState.draft.activePicker = 2; // P2 선택
+        } else if (gameState.draft.step === 2) {
+          gameState.draft.activePicker = 2; // P2 연속 선택
+        } else if (gameState.draft.step === 3) {
+          // 남은 1장은 자동으로 P1에 배정
+          const lastWonder = gameState.draft.currentPool[0];
+          gameState.wonders.push({ ...lastWonder, owner: 1, built: false });
+          gameState.draft.currentPool = [];
+          
+          // 라운드 2로 전환
+          gameState.draft.round = 2;
+          gameState.draft.step = 0;
+          gameState.draft.currentPool = [...gameState.draft.pool2];
+          gameState.draft.activePicker = 2; // 라운드 2는 P2부터 시작
+        }
+      } else if (gameState.draft.round === 2) {
+        if (gameState.draft.step === 1) {
+          gameState.draft.activePicker = 1; // P1 선택
+        } else if (gameState.draft.step === 2) {
+          gameState.draft.activePicker = 1; // P1 연속 선택
+        } else if (gameState.draft.step === 3) {
+          // 남은 1장은 자동으로 P2에 배정
+          const lastWonder = gameState.draft.currentPool[0];
+          gameState.wonders.push({ ...lastWonder, owner: 2, built: false });
+          gameState.draft.currentPool = [];
+
+          // 불가사의 드래프트 완료! 본게임 피라미드 보드로 진입!
+          finishWonderDraft();
+          return;
+        }
+      }
+
+      renderWonderDraftUI();
+    }
+
+    function playAIWonderPick() {
+      if (gameState.draft.currentPool.length === 0) return;
+      // AI는 승점(vp) 및 군사(shield) 가중치로 최선의 불가사의 선택
+      const pool = gameState.draft.currentPool;
+      const sorted = [...pool].sort((a, b) => (b.vp * 2 + b.shield * 4 + b.coins) - (a.vp * 2 + a.shield * 4 + a.coins));
+      onWonderCardSelected(sorted[0]);
+    }
+
+    function finishWonderDraft() {
+      gameState.phase = 'play';
+      gameState.turn = 1;
+      gameState.currentAge = 1;
+      gameState.pyramid = buildPyramidStructure(1);
+
+      document.getElementById('wonder-draft-container').style.display = 'none';
+      document.getElementById('main-gameplay-area').style.display = 'block';
+
+      updatePyramidAccessibility();
+      renderGameUI();
+    }
+
+    /* --------------------------------------------------------------------------
+       4. 피라미드 보드 빌드 및 렌더링 (실제 고화질 사진 탑재)
+       -------------------------------------------------------------------------- */
     function buildPyramidStructure(age) {
       const cards = [...CARD_DATABASE[age]].sort(() => Math.random() - 0.5);
       const rows = [2, 3, 4, 5];
       let cardIdx = 0;
       const nodes = [];
 
-      // 1. 노드 생성
       for (let r = 0; r < rows.length; r++) {
         const count = rows[r];
-        const isFaceUp = (r === 1 || r === 3); // 1층과 3층은 앞면, 0층과 2층은 뒷면
+        const isFaceUp = (r === 1 || r === 3);
         for (let c = 0; c < count; c++) {
           nodes.push({
             id: `node_${r}_${c}`,
@@ -2686,12 +2959,11 @@
             card: cards[cardIdx++] || cards[0],
             isFaceUp: isFaceUp,
             isTaken: false,
-            coveredBy: [] // 이 카드를 덮고 있는 아래 줄 카드의 id 목록
+            coveredBy: []
           });
         }
       }
 
-      // 2. 덮임 관계 (coveredBy) 설정: (r, c)는 바로 아래 (r+1, c)와 (r+1, c+1)에 의해 덮임
       nodes.forEach(node => {
         if (node.row < rows.length - 1) {
           const nextRow = node.row + 1;
@@ -2704,7 +2976,6 @@
       return nodes;
     }
 
-    // 피라미드 상태 갱신 (덮고 있던 카드가 모두 치워지면 앞면으로 뒤집힘)
     function updatePyramidAccessibility() {
       gameState.pyramid.forEach(node => {
         if (!node.isTaken) {
@@ -2714,13 +2985,12 @@
           });
           
           if (activeCoveringCards.length === 0) {
-            node.isFaceUp = true; // 잠금 해제 & 앞면 공개!
+            node.isFaceUp = true;
           }
         }
       });
     }
 
-    // UI 렌더링 함수들
     function renderGameUI() {
       renderDashboard();
       renderPyramid();
@@ -2728,18 +2998,15 @@
       updateTurnBanner();
     }
 
-    // 대시보드 (스탯, 군사, 과학) 렌더링
     function renderDashboard() {
       const p1 = gameState.players[1];
       const p2 = gameState.players[2];
 
-      // 코인 & VP
       document.getElementById('p1-coins').textContent = p1.coins;
       document.getElementById('p1-vp').textContent = calculatePlayerVP(1);
       document.getElementById('p2-coins').textContent = p2.coins;
       document.getElementById('p2-vp').textContent = calculatePlayerVP(2);
 
-      // 과학 슬롯
       document.getElementById('p1-science-count').textContent = p1.science.size;
       document.querySelectorAll('#p1-science-slots .science-slot').forEach(slot => {
         const symbol = slot.dataset.symbol;
@@ -2754,8 +3021,6 @@
         else slot.classList.remove('collected');
       });
 
-      // 군사 트랙 위치 (-9 ~ +9 -> 0% ~ 100%)
-      // -9면 4%, 0이면 50%, +9면 96%
       const milVal = Math.max(-9, Math.min(9, gameState.militaryTrack));
       const percentage = 50 + (milVal / 9) * 46;
       document.getElementById('military-token').style.left = `${percentage}%`;
@@ -2766,7 +3031,6 @@
       else statusDesc += `(완전한 중립)`;
       document.getElementById('military-status-desc').innerHTML = statusDesc;
 
-      // 턴 박스 테두리 활성화
       if (gameState.turn === 1) {
         document.getElementById('p1-stat-box').classList.add('active-turn');
         document.getElementById('p2-stat-box').classList.remove('active-turn');
@@ -2776,11 +3040,17 @@
       }
     }
 
-    // 턴 배너 업데이트
     function updateTurnBanner() {
       const bannerText = document.getElementById('turn-display-text');
       const ageBadge = document.getElementById('current-age-badge');
       
+      if (gameState.phase === 'draft') {
+        ageBadge.textContent = "초반 드래프트";
+        const picker = gameState.draft.activePicker === 1 ? "플레이어 1 (정종환)" : (gameState.mode === 'ai' ? "AI 봇" : "플레이어 2");
+        bannerText.textContent = `🏛️ 불가사의 선택 단계: [${picker}]의 선택 차례입니다.`;
+        return;
+      }
+
       ageBadge.textContent = `제 ${gameState.currentAge} 시대 (Age ${getRomanNumeral(gameState.currentAge)})`;
 
       if (gameState.isGameOver) {
@@ -2805,7 +3075,7 @@
       return 'III';
     }
 
-    // 피라미드 보드 렌더링
+    // 피라미드 보드 렌더링 (실제 사진 탑재)
     function renderPyramid() {
       const board = document.getElementById('pyramid-board');
       board.innerHTML = '';
@@ -2824,7 +3094,6 @@
           if (node.isTaken) {
             cardEl.classList.add('taken');
           } else if (!node.isFaceUp) {
-            // 뒷면 카드
             cardEl.classList.add('face-down', 'covered');
             cardEl.innerHTML = `
               <div class="face-down-emblem">
@@ -2832,7 +3101,6 @@
               </div>
             `;
           } else {
-            // 앞면 카드
             const isAccessible = isNodeAccessible(node);
             if (isAccessible) {
               cardEl.classList.add('accessible', `card-type-${node.card.type}`);
@@ -2849,14 +3117,16 @@
             else if (node.card.type === 'resource') typeIconClass = "fa-cubes";
 
             cardEl.innerHTML = `
-              <div class="card-header-bar">
-                <span class="card-cost ${node.card.cost === 0 ? 'free' : ''}">
+              <div class="card-photo-header">
+                <img src="${node.card.img}" alt="${node.card.name}" loading="lazy">
+                <span class="card-photo-cost ${node.card.cost === 0 ? 'free' : ''}">
                   ${node.card.cost === 0 ? '무료' : node.card.cost + ' 🪙'}
                 </span>
-                <span class="card-type-icon"><i class="fa-solid ${typeIconClass}"></i></span>
+                <span class="card-photo-type-badge">
+                  <i class="fa-solid ${typeIconClass}"></i>
+                </span>
               </div>
               <div class="card-body-content">
-                <div class="card-main-symbol">${node.card.icon}</div>
                 <div class="card-title">${node.card.name}</div>
                 <div class="card-benefit-badge">${getCardBenefitSummary(node.card)}</div>
               </div>
@@ -2886,51 +3156,57 @@
       });
     }
 
-    // 불가사의 렌더링
+    // 하단 불가사의 렌더링 (실제 사진 탑재)
     function renderWonders() {
       const wondersContainer = document.getElementById('wonders-grid');
       wondersContainer.innerHTML = '';
+
+      if (gameState.wonders.length === 0) {
+        wondersContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 20px;">
+            상단의 불가사의 드래프트 단계를 완료하면 획득한 불가사의들이 이곳에 배치됩니다.
+          </div>
+        `;
+        return;
+      }
 
       gameState.wonders.forEach(w => {
         const wonderEl = document.createElement('div');
         wonderEl.className = `wonder-card ${w.built ? 'built' : ''}`;
         
         wonderEl.innerHTML = `
-          <div class="wonder-card-top">
-            <span class="wonder-owner-tag">소유: ${w.owner === 1 ? 'P1 (정종환)' : 'P2/AI'}</span>
-            <span class="wonder-cost">${w.cost} 코인</span>
+          <img src="${w.img}" alt="${w.name}" class="wonder-card-img" loading="lazy">
+          <div class="wonder-card-body">
+            <div class="wonder-card-top">
+              <span class="wonder-owner-tag">소유: ${w.owner === 1 ? 'P1' : 'P2/AI'}</span>
+              <span class="wonder-cost">${w.cost} 코인</span>
+            </div>
+            <div class="wonder-name">
+              <i class="fa-solid fa-monument" style="color: #8E44AD;"></i>
+              <span>${w.name}</span>
+            </div>
+            <p class="wonder-benefit">${w.desc}</p>
+            ${w.built ? '<span class="wonder-stamp"><i class="fa-solid fa-check"></i> 건설 완료</span>' : ''}
           </div>
-          <div class="wonder-name">
-            <i class="fa-solid fa-monument" style="color: #8E44AD;"></i>
-            <span>${w.name}</span>
-          </div>
-          <p class="wonder-benefit">${w.desc}</p>
-          ${w.built ? '<span class="wonder-stamp"><i class="fa-solid fa-check"></i> 건설 완료</span>' : ''}
         `;
         wondersContainer.appendChild(wonderEl);
       });
     }
 
-    // 승점 계산기 (건물 승점 + 불가사의 승점 + 군사 승점 + 코인 3개당 1점)
     function calculatePlayerVP(playerNum) {
       const p = gameState.players[playerNum];
       let vp = 0;
 
-      // 1. 카드 건물 승점
       p.builtCards.forEach(c => {
         if (c.vp) vp += c.vp;
       });
 
-      // 2. 건설된 불가사의 승점
       gameState.wonders.filter(w => w.owner === playerNum && w.built).forEach(w => {
         vp += w.vp;
       });
 
-      // 3. 코인 환산 점수 (3코인당 1VP)
       vp += Math.floor(p.coins / 3);
 
-      // 4. 군사 트랙 우위 점수
-      // -9 ~ +9
       const mil = gameState.militaryTrack;
       if (playerNum === 1 && mil > 0) {
         if (mil >= 6) vp += 10;
@@ -2947,11 +3223,11 @@
     }
 
     /* --------------------------------------------------------------------------
-       카드 클릭 & 액션 처리 (인간 플레이어)
+       5. 카드 액션 모달 & 플레이 실행
        -------------------------------------------------------------------------- */
     function onCardClicked(node) {
-      if (gameState.isGameOver) return;
-      if (gameState.mode === 'ai' && gameState.turn === 2) return; // AI 턴 동안 조작 차단
+      if (gameState.isGameOver || gameState.phase !== 'play') return;
+      if (gameState.mode === 'ai' && gameState.turn === 2) return;
 
       gameState.selectedCardNode = node;
       openActionModal(node);
@@ -2968,16 +3244,16 @@
       const card = node.card;
       const player = gameState.players[gameState.turn];
 
-      // 미리보기 렌더링
       preview.innerHTML = `
-        <div class="preview-card-icon">${card.icon}</div>
+        <div class="preview-card-img-wrap">
+          <img src="${card.img}" alt="${card.name}">
+        </div>
         <div class="preview-card-info">
           <h4>${card.name} (${getCardTypeName(card.type)})</h4>
           <p>효과: <strong>${getCardBenefitSummary(card)}</strong> / 비용: <strong>${card.cost === 0 ? '무료' : card.cost + ' 코인'}</strong></p>
         </div>
       `;
 
-      // 1. 건설 가능 여부 체크
       if (player.coins >= card.cost) {
         buildBtn.disabled = false;
         buildCostText.textContent = `${card.cost} 코인 지불`;
@@ -2986,7 +3262,6 @@
         buildCostText.textContent = `코인 부족 (${card.cost} 필요)`;
       }
 
-      // 2. 불가사의 건설 가능 여부 체크
       const availableWonder = gameState.wonders.find(w => w.owner === gameState.turn && !w.built);
       if (availableWonder && player.coins >= availableWonder.cost) {
         wonderBtn.disabled = false;
@@ -3015,21 +3290,18 @@
       return '자원';
     }
 
-    // [액션 1: 건물 건설 실행]
     document.getElementById('btn-action-build').addEventListener('click', () => {
       if (!gameState.selectedCardNode) return;
       executeCardAction('build', gameState.selectedCardNode);
       closeActionModal();
     });
 
-    // [액션 2: 버리고 코인 받기 실행]
     document.getElementById('btn-action-discard').addEventListener('click', () => {
       if (!gameState.selectedCardNode) return;
       executeCardAction('discard', gameState.selectedCardNode);
       closeActionModal();
     });
 
-    // [액션 3: 불가사의 건설 실행]
     document.getElementById('btn-action-wonder').addEventListener('click', () => {
       if (!gameState.selectedCardNode) return;
       executeCardAction('wonder', gameState.selectedCardNode);
@@ -3038,7 +3310,6 @@
 
     document.getElementById('close-action-modal-btn').addEventListener('click', closeActionModal);
 
-    // 행동 실행 코어 로직
     function executeCardAction(actionType, node) {
       const pNum = gameState.turn;
       const player = gameState.players[pNum];
@@ -3048,7 +3319,6 @@
         player.coins -= card.cost;
         player.builtCards.push(card);
 
-        // 효과 적용
         if (card.shield) {
           if (pNum === 1) gameState.militaryTrack += card.shield;
           else gameState.militaryTrack -= card.shield;
@@ -3060,7 +3330,6 @@
           player.coins += card.coins;
         }
       } else if (actionType === 'discard') {
-        // 코인 +2원 획득
         player.coins += 2;
       } else if (actionType === 'wonder') {
         const wonder = gameState.wonders.find(w => w.owner === pNum && !w.built);
@@ -3077,15 +3346,12 @@
         }
       }
 
-      // 카드 소비 처리
       node.isTaken = true;
       updatePyramidAccessibility();
       renderGameUI();
 
-      // 즉시 승리 조건 판정
       if (checkImmediateVictory()) return;
 
-      // 시대 종료 여부 체크 (남은 카드가 없는가?)
       const remainingCards = gameState.pyramid.filter(n => !n.isTaken);
       if (remainingCards.length === 0) {
         if (gameState.currentAge < 3) {
@@ -3094,27 +3360,24 @@
           updatePyramidAccessibility();
           renderGameUI();
         } else {
-          // 3시대 종료 -> 시민 승리 판정
           endGameByCivilianVictory();
           return;
         }
       }
 
-      // 턴 넘기기
       gameState.turn = (gameState.turn === 1) ? 2 : 1;
       renderGameUI();
 
-      // AI 턴 처리
       if (gameState.mode === 'ai' && gameState.turn === 2 && !gameState.isGameOver) {
         setTimeout(playAITurn, 700);
       }
     }
 
     /* --------------------------------------------------------------------------
-       AI 봇 로직 (Heuristic Evaluation)
+       6. AI 봇 엔진 (Heuristic Evaluation)
        -------------------------------------------------------------------------- */
     function playAITurn() {
-      if (gameState.isGameOver) return;
+      if (gameState.isGameOver || gameState.phase !== 'play') return;
 
       const aiPlayer = gameState.players[2];
       const accessibleNodes = gameState.pyramid.filter(isNodeAccessible);
@@ -3128,7 +3391,6 @@
       accessibleNodes.forEach(node => {
         const card = node.card;
 
-        // 1. 군사 승리 가능한가?
         if (card.shield && (gameState.militaryTrack - card.shield) <= -9 && aiPlayer.coins >= card.cost) {
           bestNode = node;
           bestAction = 'build';
@@ -3136,7 +3398,6 @@
           return;
         }
 
-        // 2. 과학 6종 완성 가능한가?
         if (card.symbol && !aiPlayer.science.has(card.symbol) && aiPlayer.science.size === 5 && aiPlayer.coins >= card.cost) {
           bestNode = node;
           bestAction = 'build';
@@ -3144,13 +3405,11 @@
           return;
         }
 
-        // 3. 상대방(P1) 군사/과학 저지
         if (card.shield && gameState.militaryTrack >= 6 && aiPlayer.coins >= card.cost) {
           const score = 500;
           if (score > highestScore) { highestScore = score; bestNode = node; bestAction = 'build'; }
         }
 
-        // 4. 일반적 평가: 불가사의, 군사, 과학, 승점, 코인
         const availableWonder = gameState.wonders.find(w => w.owner === 2 && !w.built);
         if (availableWonder && aiPlayer.coins >= availableWonder.cost) {
           const wonderScore = 120 + availableWonder.vp * 10;
@@ -3175,7 +3434,6 @@
             bestAction = 'build';
           }
         } else {
-          // 코인이 부족할 때 버리기 점수
           const discardScore = 15;
           if (discardScore > highestScore) {
             highestScore = discardScore;
@@ -3185,15 +3443,13 @@
         }
       });
 
-      // AI 결정 실행
       executeCardAction(bestAction, bestNode);
     }
 
     /* --------------------------------------------------------------------------
-       승리 조건 체크 및 게임 종료 모달
+       7. 승리 판정 및 게임 재시작
        -------------------------------------------------------------------------- */
     function checkImmediateVictory() {
-      // 1. 군사 우위 승리 (Military Supremacy)
       if (gameState.militaryTrack >= 9) {
         showVictoryModal("플레이어 1 (정종환) 승리!", "군사 트랙 끝에 도달하여 상대 수도를 함락시켰습니다! (군사 우위 승리 🛡️)");
         return true;
@@ -3202,7 +3458,6 @@
         return true;
       }
 
-      // 2. 과학 우위 승리 (Scientific Supremacy)
       if (gameState.players[1].science.size >= 6) {
         showVictoryModal("플레이어 1 (정종환) 승리!", "서로 다른 6가지 과학 상징을 모두 수집했습니다! (과학 우위 승리 🌐)");
         return true;
@@ -3277,7 +3532,6 @@
       document.getElementById('victory-modal').classList.add('active');
     }
 
-    // 모드 전환 및 리셋
     function initNewGame() {
       gameState.currentAge = 1;
       gameState.turn = 1;
@@ -3288,8 +3542,6 @@
         1: { name: "P1 (정종환)", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] },
         2: { name: gameState.mode === 'ai' ? "AI 봇" : "플레이어 2", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] }
       };
-      gameState.wonders = JSON.parse(JSON.stringify(WONDERS_DATA));
-      gameState.pyramid = buildPyramidStructure(1);
 
       document.getElementById('p2-name-label').textContent = gameState.mode === 'ai' ? "AI 봇" : "플레이어 2";
       document.getElementById('p2-icon').className = gameState.mode === 'ai' ? "fa-solid fa-robot" : "fa-solid fa-user";
@@ -3297,11 +3549,11 @@
       document.getElementById('victory-modal').classList.remove('active');
       document.getElementById('action-modal').classList.remove('active');
 
-      updatePyramidAccessibility();
-      renderGameUI();
+      // 초반 불가사의 드래프트부터 시작!
+      initWonderDraft();
     }
 
-    // 모드 버튼 리스너
+    // 모드 토글
     document.getElementById('mode-ai-btn').addEventListener('click', () => {
       document.getElementById('mode-ai-btn').classList.add('active');
       document.getElementById('mode-pvp-btn').classList.remove('active');
@@ -3330,7 +3582,7 @@
       document.getElementById('rules-modal').classList.remove('active');
     });
 
-    // 게임 시작 시 초기화
+    // 시작 시 새 게임 개시
     initNewGame();
   </script>
 </body>
