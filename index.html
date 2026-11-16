@@ -3423,12 +3423,158 @@
   </footer>
 
   <!-- ==========================================================================
-       [보드게임 모달창들: 카드 액션 / 룰북 / 승리 결과]
-       ========================================================================== -->
-    <!-- ==========================================================================
        [보드게임 모달창들: 카드 액션 / 진보 토큰 선택 / 룰북 / 승리 결과]
        ========================================================================== -->
-    <script>
+  <!-- 1. 카드 선택 액션 모달 (동적 교역 비용 상세 계산) -->
+  <div class="game-modal-overlay" id="action-modal">
+    <div class="game-modal-card">
+      <div class="game-modal-header">
+        <h3 class="game-modal-title">카드 행동 선택</h3>
+        <button id="close-action-modal-btn" style="font-size: 1.2rem; color: var(--text-muted);">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="action-card-preview" id="action-card-preview">
+        <!-- 미리보기 내용 주입 -->
+      </div>
+
+      <!-- 동적 교역 비용 계산 상세 박스 -->
+      <div class="trade-cost-detail-box" id="trade-cost-detail-box">
+        <!-- 자바스크립트로 교역 계산 내역이 실시간 주입됩니다 -->
+      </div>
+
+      <div class="modal-actions-list">
+        <button class="action-choice-btn build" id="btn-action-build">
+          <span><i class="fa-solid fa-hammer"></i> 건물 건설하기</span>
+          <span id="action-build-cost-text">필요: 0 코인</span>
+        </button>
+
+        <button class="action-choice-btn discard" id="btn-action-discard">
+          <span><i class="fa-solid fa-coins"></i> 카드 버리고 코인 받기</span>
+          <span id="action-discard-coins-text">+2 코인 획득</span>
+        </button>
+
+        <button class="action-choice-btn wonder" id="btn-action-wonder">
+          <span><i class="fa-solid fa-monument"></i> 불가사의 건설에 사용</span>
+          <span id="action-wonder-cost-text">선택 가능</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 진보 토큰 선택 모달 (과학 상징 1쌍 완성 시 팝업) -->
+  <div class="game-modal-overlay" id="progress-select-modal">
+    <div class="game-modal-card" style="max-width: 520px;">
+      <div class="game-modal-header">
+        <h3 class="game-modal-title">🎉 과학적 진보: 진보 토큰 선택</h3>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 18px;">
+        동일한 과학 상징 1쌍(2개)을 달성했습니다! 아래 공개된 진보 토큰 중 1개를 선택하여 영구적인 혜택을 획득하세요.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;" id="progress-choice-list">
+        <!-- 선택 가능한 진보 토큰 목록 주입 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 공식 룰 안내 모달 -->
+  <div class="game-modal-overlay" id="rules-modal">
+    <div class="game-modal-card" style="max-width: 580px;">
+      <div class="game-modal-header">
+        <h3 class="game-modal-title">세븐 원더스 듀얼 공식 보드게임 룰</h3>
+        <button id="close-rules-modal-btn" style="font-size: 1.2rem; color: var(--text-muted);">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.65; display: flex; flex-direction: column; gap: 12px; max-height: 65vh; overflow-y: auto; padding-right: 6px;">
+        <p><strong>1. 자원 생산 및 동적 교역 비용 공식:</strong><br>
+        자원은 5종류(나무, 돌, 점토, 유리, 파피루스)입니다. 카드를 지을 때 부족한 자원 1개당 <strong>[기본 2코인 + 상대방이 생산하는 해당 자원 개수]</strong>의 코인을 은행에 지불하고 구입합니다. (특정 자원 할인 상업 카드를 보유하면 개당 1코인 고정!)</p>
+        
+        <p><strong>2. 연쇄 무료 건설 (Chaining):</strong><br>
+        이전 시대 카드가 제공하는 '연쇄 심볼(말굽, 검, 탑, 책 등)'을 보유하고 있다면, 상위 카드의 자원/코인 요구치와 상관없이 <strong>0원 무료 건설</strong>할 수 있습니다.</p>
+
+        <p><strong>3. 과학 페어 & 진보 토큰 (Progress Tokens):</strong><br>
+        <strong>똑같은 과학 상징 2개(1쌍)</strong>를 모을 때마다 보드 상단의 진보 토큰 5개 중 1개를 즉시 선택합니다. (서로 다른 과학 상징 6종을 먼저 모으면 즉시 과학 승리!)</p>
+
+        <p><strong>4. 군사 트랙 약탈 토큰 & 선 플레이어 결정:</strong><br>
+        군사 트랙 3칸 돌파 시 상대 코인 2개, 6칸 돌파 시 상대 코인 5개를 약탈합니다. 각 시대가 끝날 때 군사력이 밀리고 있는 플레이어가 다음 시대의 첫 턴(선)을 갖습니다.</p>
+
+        <p><strong>5. 카드 버리기 코인 & 7대 불가사의 제한:</strong><br>
+        카드를 버릴 때 <strong>[2 + 내가 보유한 노란색 상업 카드 수]</strong>만큼의 코인을 받습니다. 양 플레이어 합산 총 7개의 불가사의가 완공되는 즉시 8번째 불가사의는 건설할 수 없습니다.</p>
+      </div>
+
+      <div style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-primary" id="rules-confirm-btn" style="padding: 9px 18px;">이해했습니다!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 승리 / 게임 종료 모달 -->
+  <div class="game-modal-overlay" id="victory-modal">
+    <div class="game-modal-card victory-modal-content">
+      <div class="victory-trophy">
+        <i class="fa-solid fa-crown"></i>
+      </div>
+      <h3 class="game-modal-title" id="victory-title" style="font-size: 1.6rem; margin-bottom: 6px;">플레이어 1 승리!</h3>
+      <p id="victory-reason" style="font-size: 1rem; color: var(--point-terracotta); font-weight: 700; margin-bottom: 20px;">
+        군사 우위 승리를 달성했습니다!
+      </p>
+
+      <table class="score-breakdown-table">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>P1 (정종환)</th>
+            <th id="table-p2-header">P2 / AI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>건물 및 불가사의 VP</td>
+            <td id="final-p1-cards-vp">0점</td>
+            <td id="final-p2-cards-vp">0점</td>
+          </tr>
+          <tr>
+            <td>길드 카드(보라색) 보너스 VP</td>
+            <td id="final-p1-guild-vp">0점</td>
+            <td id="final-p2-guild-vp">0점</td>
+          </tr>
+          <tr>
+            <td>진보 토큰 VP (수학/철학 등)</td>
+            <td id="final-p1-prog-vp">0점</td>
+            <td id="final-p2-prog-vp">0점</td>
+          </tr>
+          <tr>
+            <td>코인 환산 점수 (3코인 = 1점)</td>
+            <td id="final-p1-coins-vp">0점</td>
+            <td id="final-p2-coins-vp">0점</td>
+          </tr>
+          <tr>
+            <td>군사 트랙 보너스 점수</td>
+            <td id="final-p1-mil-vp">0점</td>
+            <td id="final-p2-mil-vp">0점</td>
+          </tr>
+          <tr style="font-weight: 800; font-size: 1.05rem; background: var(--bg-subtle);">
+            <td>최종 총점</td>
+            <td id="final-p1-total" style="color: var(--point-terracotta);">0점</td>
+            <td id="final-p2-total" style="color: var(--game-civic);">0점</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button class="btn btn-primary" id="victory-restart-btn" style="width: 100%; margin-top: 10px;">
+        <i class="fa-solid fa-rotate-right"></i> 다시 대결하기
+      </button>
+    </div>
+  </div>
+  <script>
+/* ==========================================================================
+
+  <script>
+
 /* ==========================================================================
    세븐 원더스 듀얼 (7 Wonders Duel) BGA 원목 테이블 뷰 전용 게임 엔진
    ========================================================================== */
@@ -3884,8 +4030,10 @@ function initWonderDraft() {
   gameState.draft.currentPool = [...gameState.draft.pool1];
   gameState.draft.activePicker = 1;
 
-  document.getElementById('wonder-draft-container').style.display = 'flex';
-  document.getElementById('main-gameplay-area').style.display = 'none';
+  const draftCont = document.getElementById('wonder-draft-container');
+  if (draftCont) draftCont.style.display = 'flex';
+  const mainArea = document.getElementById('main-gameplay-area');
+  if (mainArea) mainArea.style.display = 'none';
 
   renderWonderDraftUI();
 }
@@ -3914,43 +4062,47 @@ function renderWonderDraftUI() {
   const desc = document.getElementById('draft-turn-desc');
   const poolContainer = document.getElementById('draft-cards-pool');
 
-  roundTag.textContent = `불가사의 드래프트: 라운드 ${gameState.draft.round}/2`;
+  if (roundTag) roundTag.textContent = `불가사의 드래프트: 라운드 ${gameState.draft.round}/2`;
 
   const pickerName = gameState.draft.activePicker === 1 ? "플레이어 1 (정종환)" : (gameState.mode === 'ai' ? "AI 봇" : "플레이어 2");
-  title.textContent = `${pickerName}의 선택 차례`;
+  if (title) title.textContent = `${pickerName}의 선택 차례`;
 
-  if (gameState.draft.round === 1) {
-    desc.textContent = "라운드 1 (선택 순서: P1 1장 ➔ P2/AI 2장 ➔ P1 남은 1장)";
-  } else {
-    desc.textContent = "라운드 2 (선택 순서: P2/AI 1장 ➔ P1 2장 ➔ P2/AI 남은 1장)";
+  if (desc) {
+    if (gameState.draft.round === 1) {
+      desc.textContent = "라운드 1 (선택 순서: P1 1장 ➔ P2/AI 2장 ➔ P1 남은 1장)";
+    } else {
+      desc.textContent = "라운드 2 (선택 순서: P2/AI 1장 ➔ P1 2장 ➔ P2/AI 남은 1장)";
+    }
   }
 
-  poolContainer.innerHTML = '';
+  if (poolContainer) {
+    poolContainer.innerHTML = '';
 
-  gameState.draft.currentPool.forEach(wonder => {
-    const cardEl = document.createElement('div');
-    cardEl.className = 'draft-card';
-    cardEl.innerHTML = `
-      <div class="draft-card-img-wrap">
-        <img src="${wonder.img}" alt="${wonder.name}" loading="lazy">
-        <span class="draft-card-cost-pill">${wonder.repeatTurn ? '⚡추가턴' : '불가사의'}</span>
-      </div>
-      <div class="draft-card-body">
-        <h4 class="draft-card-title">${wonder.name}</h4>
-        <p class="draft-card-benefit">${wonder.desc}</p>
-        <div class="draft-select-btn">
-          <i class="fa-solid fa-hand-pointer"></i> 불가사의 선택
+    gameState.draft.currentPool.forEach(wonder => {
+      const cardEl = document.createElement('div');
+      cardEl.className = 'draft-card';
+      cardEl.innerHTML = `
+        <div class="draft-card-img-wrap">
+          <img src="${wonder.img}" alt="${wonder.name}" loading="lazy">
+          <span class="draft-card-cost-pill">${wonder.repeatTurn ? '⚡추가턴' : '불가사의'}</span>
         </div>
-      </div>
-    `;
+        <div class="draft-card-body">
+          <h4 class="draft-card-title">${wonder.name}</h4>
+          <p class="draft-card-benefit">${wonder.desc}</p>
+          <div class="draft-select-btn">
+            <i class="fa-solid fa-hand-pointer"></i> 불가사의 선택
+          </div>
+        </div>
+      `;
 
-    cardEl.addEventListener('click', () => {
-      if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') return;
-      onWonderCardSelected(wonder);
+      cardEl.addEventListener('click', () => {
+        if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') return;
+        onWonderCardSelected(wonder);
+      });
+
+      poolContainer.appendChild(cardEl);
     });
-
-    poolContainer.appendChild(cardEl);
-  });
+  }
 
   renderBGAWonders();
   updateTurnBanner();
@@ -4014,8 +4166,10 @@ function finishWonderDraft() {
   gameState.currentAge = 1;
   gameState.pyramid = buildPyramidForAge(1);
 
-  document.getElementById('wonder-draft-container').style.display = 'none';
-  document.getElementById('main-gameplay-area').style.display = 'block';
+  const draftCont = document.getElementById('wonder-draft-container');
+  if (draftCont) draftCont.style.display = 'none';
+  const mainArea = document.getElementById('main-gameplay-area');
+  if (mainArea) mainArea.style.display = 'block';
 
   updatePyramidAccessibility();
   renderGameUI();
@@ -4390,10 +4544,14 @@ function renderBGAPanels() {
   const p1 = gameState.players[1];
   const p2 = gameState.players[2];
 
-  document.getElementById('p1-coins').textContent = p1.coins;
-  document.getElementById('p1-vp').textContent = calculatePlayerVP(1);
-  document.getElementById('p2-coins').textContent = p2.coins;
-  document.getElementById('p2-vp').textContent = calculatePlayerVP(2);
+  const p1Coins = document.getElementById('p1-coins');
+  if (p1Coins) p1Coins.textContent = p1.coins;
+  const p1Vp = document.getElementById('p1-vp');
+  if (p1Vp) p1Vp.textContent = calculatePlayerVP(1);
+  const p2Coins = document.getElementById('p2-coins');
+  if (p2Coins) p2Coins.textContent = p2.coins;
+  const p2Vp = document.getElementById('p2-vp');
+  if (p2Vp) p2Vp.textContent = calculatePlayerVP(2);
 
   // 보유 진보 토큰 뱃지
   renderPlayerTokens('p1-prog-tokens-wrap', p1);
@@ -4402,12 +4560,14 @@ function renderBGAPanels() {
   // 활성 턴 박스
   const p1Box = document.getElementById('p1-stat-box');
   const p2Box = document.getElementById('p2-stat-box');
-  if (gameState.turn === 1) {
-    p1Box.classList.add('active-turn');
-    p2Box.classList.remove('active-turn');
-  } else {
-    p1Box.classList.remove('active-turn');
-    p2Box.classList.add('active-turn');
+  if (p1Box && p2Box) {
+    if (gameState.turn === 1) {
+      p1Box.classList.add('active-turn');
+      p2Box.classList.remove('active-turn');
+    } else {
+      p1Box.classList.remove('active-turn');
+      p2Box.classList.add('active-turn');
+    }
   }
 }
 
@@ -4505,6 +4665,7 @@ function onCardClicked(node) {
 
 function openActionModal(node) {
   const modal = document.getElementById('action-modal');
+  if (!modal) return;
   const preview = document.getElementById('action-card-preview');
   const tradeBox = document.getElementById('trade-cost-detail-box');
   const buildBtn = document.getElementById('btn-action-build');
@@ -4517,49 +4678,53 @@ function openActionModal(node) {
   const pNum = gameState.turn;
   const player = gameState.players[pNum];
 
-  preview.innerHTML = `
-    <div class="preview-card-img-wrap">
-      <img src="${card.img}" alt="${card.name}">
-    </div>
-    <div class="preview-card-info">
-      <h4>${card.name} (${getCardTypeName(card.type)})</h4>
-      <p>효과: <strong>${getCardBenefitSummary(card)}</strong></p>
-    </div>
-  `;
-
-  const tradeInfo = calculateTradeCost(pNum, card);
-  tradeBox.innerHTML = tradeInfo.detailsText;
-
-  if (tradeInfo.isChainFree) {
-    tradeBox.className = "trade-cost-detail-box free-chain";
-  } else if (tradeInfo.canBuild) {
-    tradeBox.className = "trade-cost-detail-box affordable";
-  } else {
-    tradeBox.className = "trade-cost-detail-box unaffordable";
+  if (preview) {
+    preview.innerHTML = `
+      <div class="preview-card-img-wrap">
+        <img src="${card.img}" alt="${card.name}">
+      </div>
+      <div class="preview-card-info">
+        <h4>${card.name} (${getCardTypeName(card.type)})</h4>
+        <p>효과: <strong>${getCardBenefitSummary(card)}</strong></p>
+      </div>
+    `;
   }
 
-  buildBtn.disabled = !tradeInfo.canBuild;
-  buildCostText.textContent = tradeInfo.isChainFree ? "0코인 (연쇄 무료)" : `${tradeInfo.totalCoinCost} 코인 지불`;
+  const tradeInfo = calculateTradeCost(pNum, card);
+  if (tradeBox) {
+    tradeBox.innerHTML = tradeInfo.detailsText;
+
+    if (tradeInfo.isChainFree) {
+      tradeBox.className = "trade-cost-detail-box free-chain";
+    } else if (tradeInfo.canBuild) {
+      tradeBox.className = "trade-cost-detail-box affordable";
+    } else {
+      tradeBox.className = "trade-cost-detail-box unaffordable";
+    }
+  }
+
+  if (buildBtn) buildBtn.disabled = !tradeInfo.canBuild;
+  if (buildCostText) buildCostText.textContent = tradeInfo.isChainFree ? "0코인 (연쇄 무료)" : `${tradeInfo.totalCoinCost} 코인 지불`;
 
   const yellowCount = player.builtCards.filter(c => c.type === 'commerce').length;
   const discardGain = 2 + yellowCount;
-  discardCoinsText.textContent = `+${discardGain} 코인 획득 (기본2 + 상업${yellowCount})`;
+  if (discardCoinsText) discardCoinsText.textContent = `+${discardGain} 코인 획득 (기본2 + 상업${yellowCount})`;
 
   const availableWonder = gameState.wonders.find(w => w.owner === pNum && !w.built);
   if (gameState.totalWondersBuilt >= 7) {
-    wonderBtn.disabled = true;
-    wonderCostText.textContent = "7개 완공 한도 도달";
+    if (wonderBtn) wonderBtn.disabled = true;
+    if (wonderCostText) wonderCostText.textContent = "7개 완공 한도 도달";
   } else if (!availableWonder) {
-    wonderBtn.disabled = true;
-    wonderCostText.textContent = "남은 불가사의 없음";
+    if (wonderBtn) wonderBtn.disabled = true;
+    if (wonderCostText) wonderCostText.textContent = "남은 불가사의 없음";
   } else {
     const wonderTrade = calculateTradeCost(pNum, availableWonder);
     if (wonderTrade.canBuild) {
-      wonderBtn.disabled = false;
-      wonderCostText.textContent = `${availableWonder.name} (${wonderTrade.totalCoinCost} 코인)`;
+      if (wonderBtn) wonderBtn.disabled = false;
+      if (wonderCostText) wonderCostText.textContent = `${availableWonder.name} (${wonderTrade.totalCoinCost} 코인)`;
     } else {
-      wonderBtn.disabled = true;
-      wonderCostText.textContent = `코인 부족 (${wonderTrade.totalCoinCost}코인 필요)`;
+      if (wonderBtn) wonderBtn.disabled = true;
+      if (wonderCostText) wonderCostText.textContent = `코인 부족 (${wonderTrade.totalCoinCost}코인 필요)`;
     }
   }
 
@@ -4567,7 +4732,8 @@ function openActionModal(node) {
 }
 
 function closeActionModal() {
-  document.getElementById('action-modal').classList.remove('active');
+  const modal = document.getElementById('action-modal');
+  if (modal) modal.classList.remove('active');
   gameState.selectedCardNode = null;
 }
 
@@ -4756,6 +4922,7 @@ function triggerProgressTokenChoice(playerNum) {
 
   const modal = document.getElementById('progress-select-modal');
   const list = document.getElementById('progress-choice-list');
+  if (!modal || !list) return;
   list.innerHTML = '';
 
   availableTokens.forEach(token => {
@@ -4910,8 +5077,10 @@ function endGameByCivilianVictory() {
 function showVictoryModal(title, reason) {
   gameState.isGameOver = true;
 
-  document.getElementById('victory-title').textContent = title;
-  document.getElementById('victory-reason').textContent = reason;
+  const vTitle = document.getElementById('victory-title');
+  if (vTitle) vTitle.textContent = title;
+  const vReason = document.getElementById('victory-reason');
+  if (vReason) vReason.textContent = reason;
 
   const p1 = gameState.players[1];
   const p2 = gameState.players[2];
@@ -4941,23 +5110,29 @@ function showVictoryModal(title, reason) {
     else p2MilVP = 2;
   }
 
-  document.getElementById('final-p1-cards-vp').textContent = `${p1CardsVP}점`;
-  document.getElementById('final-p2-cards-vp').textContent = `${p2CardsVP}점`;
-  document.getElementById('final-p1-guild-vp').textContent = `${p1GuildVP}점`;
-  document.getElementById('final-p2-guild-vp').textContent = `${p2GuildVP}점`;
-  document.getElementById('final-p1-prog-vp').textContent = `${p1ProgVP}점`;
-  document.getElementById('final-p2-prog-vp').textContent = `${p2ProgVP}점`;
-  document.getElementById('final-p1-coins-vp').textContent = `${p1CoinVP}점 (${p1.coins}🪙)`;
-  document.getElementById('final-p2-coins-vp').textContent = `${p2CoinVP}점 (${p2.coins}🪙)`;
-  document.getElementById('final-p1-mil-vp').textContent = `${p1MilVP}점`;
-  document.getElementById('final-p2-mil-vp').textContent = `${p2MilVP}점`;
+  const setEl = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
 
-  document.getElementById('final-p1-total').textContent = `${calculatePlayerVP(1)}점`;
-  document.getElementById('final-p2-total').textContent = `${calculatePlayerVP(2)}점`;
+  setEl('final-p1-cards-vp', `${p1CardsVP}점`);
+  setEl('final-p2-cards-vp', `${p2CardsVP}점`);
+  setEl('final-p1-guild-vp', `${p1GuildVP}점`);
+  setEl('final-p2-guild-vp', `${p2GuildVP}점`);
+  setEl('final-p1-prog-vp', `${p1ProgVP}점`);
+  setEl('final-p2-prog-vp', `${p2ProgVP}점`);
+  setEl('final-p1-coins-vp', `${p1CoinVP}점 (${p1.coins}🪙)`);
+  setEl('final-p2-coins-vp', `${p2CoinVP}점 (${p2.coins}🪙)`);
+  setEl('final-p1-mil-vp', `${p1MilVP}점`);
+  setEl('final-p2-mil-vp', `${p2MilVP}점`);
 
-  document.getElementById('table-p2-header').textContent = gameState.mode === 'ai' ? 'AI 봇' : 'P2';
+  setEl('final-p1-total', `${calculatePlayerVP(1)}점`);
+  setEl('final-p2-total', `${calculatePlayerVP(2)}점`);
 
-  document.getElementById('victory-modal').classList.add('active');
+  setEl('table-p2-header', gameState.mode === 'ai' ? 'AI 봇' : 'P2');
+
+  const vModal = document.getElementById('victory-modal');
+  if (vModal) vModal.classList.add('active');
 }
 
 /* --------------------------------------------------------------------------
@@ -5062,44 +5237,116 @@ function initNewGame() {
     2: createPlayerObject(gameState.mode === 'ai' ? "AI 봇" : "플레이어 2")
   };
 
-  document.getElementById('p2-name-label').textContent = gameState.mode === 'ai' ? "AI 봇" : "플레이어 2";
-  document.getElementById('p2-icon').className = gameState.mode === 'ai' ? "fa-solid fa-robot" : "fa-solid fa-user";
+  const p2Name = document.getElementById('p2-name-label');
+  if (p2Name) p2Name.textContent = gameState.mode === 'ai' ? "AI 봇" : "플레이어 2";
 
-  document.getElementById('victory-modal').classList.remove('active');
-  document.getElementById('action-modal').classList.remove('active');
-  document.getElementById('progress-select-modal').classList.remove('active');
+  const p2Icon = document.getElementById('p2-icon');
+  if (p2Icon) p2Icon.className = gameState.mode === 'ai' ? "fa-solid fa-robot" : "fa-solid fa-user";
+
+  const vModal = document.getElementById('victory-modal');
+  if (vModal) vModal.classList.remove('active');
+
+  const aModal = document.getElementById('action-modal');
+  if (aModal) aModal.classList.remove('active');
+
+  const pModal = document.getElementById('progress-select-modal');
+  if (pModal) pModal.classList.remove('active');
 
   initWonderDraft();
 }
 
-document.getElementById('mode-ai-btn').addEventListener('click', () => {
-  document.getElementById('mode-ai-btn').classList.add('active');
-  document.getElementById('mode-pvp-btn').classList.remove('active');
-  gameState.mode = 'ai';
+function initGame() {
   initNewGame();
-});
+}
 
-document.getElementById('mode-pvp-btn').addEventListener('click', () => {
-  document.getElementById('mode-pvp-btn').classList.add('active');
-  document.getElementById('mode-ai-btn').classList.remove('active');
-  gameState.mode = 'pvp';
-  initNewGame();
-});
+// 액션 모달 버튼 리스너 바인딩
+const btnBuild = document.getElementById('btn-action-build');
+if (btnBuild) {
+  btnBuild.addEventListener('click', () => {
+    if (!gameState.selectedCardNode) return;
+    executeCardAction('build', gameState.selectedCardNode);
+    closeActionModal();
+  });
+}
 
-document.getElementById('game-reset-btn').addEventListener('click', initNewGame);
-document.getElementById('victory-restart-btn').addEventListener('click', initNewGame);
+const btnDiscard = document.getElementById('btn-action-discard');
+if (btnDiscard) {
+  btnDiscard.addEventListener('click', () => {
+    if (!gameState.selectedCardNode) return;
+    executeCardAction('discard', gameState.selectedCardNode);
+    closeActionModal();
+  });
+}
 
-document.getElementById('game-rules-btn').addEventListener('click', () => {
-  document.getElementById('rules-modal').classList.add('active');
-});
-document.getElementById('close-rules-modal-btn').addEventListener('click', () => {
-  document.getElementById('rules-modal').classList.remove('active');
-});
-document.getElementById('rules-confirm-btn').addEventListener('click', () => {
-  document.getElementById('rules-modal').classList.remove('active');
-});
+const btnWonder = document.getElementById('btn-action-wonder');
+if (btnWonder) {
+  btnWonder.addEventListener('click', () => {
+    if (!gameState.selectedCardNode) return;
+    executeCardAction('wonder', gameState.selectedCardNode);
+    closeActionModal();
+  });
+}
 
-initNewGame();
+const btnCloseAction = document.getElementById('close-action-modal-btn');
+if (btnCloseAction) {
+  btnCloseAction.addEventListener('click', closeActionModal);
+}
+
+// 게임 모드 토글 (AI 봇 vs 로컬 2인)
+const modeAiBtn = document.getElementById('mode-ai-btn');
+const modePvpBtn = document.getElementById('mode-pvp-btn');
+
+if (modeAiBtn && modePvpBtn) {
+  modeAiBtn.addEventListener('click', () => {
+    modeAiBtn.classList.add('active');
+    modePvpBtn.classList.remove('active');
+    gameState.mode = 'ai';
+    initNewGame();
+  });
+
+  modePvpBtn.addEventListener('click', () => {
+    modePvpBtn.classList.add('active');
+    modeAiBtn.classList.remove('active');
+    gameState.mode = 'pvp';
+    initNewGame();
+  });
+}
+
+// 새 게임 및 재시작 버튼
+const gameResetBtn = document.getElementById('game-reset-btn');
+if (gameResetBtn) gameResetBtn.addEventListener('click', initNewGame);
+
+const victoryRestartBtn = document.getElementById('victory-restart-btn');
+if (victoryRestartBtn) victoryRestartBtn.addEventListener('click', initNewGame);
+
+// 공식 룰북 팝업 모달 리스너
+const gameRulesBtn = document.getElementById('game-rules-btn');
+const rulesModal = document.getElementById('rules-modal');
+const closeRulesBtn = document.getElementById('close-rules-modal-btn');
+const rulesConfirmBtn = document.getElementById('rules-confirm-btn');
+
+if (gameRulesBtn && rulesModal) {
+  gameRulesBtn.addEventListener('click', () => {
+    rulesModal.classList.add('active');
+  });
+}
+if (closeRulesBtn && rulesModal) {
+  closeRulesBtn.addEventListener('click', () => {
+    rulesModal.classList.remove('active');
+  });
+}
+if (rulesConfirmBtn && rulesModal) {
+  rulesConfirmBtn.addEventListener('click', () => {
+    rulesModal.classList.remove('active');
+  });
+}
+
+// DOM 준비 시 즉시 게임 엔진 초기화 실행 (초반 불가사의 드래프트 렌더링)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initGame);
+} else {
+  initGame();
+}
 
   </script>
 </body>
