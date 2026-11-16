@@ -1922,7 +1922,267 @@
         grid-template-columns: 1fr;
       }
     }
-  </style>
+  
+    /* ==========================================================================
+       [세븐 원더스 듀얼 공식 룰 전용 신규 스타일]
+       ========================================================================== */
+    /* 자원 생산 칩 및 그리드 */
+    .resource-production-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .res-prod-chip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      border: 1px solid var(--border-warm);
+      background: var(--bg-subtle);
+      color: var(--text-espresso);
+    }
+    .res-prod-chip.has-prod {
+      border-color: #D97736;
+      background: #FFFDF9;
+      box-shadow: 0 1px 3px rgba(217, 119, 54, 0.15);
+    }
+    .res-prod-chip .res-icon {
+      font-size: 0.85rem;
+    }
+    .res-prod-chip .res-count {
+      font-weight: 800;
+      color: var(--point-terracotta);
+    }
+
+    /* 연쇄 심볼 칩 */
+    .chain-symbols-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .chain-tag-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      background: #EBF8FF;
+      color: #2B6CB0;
+      border: 1px solid #BEE3F8;
+    }
+
+    /* 상단 진보 토큰 진열대 (Progress Tokens Shelf) */
+    .progress-shelf-container {
+      background: linear-gradient(135deg, #FDFBF7 0%, #F5ECE0 100%);
+      border: 1px solid var(--border-warm);
+      border-radius: var(--radius-md);
+      padding: 12px 18px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    .progress-shelf-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text-espresso);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .progress-shelf-tokens {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .progress-token-item {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #27AE60 0%, #1E8449 100%);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      box-shadow: 0 3px 8px rgba(39, 174, 96, 0.35);
+      border: 2px solid #FFFFFF;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+    .progress-token-item:hover {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 6px 14px rgba(39, 174, 96, 0.45);
+    }
+    .progress-token-item.taken {
+      opacity: 0.25;
+      filter: grayscale(1);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    .progress-token-tooltip {
+      position: absolute;
+      bottom: 52px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(44, 24, 16, 0.95);
+      color: #FFFFFF;
+      font-size: 0.74rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 50;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+    .progress-token-item:hover .progress-token-tooltip {
+      opacity: 1;
+    }
+
+    /* 군사 약탈 토큰 (-6, -3, +3, +6) */
+    .loot-token {
+      position: absolute;
+      top: -12px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #C0392B;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 800;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+      transform: translateX(-50%);
+      z-index: 3;
+      transition: all 0.3s;
+    }
+    .loot-token.triggered {
+      opacity: 0.25;
+      text-decoration: line-through;
+      background: #7F8C8D;
+      box-shadow: none;
+    }
+    .loot-token.p1-side { background: #E67E22; }
+    .loot-token.p2-side { background: #2980B9; }
+
+    /* 카드 상단 자원 비용 & 연쇄 무료 뱃지 */
+    .card-costs-container {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 5;
+    }
+    .card-req-res-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: rgba(0, 0, 0, 0.78);
+      padding: 1px 5px;
+      border-radius: var(--radius-full);
+      backdrop-filter: blur(2px);
+    }
+    .req-res-icon {
+      font-size: 0.65rem;
+    }
+    .req-res-num {
+      color: #FFFFFF;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+    .free-chain-indicator {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      background: #27AE60;
+      color: #FFFFFF;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      z-index: 5;
+    }
+    .chain-symbol-indicator {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background: rgba(255, 255, 255, 0.95);
+      color: #2C1810;
+      font-size: 0.72rem;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid #D2C4B5;
+      z-index: 5;
+    }
+
+    /* 카드 액션 모달 교역 상세 내역 박스 */
+    .trade-cost-detail-box {
+      background: #FFFDF9;
+      border: 1px solid #ECC94B;
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+    .trade-cost-detail-box.free-chain {
+      background: #F0FFF4;
+      border-color: #68D391;
+      color: #22543D;
+    }
+    .trade-cost-detail-box.affordable {
+      background: #FEFCBF;
+      border-color: #ECC94B;
+      color: #744210;
+    }
+    .trade-cost-detail-box.unaffordable {
+      background: #FFF5F5;
+      border-color: #FEB2B2;
+      color: #9B2C2C;
+    }
+
+    /* 7개 불가사의 완공 제한 바 */
+    .wonders-limit-banner {
+      background: #FAF5FF;
+      border: 1px solid #D6BCFA;
+      color: #6B46C1;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .wonder-card.abandoned {
+      filter: grayscale(1);
+      opacity: 0.45;
+      pointer-events: none;
+      border: 2px dashed #A0AEC0;
+    }
+    </style>
 </head>
 <body>
 
@@ -2156,6 +2416,9 @@
   <!-- ==========================================================================
        [5. 플레이 가능한 보드게임 섹션 (세븐 원더스 듀얼)]
        ========================================================================== -->
+    <!-- ==========================================================================
+       [5. 플레이 가능한 보드게임 섹션 (세븐 원더스 듀얼 - 공식 룰 엔진)]
+       ========================================================================== -->
   <section class="section-padding game-section" id="boardgame-section">
     <div class="container">
       
@@ -2163,7 +2426,7 @@
         <span class="section-eyebrow">INTERACTIVE BOARD GAME</span>
         <h2 class="section-title">세븐 원더스 듀얼 (7 Wonders Duel)</h2>
         <p class="section-subtitle">
-          2인 전용 전략 보드게임인 &lt;세븐 원더스 듀얼&gt;의 핵심 메커니즘(불가사의 드래프트, 카드 피라미드 드래프팅, 자원 관리, 군사 줄다리기, 과학 상징 수집)을 실제 고화질 유적 사진과 함께 구현한 웹 미니게임입니다.
+          2인 전용 명작 전략 보드게임인 &lt;세븐 원더스 듀얼&gt;의 <strong>실제 공식 룰(동적 교역 비용, 연쇄 무료 건설, 과학 페어 진보 토큰 5개, 군사 약탈 토큰, 7대 불가사의 제한, 추가 턴)</strong>을 웹에서 완벽하게 플레이할 수 있는 풀 엔진입니다.
         </p>
       </div>
 
@@ -2182,11 +2445,22 @@
 
           <div class="game-controls-right">
             <button class="game-btn-sm btn-rules" id="game-rules-btn">
-              <i class="fa-regular fa-circle-question"></i> 게임 방법 보기
+              <i class="fa-regular fa-circle-question"></i> 공식 룰북 보기
             </button>
             <button class="game-btn-sm btn-reset" id="game-reset-btn">
               <i class="fa-solid fa-rotate-right"></i> 새 게임 시작
             </button>
+          </div>
+        </div>
+
+        <!-- 상단 무작위 5개 진보 토큰 진열대 (Progress Tokens Shelf) -->
+        <div class="progress-shelf-container">
+          <div class="progress-shelf-title">
+            <i class="fa-solid fa-certificate" style="color: #27AE60;"></i>
+            <span>진보 토큰 진열대 (과학 상징 1쌍 완성 시 획득)</span>
+          </div>
+          <div class="progress-shelf-tokens" id="progress-shelf-tokens">
+            <!-- 자바스크립트로 이번 게임의 5개 진보 토큰이 렌더링됩니다 -->
           </div>
         </div>
 
@@ -2231,6 +2505,7 @@
                 <span style="font-size: 0.75rem; font-weight: 700; color: var(--point-terracotta);">YOU</span>
               </div>
 
+              <!-- 코인 & VP -->
               <div class="stat-pills-row">
                 <div class="stat-pill coins">
                   <i class="fa-solid fa-coins"></i>
@@ -2242,8 +2517,9 @@
                 </div>
               </div>
 
+              <!-- 과학 상징 슬롯 -->
               <div class="science-symbols-wrap">
-                <span class="science-label">과학 상징 (<span id="p1-science-count">0</span>/6)</span>
+                <span class="science-label">과학 상징 (<span id="p1-science-count">0</span>/6종) · 쌍(<span id="p1-science-pairs">0</span>)</span>
                 <div class="science-icons-row" id="p1-science-slots">
                   <div class="science-slot" data-symbol="globe" title="천구의">🌐</div>
                   <div class="science-slot" data-symbol="compass" title="컴퍼스">📐</div>
@@ -2253,20 +2529,65 @@
                   <div class="science-slot" data-symbol="mortar" title="약사발">🧪</div>
                 </div>
               </div>
+
+              <!-- 생산 자원 현황판 (나무, 돌, 점토, 유리, 파피루스, 와일드) -->
+              <div>
+                <span class="science-label">생산 자원 & 교역 현황</span>
+                <div class="resource-production-grid" id="p1-resource-grid">
+                  <div class="res-prod-chip" id="p1-res-wood">
+                    <span class="res-icon">🪵 나무</span>
+                    <span class="res-count" id="p1-count-wood">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p1-res-stone">
+                    <span class="res-icon">🪨 돌</span>
+                    <span class="res-count" id="p1-count-stone">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p1-res-clay">
+                    <span class="res-icon">🧱 점토</span>
+                    <span class="res-count" id="p1-count-clay">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p1-res-glass">
+                    <span class="res-icon">🍷 유리</span>
+                    <span class="res-count" id="p1-count-glass">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p1-res-papyrus">
+                    <span class="res-icon">📜 종이</span>
+                    <span class="res-count" id="p1-count-papyrus">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p1-res-wild">
+                    <span class="res-icon">🌐 와일드</span>
+                    <span class="res-count" id="p1-count-wild">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 보유 연쇄 심볼 및 진보 토큰 -->
+              <div>
+                <span class="science-label">연쇄 심볼 & 진보 토큰</span>
+                <div class="chain-symbols-wrap" id="p1-chains-wrap">
+                  <span style="font-size: 0.72rem; color: var(--text-muted);">보유 심볼 없음</span>
+                </div>
+              </div>
             </div>
 
-            <!-- 중앙 군사 트랙 -->
+            <!-- 중앙 군사 줄다리기 트랙 (약탈 토큰 4개 배치) -->
             <div class="military-track-box">
               <div class="military-title">
                 <i class="fa-solid fa-shield-halved" style="color: var(--game-military);"></i>
-                <span>군사 줄다리기 트랙</span>
+                <span>군사 줄다리기 트랙 & 약탈 토큰</span>
               </div>
 
-              <div class="military-track-container">
+              <div class="military-track-container" style="margin-top: 10px;">
+                <!-- 약탈 토큰 4개 (-6, -3, +3, +6) -->
+                <div class="loot-token p2-side" id="loot-p2-6" style="left: 17%;" title="P2가 -6 도달 시 P1 코인 5개 약탈">-5🪙</div>
+                <div class="loot-token p2-side" id="loot-p2-3" style="left: 33%;" title="P2가 -3 도달 시 P1 코인 2개 약탈">-2🪙</div>
+                <div class="loot-token p1-side" id="loot-p1-3" style="left: 67%;" title="P1이 +3 도달 시 P2 코인 2개 약탈">-2🪙</div>
+                <div class="loot-token p1-side" id="loot-p1-6" style="left: 83%;" title="P1이 +6 도달 시 P2 코인 5개 약탈">-5🪙</div>
+
                 <div class="military-scale">
-                  <span class="p2-side">◀ P2/AI 승리 (-9)</span>
+                  <span class="p2-side">◀ P2 수도 (-9)</span>
                   <span>0 (중립)</span>
-                  <span class="p1-side">(+9) P1 승리 ▶</span>
+                  <span class="p1-side">(+9) P1 수도 ▶</span>
                 </div>
 
                 <div class="military-bar-rail">
@@ -2278,7 +2599,7 @@
               </div>
 
               <p class="military-info-desc" id="military-status-desc">
-                현재 트랙 수치: <strong>0</strong> (어느 한쪽이 +9 또는 -9에 도달하면 즉시 군사 승리)
+                현재 트랙: <strong>0</strong> (어느 한쪽이 +9 또는 -9에 도달하면 즉시 군사 승리)
               </p>
             </div>
 
@@ -2304,7 +2625,7 @@
               </div>
 
               <div class="science-symbols-wrap">
-                <span class="science-label">과학 상징 (<span id="p2-science-count">0</span>/6)</span>
+                <span class="science-label">과학 상징 (<span id="p2-science-count">0</span>/6종) · 쌍(<span id="p2-science-pairs">0</span>)</span>
                 <div class="science-icons-row" id="p2-science-slots">
                   <div class="science-slot" data-symbol="globe" title="천구의">🌐</div>
                   <div class="science-slot" data-symbol="compass" title="컴퍼스">📐</div>
@@ -2314,24 +2635,66 @@
                   <div class="science-slot" data-symbol="mortar" title="약사발">🧪</div>
                 </div>
               </div>
+
+              <!-- P2 생산 자원 현황판 -->
+              <div>
+                <span class="science-label">생산 자원 & 교역 현황</span>
+                <div class="resource-production-grid" id="p2-resource-grid">
+                  <div class="res-prod-chip" id="p2-res-wood">
+                    <span class="res-icon">🪵 나무</span>
+                    <span class="res-count" id="p2-count-wood">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p2-res-stone">
+                    <span class="res-icon">🪨 돌</span>
+                    <span class="res-count" id="p2-count-stone">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p2-res-clay">
+                    <span class="res-icon">🧱 점토</span>
+                    <span class="res-count" id="p2-count-clay">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p2-res-glass">
+                    <span class="res-icon">🍷 유리</span>
+                    <span class="res-count" id="p2-count-glass">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p2-res-papyrus">
+                    <span class="res-icon">📜 종이</span>
+                    <span class="res-count" id="p2-count-papyrus">0</span>
+                  </div>
+                  <div class="res-prod-chip" id="p2-res-wild">
+                    <span class="res-icon">🌐 와일드</span>
+                    <span class="res-count" id="p2-count-wild">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <span class="science-label">연쇄 심볼 & 진보 토큰</span>
+                <div class="chain-symbols-wrap" id="p2-chains-wrap">
+                  <span style="font-size: 0.72rem; color: var(--text-muted);">보유 심볼 없음</span>
+                </div>
+              </div>
             </div>
 
           </div>
 
-          <!-- 중앙 카드 피라미드 보드 (실제 사진 탑재) -->
+          <!-- 중앙 카드 피라미드 보드 (각 시대 20장 정통 배열) -->
           <div class="pyramid-board-wrap" id="pyramid-board">
-            <!-- 자바스크립트로 시대별 피라미드 카드가 동적으로 렌더링됩니다 -->
+            <!-- 자바스크립트로 시대별 20장 피라미드 카드가 동적으로 렌더링됩니다 -->
           </div>
 
         </div>
 
-        <!-- 하단 드래프트된 불가사의 (Wonders) 보관소 -->
+        <!-- 하단 드래프트된 불가사의 (Wonders) 보관소 (7개 제한 뱃지 포함) -->
         <div class="wonders-section">
           <div class="wonders-header">
-            <span><i class="fa-solid fa-monument" style="color: #8E44AD;"></i> 내 손안의 불가사의 (My Wonders)</span>
-            <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">
-              초반 드래프트로 획득한 불가사의 목록입니다. 카드를 가져올 때 카드를 소비하여 건설할 수 있습니다.
-            </span>
+            <div>
+              <i class="fa-solid fa-monument" style="color: #8E44AD;"></i>
+              <span>내 손안의 불가사의 (My Wonders)</span>
+            </div>
+            <div class="wonders-limit-banner">
+              <i class="fa-solid fa-crown"></i>
+              <span>세계 불가사의 완공 제한: <strong id="total-wonders-built-count">0</strong> / 7개 완공</span>
+            </div>
           </div>
 
           <div class="wonders-grid" id="wonders-grid">
@@ -2343,11 +2706,7 @@
 
     </div>
   </section>
-
-  <!-- ==========================================================================
-       [6. 추천 도서 섹션 (실제 사진 북커버 적용)]
-       ========================================================================== -->
-  <section class="section-padding books-section" id="books-section">
+<section class="section-padding books-section" id="books-section">
     <div class="container">
       
       <div class="section-header">
@@ -2545,7 +2904,10 @@
   <!-- ==========================================================================
        [보드게임 모달창들: 카드 액션 / 룰북 / 승리 결과]
        ========================================================================== -->
-  <!-- 1. 카드 선택 액션 모달 -->
+    <!-- ==========================================================================
+       [보드게임 모달창들: 카드 액션 / 진보 토큰 선택 / 룰북 / 승리 결과]
+       ========================================================================== -->
+  <!-- 1. 카드 선택 액션 모달 (동적 교역 비용 상세 계산) -->
   <div class="game-modal-overlay" id="action-modal">
     <div class="game-modal-card">
       <div class="game-modal-header">
@@ -2559,6 +2921,11 @@
         <!-- 미리보기 내용 주입 -->
       </div>
 
+      <!-- 동적 교역 비용 계산 상세 박스 -->
+      <div class="trade-cost-detail-box" id="trade-cost-detail-box">
+        <!-- 자바스크립트로 교역 계산 내역이 실시간 주입됩니다 -->
+      </div>
+
       <div class="modal-actions-list">
         <button class="action-choice-btn build" id="btn-action-build">
           <span><i class="fa-solid fa-hammer"></i> 건물 건설하기</span>
@@ -2567,7 +2934,7 @@
 
         <button class="action-choice-btn discard" id="btn-action-discard">
           <span><i class="fa-solid fa-coins"></i> 카드 버리고 코인 받기</span>
-          <span>+2 코인 획득</span>
+          <span id="action-discard-coins-text">+2 코인 획득</span>
         </button>
 
         <button class="action-choice-btn wonder" id="btn-action-wonder">
@@ -2578,37 +2945,56 @@
     </div>
   </div>
 
-  <!-- 2. 게임 룰 안내 모달 -->
-  <div class="game-modal-overlay" id="rules-modal">
-    <div class="game-modal-card" style="max-width: 560px;">
+  <!-- 2. 진보 토큰 선택 모달 (과학 상징 1쌍 완성 시 팝업) -->
+  <div class="game-modal-overlay" id="progress-select-modal">
+    <div class="game-modal-card" style="max-width: 520px;">
       <div class="game-modal-header">
-        <h3 class="game-modal-title">세븐 원더스 듀얼 간단 규칙</h3>
+        <h3 class="game-modal-title">🎉 과학적 진보: 진보 토큰 선택</h3>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 18px;">
+        동일한 과학 상징 1쌍(2개)을 달성했습니다! 아래 공개된 진보 토큰 중 1개를 선택하여 영구적인 혜택을 획득하세요.
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 10px;" id="progress-choice-list">
+        <!-- 선택 가능한 진보 토큰 목록 주입 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 공식 룰 안내 모달 -->
+  <div class="game-modal-overlay" id="rules-modal">
+    <div class="game-modal-card" style="max-width: 580px;">
+      <div class="game-modal-header">
+        <h3 class="game-modal-title">세븐 원더스 듀얼 공식 보드게임 룰</h3>
         <button id="close-rules-modal-btn" style="font-size: 1.2rem; color: var(--text-muted);">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <div style="font-size: 0.92rem; color: var(--text-body); line-height: 1.7; display: flex; flex-direction: column; gap: 14px;">
-        <p><strong>1. 초반 불가사의 드래프트 (Wonder Draft):</strong><br>
-        게임 시작 시 총 8장의 불가사의 중 4장씩 두 차례 공개되며, P1과 P2가 번갈아 가며 각각 4장씩의 불가사의를 직접 선택하여 보유합니다.</p>
-        <p><strong>2. 피라미드 드래프트:</strong><br>다른 카드에 덮이지 않은 앞면 카드만 클릭하여 가져올 수 있습니다. 카드가 제거되어 위에 덮고 있던 카드가 치워지면 뒷면 카드가 뒤집혀 공개됩니다.</p>
-        <p><strong>3. 3가지 카드 행동:</strong><br>
-        • <strong>건물 건설:</strong> 코인을 지불하여 군사, 과학, 시민, 자원 등의 혜택을 얻습니다.<br>
-        • <strong>버리기:</strong> 카드를 버리고 즉시 <strong>코인 2개</strong>를 받습니다.<br>
-        • <strong>불가사의 건설:</strong> 카드를 소모하여 강력한 불가사의 건물을 완성합니다.</p>
-        <p><strong>4. 승리 조건:</strong><br>
-        • <strong>군사 우위 승리:</strong> 군사 트랙 끝(+9 또는 -9) 도달 시 즉시 승리!<br>
-        • <strong>과학 우위 승리:</strong> 서로 다른 과학 상징 6종을 먼저 모으면 즉시 승리!<br>
-        • <strong>시민 승리:</strong> 3시대 종료 후 승점(VP) + 코인(3원당 1점) 총합이 높은 플레이어 승리!</p>
+      <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.65; display: flex; flex-direction: column; gap: 12px; max-height: 65vh; overflow-y: auto; padding-right: 6px;">
+        <p><strong>1. 자원 생산 및 동적 교역 비용 공식:</strong><br>
+        자원은 5종류(나무, 돌, 점토, 유리, 파피루스)입니다. 카드를 지을 때 부족한 자원 1개당 <strong>[기본 2코인 + 상대방이 생산하는 해당 자원 개수]</strong>의 코인을 은행에 지불하고 구입합니다. (특정 자원 할인 상업 카드를 보유하면 개당 1코인 고정!)</p>
+        
+        <p><strong>2. 연쇄 무료 건설 (Chaining):</strong><br>
+        이전 시대 카드가 제공하는 '연쇄 심볼(말굽, 검, 탑, 책 등)'을 보유하고 있다면, 상위 카드의 자원/코인 요구치와 상관없이 <strong>0원 무료 건설</strong>할 수 있습니다.</p>
+
+        <p><strong>3. 과학 페어 & 진보 토큰 (Progress Tokens):</strong><br>
+        <strong>똑같은 과학 상징 2개(1쌍)</strong>를 모을 때마다 보드 상단의 진보 토큰 5개 중 1개를 즉시 선택합니다. (서로 다른 과학 상징 6종을 먼저 모으면 즉시 과학 승리!)</p>
+
+        <p><strong>4. 군사 트랙 약탈 토큰 & 선 플레이어 결정:</strong><br>
+        군사 트랙 3칸 돌파 시 상대 코인 2개, 6칸 돌파 시 상대 코인 5개를 약탈합니다. 각 시대가 끝날 때 군사력이 밀리고 있는 플레이어가 다음 시대의 첫 턴(선)을 갖습니다.</p>
+
+        <p><strong>5. 카드 버리기 코인 & 7대 불가사의 제한:</strong><br>
+        카드를 버릴 때 <strong>[2 + 내가 보유한 노란색 상업 카드 수]</strong>만큼의 코인을 받습니다. 양 플레이어 합산 총 7개의 불가사의가 완공되는 즉시 8번째 불가사의는 건설할 수 없습니다.</p>
       </div>
 
-      <div style="margin-top: 24px; text-align: right;">
-        <button class="btn btn-primary" id="rules-confirm-btn" style="padding: 10px 20px;">이해했습니다!</button>
+      <div style="margin-top: 20px; text-align: right;">
+        <button class="btn btn-primary" id="rules-confirm-btn" style="padding: 9px 18px;">이해했습니다!</button>
       </div>
     </div>
   </div>
 
-  <!-- 3. 승리 / 게임 종료 모달 -->
+  <!-- 4. 승리 / 게임 종료 모달 -->
   <div class="game-modal-overlay" id="victory-modal">
     <div class="game-modal-card victory-modal-content">
       <div class="victory-trophy">
@@ -2634,6 +3020,16 @@
             <td id="final-p2-cards-vp">0점</td>
           </tr>
           <tr>
+            <td>길드 카드(보라색) 보너스 VP</td>
+            <td id="final-p1-guild-vp">0점</td>
+            <td id="final-p2-guild-vp">0점</td>
+          </tr>
+          <tr>
+            <td>진보 토큰 VP (수학/철학 등)</td>
+            <td id="final-p1-prog-vp">0점</td>
+            <td id="final-p2-prog-vp">0점</td>
+          </tr>
+          <tr>
             <td>코인 환산 점수 (3코인 = 1점)</td>
             <td id="final-p1-coins-vp">0점</td>
             <td id="final-p2-coins-vp">0점</td>
@@ -2656,934 +3052,1726 @@
       </button>
     </div>
   </div>
-
-  <!-- ==========================================================================
-       [인터랙션 스크립트 & 세븐 원더스 듀얼 게임 엔진]
-       ========================================================================== -->
   <script>
-    /* --------------------------------------------------------------------------
-       1. 네비게이션 & UI 인터랙션
-       -------------------------------------------------------------------------- */
-    const menuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileNav = document.getElementById('mobile-nav');
+/* ==========================================================================
+   세븐 원더스 듀얼 (7 Wonders Duel) 실제 공식 보드게임 룰 웹 엔진
+   ========================================================================== */
 
-    if (menuToggle && mobileNav) {
-      menuToggle.addEventListener('click', () => {
-        mobileNav.classList.toggle('active');
-        const icon = menuToggle.querySelector('i');
-        if (mobileNav.classList.contains('active')) {
-          icon.classList.remove('fa-bars');
-          icon.classList.add('fa-xmark');
-        } else {
-          icon.classList.remove('fa-xmark');
-          icon.classList.add('fa-bars');
-        }
-      });
+/* --------------------------------------------------------------------------
+   1. 네비게이션 & UI 인터랙션
+   -------------------------------------------------------------------------- */
+const menuToggle = document.getElementById('mobile-menu-toggle');
+const mobileNav = document.getElementById('mobile-nav');
 
-      document.querySelectorAll('.mobile-nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileNav.classList.remove('active');
-          const icon = menuToggle.querySelector('i');
-          icon.classList.remove('fa-xmark');
-          icon.classList.add('fa-bars');
-        });
-      });
+if (menuToggle && mobileNav) {
+  menuToggle.addEventListener('click', () => {
+    mobileNav.classList.toggle('active');
+    const icon = menuToggle.querySelector('i');
+    if (mobileNav.classList.contains('active')) {
+      icon.classList.remove('fa-bars');
+      icon.classList.add('fa-xmark');
+    } else {
+      icon.classList.remove('fa-xmark');
+      icon.classList.add('fa-bars');
     }
+  });
 
-    window.addEventListener('scroll', () => {
-      const navbar = document.getElementById('navbar');
-      if (window.scrollY > 20) {
-        navbar.style.boxShadow = '0 4px 20px rgba(44, 24, 16, 0.08)';
-      } else {
-        navbar.style.boxShadow = 'none';
+  document.querySelectorAll('.mobile-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('active');
+      const icon = menuToggle.querySelector('i');
+      icon.classList.remove('fa-xmark');
+      icon.classList.add('fa-bars');
+    });
+  });
+}
+
+window.addEventListener('scroll', () => {
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    if (window.scrollY > 20) {
+      navbar.style.boxShadow = '0 4px 20px rgba(44, 24, 16, 0.08)';
+    } else {
+      navbar.style.boxShadow = 'none';
+    }
+  }
+});
+
+/* --------------------------------------------------------------------------
+   2. 마스터 데이터 정의: 진보 토큰, 불가사의, 길드, 1~3시대 카드
+   -------------------------------------------------------------------------- */
+// 10종 진보 토큰 풀 (Progress Tokens)
+const ALL_PROGRESS_TOKENS_MASTER = [
+  { id: "agriculture", name: "농업 (Agriculture)", icon: "🌾", desc: "즉시 6코인을 획득하고, 게임 종료 시 승점 4점을 얻습니다.", vp: 4, coins: 6 },
+  { id: "architecture", name: "건축 (Architecture)", icon: "🏛️", desc: "이후 건설하는 모든 불가사의의 자원 요구량이 2개 면제됩니다.", discountWonderRes: 2 },
+  { id: "economy", name: "경제 (Economy)", icon: "💰", desc: "상대방이 자원 교역으로 은행에 지불한 코인을 내가 받습니다. 즉시 3코인 획득.", coins: 3, hasEconomy: true },
+  { id: "law", name: "법률 (Law)", icon: "⚖️", desc: "독점 과학 상징(법률) 1개를 즉시 획득하여 과학 승리(6종)에 기여합니다.", symbol: "law" },
+  { id: "mathematics", name: "수학 (Mathematics)", icon: "📐", desc: "게임 종료 시 내가 보유한 진보 토큰 1개당 승점 3점을 추가로 얻습니다.", vpPerToken: 3 },
+  { id: "philosophy", name: "철학 (Philosophy)", icon: "📜", desc: "순수한 지혜의 결정체: 즉시 승점 7점을 획득합니다.", vp: 7 },
+  { id: "strategy", name: "전략 (Strategy)", icon: "⚔️", desc: "이후 군사 카드나 불가사의를 건설할 때마다 군사 방패 +1개를 추가로 얻습니다.", extraShield: 1 },
+  { id: "theology", name: "신학 (Theology)", icon: "🕊️", desc: "이후 내가 건설하는 모든 불가사의에 '추가 턴 1회' 효과가 영구 부여됩니다.", allWonderRepeat: true },
+  { id: "urbanism", name: "도시계획 (Urbanism)", icon: "🏘️", desc: "연쇄 심볼을 통해 무료로 카드를 건설할 때마다 즉시 4코인을 획득합니다.", freeChainCoins: 4 },
+  { id: "masonry", name: "석조기술 (Masonry)", icon: "🧱", desc: "파란색(시민) 카드를 건설할 때 필요한 자원 요구량이 2개 면제됩니다.", discountCivicRes: 2 }
+];
+
+// 8종 고대 세계의 불가사의 (Wonders)
+const ALL_WONDERS_MASTER = [
+  { 
+    id: "w_pyramids", name: "기자의 대피라미드", 
+    req: { stone: 3, papyrus: 1 }, cost: 0, vp: 9, shield: 0, coins: 0, repeatTurn: false,
+    img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=400&q=80", 
+    desc: "돌3, 종이1 | 순수 승점 9점 획득" 
+  },
+  { 
+    id: "w_colossus", name: "로도스의 거상", 
+    req: { clay: 3, glass: 1 }, cost: 0, vp: 3, shield: 2, coins: 0, repeatTurn: false,
+    img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80", 
+    desc: "점토3, 유리1 | 군사 방패 2개, 승점 3점" 
+  },
+  { 
+    id: "w_lighthouse", name: "알렉산드리아 등대", 
+    req: { wood: 2, stone: 1, glass: 1 }, cost: 0, vp: 4, shield: 0, coins: 6, repeatTurn: true,
+    img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=400&q=80", 
+    desc: "나무2, 돌1, 유리1 | 코인 6개 획득, 승점 4점, ⚡추가 턴 1회" 
+  },
+  { 
+    id: "w_zeus", name: "올림피아 제우스 신상", 
+    req: { clay: 1, wood: 1, stone: 1, papyrus: 2 }, cost: 0, vp: 3, shield: 1, coins: 0, destroyCoin: 3, repeatTurn: true,
+    img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=400&q=80", 
+    desc: "점토1, 나무1, 돌1, 종이2 | 군사 방패 1개, 상대 코인 3개 파괴, 승점 3점, ⚡추가 턴" 
+  },
+  { 
+    id: "w_gardens", name: "바빌론의 공중정원", 
+    req: { clay: 2, wood: 1, glass: 1, papyrus: 1 }, cost: 0, vp: 3, shield: 0, coins: 6, repeatTurn: true,
+    img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80", 
+    desc: "점토2, 나무1, 유리1, 종이1 | 코인 6개 획득, 승점 3점, ⚡추가 턴 1회" 
+  },
+  { 
+    id: "w_artemis", name: "에페소스 아르테미스 신전", 
+    req: { stone: 1, wood: 1, glass: 1, papyrus: 1 }, cost: 0, vp: 2, shield: 0, coins: 5, repeatTurn: true,
+    img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400&q=80", 
+    desc: "돌1, 나무1, 유리1, 종이1 | 코인 5개 즉시 획득, 승점 2점, ⚡추가 턴 1회" 
+  },
+  { 
+    id: "w_library", name: "알렉산드리아 대도서관", 
+    req: { wood: 3, glass: 1, papyrus: 1 }, cost: 0, vp: 4, shield: 0, coins: 0, giveProgressToken: true, repeatTurn: false,
+    img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400&q=80", 
+    desc: "나무3, 유리1, 종이1 | 진보 토큰 1개 즉시 획득, 승점 4점" 
+  },
+  { 
+    id: "w_circus", name: "키르쿠스 막시무스", 
+    req: { clay: 2, stone: 1, wood: 1 }, cost: 0, vp: 3, shield: 1, coins: 0, repeatTurn: false,
+    img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&q=80", 
+    desc: "점토2, 돌1, 나무1 | 군사 방패 1개, 승점 3점, 상대 회색 카드 1장 파괴" 
+  }
+];
+
+// 6종 보라색 길드 카드 풀 (3시대 무작위 3장 투입)
+const GUILD_CARDS_MASTER = [
+  { 
+    id: "g_merchants", name: "상인 길드", type: "guild", 
+    req: { wood: 1, clay: 1, glass: 1, papyrus: 1 }, cost: 0, 
+    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80",
+    desc: "건설 시 노란색 카드가 많은 플레이어의 카드 1장당 1코인 즉시 획득. 게임 종료 시 해당 카드 1장당 1VP.",
+    evalVp: (p1, p2) => Math.max(p1.builtCards.filter(c=>c.type==='commerce').length, p2.builtCards.filter(c=>c.type==='commerce').length)
+  },
+  { 
+    id: "g_shipowners", name: "선주 길드", type: "guild", 
+    req: { clay: 1, stone: 1, glass: 1, papyrus: 1 }, cost: 0, 
+    img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=300&q=80",
+    desc: "건설 시 갈색/회색(자원) 카드가 많은 쪽의 카드당 1코인. 종료 시 자원 카드 1장당 1VP.",
+    evalVp: (p1, p2) => Math.max(p1.builtCards.filter(c=>c.type==='resource'||c.type==='manufactured').length, p2.builtCards.filter(c=>c.type==='resource'||c.type==='manufactured').length)
+  },
+  { 
+    id: "g_builders", name: "건축가 길드", type: "guild", 
+    req: { stone: 2, clay: 1, wood: 1, glass: 1 }, cost: 0, 
+    img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=300&q=80",
+    desc: "종료 시 양 플레이어 중 완공된 불가사의 수가 더 많은 쪽의 완공 불가사의 1개당 2VP.",
+    evalVp: (p1, p2, wonders) => Math.max(wonders.filter(w=>w.owner===1&&w.built).length, wonders.filter(w=>w.owner===2&&w.built).length) * 2
+  },
+  { 
+    id: "g_magistrates", name: "사법 길드", type: "guild", 
+    req: { wood: 2, clay: 1, papyrus: 1 }, cost: 0, 
+    img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=300&q=80",
+    desc: "종료 시 파란색(시민) 카드가 더 많은 쪽의 시민 카드 1장당 1VP.",
+    evalVp: (p1, p2) => Math.max(p1.builtCards.filter(c=>c.type==='civic').length, p2.builtCards.filter(c=>c.type==='civic').length)
+  },
+  { 
+    id: "g_scientists", name: "과학자 길드", type: "guild", 
+    req: { clay: 2, wood: 2 }, cost: 0, 
+    img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80",
+    desc: "종료 시 녹색(과학) 카드가 더 많은 쪽의 과학 카드 1장당 1VP.",
+    evalVp: (p1, p2) => Math.max(p1.builtCards.filter(c=>c.type==='science').length, p2.builtCards.filter(c=>c.type==='science').length)
+  },
+  { 
+    id: "g_tacticians", name: "전술가 길드", type: "guild", 
+    req: { stone: 2, clay: 1, papyrus: 1 }, cost: 0, 
+    img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80",
+    desc: "종료 시 빨간색(군사) 카드가 더 많은 쪽의 군사 카드 1장당 1VP.",
+    evalVp: (p1, p2) => Math.max(p1.builtCards.filter(c=>c.type==='military').length, p2.builtCards.filter(c=>c.type==='military').length)
+  }
+];
+
+// 1시대, 2시대, 3시대 카드 데이터 (각 시대 20장씩 정통 구성)
+const CARD_DATABASE = {
+  // 제 1시대 (20장)
+  1: [
+    // 갈색 원자재 (자원 생산)
+    { id: "a1_r1", name: "벌목장", type: "resource", cost: 0, req: {}, produce: { wood: 1 }, img: "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?w=300&q=80", desc: "생산: 나무 🪵 x1" },
+    { id: "a1_r2", name: "벌목소", type: "resource", cost: 1, req: {}, produce: { wood: 1 }, img: "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?w=300&q=80", desc: "1코인 | 생산: 나무 🪵 x1" },
+    { id: "a1_r3", name: "채석장", type: "resource", cost: 0, req: {}, produce: { stone: 1 }, img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=80", desc: "생산: 돌 🪨 x1" },
+    { id: "a1_r4", name: "채석갱", type: "resource", cost: 1, req: {}, produce: { stone: 1 }, img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=80", desc: "1코인 | 생산: 돌 🪨 x1" },
+    { id: "a1_r5", name: "점토 채취장", type: "resource", cost: 0, req: {}, produce: { clay: 1 }, img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&q=80", desc: "생산: 점토 🧱 x1" },
+    { id: "a1_r6", name: "점토 구덩이", type: "resource", cost: 1, req: {}, produce: { clay: 1 }, img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&q=80", desc: "1코인 | 생산: 점토 🧱 x1" },
+    // 회색 제조품
+    { id: "a1_m_glass", name: "유리공방", type: "manufactured", cost: 1, req: {}, produce: { glass: 1 }, img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80", desc: "1코인 | 생산: 유리 🍷 x1" },
+    { id: "a1_m_paper", name: "압착실", type: "manufactured", cost: 1, req: {}, produce: { papyrus: 1 }, img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80", desc: "1코인 | 생산: 종이 📜 x1" },
+    // 군사 (빨간색)
+    { id: "a1_mil_1", name: "주둔지", type: "military", cost: 0, req: { clay: 1 }, shield: 1, chainProvide: "sword", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80", desc: "점토1 | 군사 방패 +1 (연쇄: ⚔️)" },
+    { id: "a1_mil_2", name: "감시탑", type: "military", cost: 0, req: {}, shield: 1, img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&q=80", desc: "무료 | 군사 방패 +1" },
+    { id: "a1_mil_3", name: "망루", type: "military", cost: 2, req: {}, shield: 1, chainProvide: "tower", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80", desc: "2코인 | 군사 방패 +1 (연쇄: 🗼)" },
+    // 과학 (초록색)
+    { id: "a1_sci_1", name: "작업장", type: "science", cost: 0, req: { glass: 1 }, symbol: "gear", vp: 1, chainProvide: "gear", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80", desc: "유리1 | 과학: 톱니 ⚙️ (연쇄: ⚙️)" },
+    { id: "a1_sci_2", name: "약초방", type: "science", cost: 0, req: { glass: 1 }, symbol: "mortar", vp: 1, chainProvide: "mortar", img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80", desc: "유리1 | 과학: 약사발 🧪 (연쇄: 🧪)" },
+    { id: "a1_sci_3", name: "필사실", type: "science", cost: 0, req: {}, symbol: "tablet", vp: 0, chainProvide: "book", img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80", desc: "무료 | 과학: 서판 📜 (연쇄: 📖)" },
+    { id: "a1_sci_4", name: "약방", type: "science", cost: 2, req: {}, symbol: "mortar", vp: 0, img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80", desc: "2코인 | 과학: 약사발 🧪" },
+    // 시민 (파란색)
+    { id: "a1_civ_1", name: "극장", type: "civic", cost: 0, req: {}, vp: 3, chainProvide: "mask", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80", desc: "무료 | 승점 3점 (연쇄: 🎭)" },
+    { id: "a1_civ_2", name: "제단", type: "civic", cost: 0, req: {}, vp: 3, chainProvide: "moon", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80", desc: "무료 | 승점 3점 (연쇄: 🌙)" },
+    { id: "a1_civ_3", name: "목욕탕", type: "civic", cost: 0, req: { stone: 1 }, vp: 3, chainProvide: "drop", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80", desc: "돌1 | 승점 3점 (연쇄: 💧)" },
+    // 상업 (노란색)
+    { id: "a1_com_1", name: "석재 저장소", type: "commerce", cost: 3, req: {}, discount: "stone", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=80", desc: "3코인 | 돌(🪨) 교역 비용 1원 고정 할인" },
+    { id: "a1_com_2", name: "목재 저장소", type: "commerce", cost: 3, req: {}, discount: "wood", img: "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?w=300&q=80", desc: "3코인 | 나무(🪵) 교역 비용 1원 고정 할인" },
+    { id: "a1_com_3", name: "점토 저장소", type: "commerce", cost: 3, req: {}, discount: "clay", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&q=80", desc: "3코인 | 점토(🧱) 교역 비용 1원 고정 할인" },
+    { id: "a1_com_4", name: "선술집", type: "commerce", cost: 0, req: {}, coins: 4, chainProvide: "jar", img: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=300&q=80", desc: "무료 | 코인 +4개 즉시 획득 (연쇄: 🏺)" }
+  ],
+
+  // 제 2시대 (20장)
+  2: [
+    // 원자재/제조품 2개 생산
+    { id: "a2_r1", name: "제재소", type: "resource", cost: 2, req: {}, produce: { wood: 2 }, img: "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?w=300&q=80", desc: "2코인 | 생산: 나무 🪵 x2" },
+    { id: "a2_r2", name: "벽돌공장", type: "resource", cost: 2, req: {}, produce: { clay: 2 }, img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&q=80", desc: "2코인 | 생산: 점토 🧱 x2" },
+    { id: "a2_r3", name: "대채석장", type: "resource", cost: 2, req: {}, produce: { stone: 2 }, img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=80", desc: "2코인 | 생산: 돌 🪨 x2" },
+    { id: "a2_m1", name: "유리취입실", type: "manufactured", cost: 0, req: {}, produce: { glass: 1 }, img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80", desc: "무료 | 생산: 유리 🍷 x1" },
+    { id: "a2_m2", name: "건조실", type: "manufactured", cost: 0, req: {}, produce: { papyrus: 1 }, img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80", desc: "무료 | 생산: 종이 📜 x1" },
+    // 군사
+    { id: "a2_mil_1", name: "성벽", type: "military", cost: 0, req: { stone: 2 }, shield: 2, chainReq: "tower", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80", desc: "돌2 (연쇄 🗼 무료) | 군사 방패 +2" },
+    { id: "a2_mil_2", name: "연병장", type: "military", cost: 0, req: { clay: 1, wood: 1 }, shield: 1, chainProvide: "horseshoe", img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&q=80", desc: "점토1, 나무1 | 방패 +1 (연쇄: 🐎)" },
+    { id: "a2_mil_3", name: "병영", type: "military", cost: 3, req: {}, shield: 1, chainReq: "sword", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80", desc: "3코인 (연쇄 ⚔️ 무료) | 방패 +1" },
+    { id: "a2_mil_4", name: "궁술장", type: "military", cost: 0, req: { stone: 1, wood: 1, glass: 1 }, shield: 2, chainProvide: "target", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80", desc: "돌1, 나무1, 유리1 | 방패 +2 (연쇄: 🎯)" },
+    // 과학
+    { id: "a2_sci_1", name: "도서관", type: "science", cost: 0, req: { stone: 1, wood: 1, glass: 1 }, symbol: "tablet", vp: 2, chainReq: "book", img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=300&q=80", desc: "돌1, 나무1, 유리1 (연쇄 📖 무료) | 서판 📜, 2점" },
+    { id: "a2_sci_2", name: "학교", type: "science", cost: 0, req: { wood: 1, papyrus: 2 }, symbol: "compass", vp: 1, chainProvide: "harp", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80", desc: "나무1, 종이2 | 컴퍼스 📐, 1점 (연쇄: 🎵)" },
+    { id: "a2_sci_3", name: "실험실", type: "science", cost: 0, req: { clay: 1, glass: 2 }, symbol: "gear", vp: 1, chainReq: "gear", img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80", desc: "점토1, 유리2 (연쇄 ⚙️ 무료) | 톱니 ⚙️, 1점" },
+    { id: "a2_sci_4", name: "조제실", type: "science", cost: 0, req: { clay: 2, stone: 1 }, symbol: "mortar", vp: 2, chainReq: "mortar", img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80", desc: "점토2, 돌1 (연쇄 🧪 무료) | 약사발 🧪, 2점" },
+    // 시민
+    { id: "a2_civ_1", name: "조각상", type: "civic", cost: 0, req: { clay: 2 }, vp: 4, chainReq: "mask", chainProvide: "pillar", img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&q=80", desc: "점토2 (연쇄 🎭 무료) | 4점 (연쇄: 🏛️)" },
+    { id: "a2_civ_2", name: "신전", type: "civic", cost: 0, req: { wood: 1, papyrus: 1 }, vp: 4, chainReq: "moon", chainProvide: "sun", img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=300&q=80", desc: "나무1, 종이1 (연쇄 🌙 무료) | 4점 (연쇄: ☀️)" },
+    { id: "a2_civ_3", name: "수로", type: "civic", cost: 0, req: { stone: 3 }, vp: 5, chainReq: "drop", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80", desc: "돌3 (연쇄 💧 무료) | 5점" },
+    { id: "a2_civ_4", name: "법원", type: "civic", cost: 0, req: { clay: 2, glass: 1 }, vp: 5, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=300&q=80", desc: "점토2, 유리1 | 5점" },
+    // 상업
+    { id: "a2_com_1", name: "세관", type: "commerce", cost: 4, req: {}, discount: "manufactured", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80", desc: "4코인 | 제조품(유리/종이) 교역 1원 고정 할인" },
+    { id: "a2_com_2", name: "포럼", type: "commerce", cost: 3, req: { clay: 1 }, wild: 1, img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80", desc: "3코인, 점토1 | 매 턴 와일드 자원(🌐) 1개 생산" },
+    { id: "a2_com_3", name: "카라반사라이", type: "commerce", cost: 2, req: { glass: 1, papyrus: 1 }, wild: 1, img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=300&q=80", desc: "2코인, 유리1, 종이1 | 매 턴 와일드 자원(🌐) 1개 생산" },
+    { id: "a2_com_4", name: "양조장", type: "commerce", cost: 0, req: {}, coins: 6, chainReq: "jar", img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=300&q=80", desc: "무료 (연쇄 🏺 무료) | 즉시 코인 6개 획득" }
+  ],
+
+  // 제 3시대 (17장 카드 + 무작위 길드 3장 = 20장)
+  3: [
+    // 군사
+    { id: "a3_mil_1", name: "요새", type: "military", cost: 0, req: { stone: 2, clay: 1, papyrus: 1 }, shield: 2, vp: 1, chainReq: "tower", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80", desc: "돌2, 점토1, 종이1 (연쇄 🗼) | 방패 +2, 1점" },
+    { id: "a3_mil_2", name: "공성무기", type: "military", cost: 0, req: { wood: 3, glass: 1 }, shield: 2, chainReq: "target", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80", desc: "나무3, 유리1 (연쇄 🎯) | 방패 +2" },
+    { id: "a3_mil_3", name: "서커스", type: "military", cost: 0, req: { clay: 2, stone: 2 }, shield: 2, chainReq: "horseshoe", img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&q=80", desc: "점토2, 돌2 (연쇄 🐎) | 방패 +2" },
+    { id: "a3_mil_4", name: "무기고", type: "military", cost: 0, req: { clay: 3, wood: 2 }, shield: 3, img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80", desc: "점토3, 나무2 | 군사 방패 +3" },
+    { id: "a3_mil_5", name: "주둔군", type: "military", cost: 8, req: {}, shield: 3, img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80", desc: "8코인 | 군사 방패 +3" },
+    // 과학
+    { id: "a3_sci_1", name: "아카데미", type: "science", cost: 0, req: { stone: 1, wood: 1, glass: 2 }, symbol: "compass", vp: 3, chainReq: "sun", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80", desc: "돌1, 나무1, 유리2 (연쇄 ☀️) | 컴퍼스 📐, 3점" },
+    { id: "a3_sci_2", name: "연구원", type: "science", cost: 0, req: { wood: 2, papyrus: 1, glass: 1 }, symbol: "globe", vp: 3, chainReq: "sun", img: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=300&q=80", desc: "나무2, 종이1, 유리1 (연쇄 ☀️) | 천구의 🌐, 3점" },
+    { id: "a3_sci_3", name: "대학", type: "science", cost: 0, req: { clay: 1, glass: 1, papyrus: 1 }, symbol: "globe", vp: 2, chainReq: "harp", img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=300&q=80", desc: "점토1, 유리1, 종이1 (연쇄 🎵) | 천구의 🌐, 2점" },
+    { id: "a3_sci_4", name: "천문대", type: "science", cost: 0, req: { stone: 2, papyrus: 1, glass: 1 }, symbol: "scale", vp: 2, img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=300&q=80", desc: "돌2, 종이1, 유리1 | 저울 ⚖️, 2점" },
+    // 시민
+    { id: "a3_civ_1", name: "판테온", type: "civic", cost: 0, req: { clay: 1, wood: 1, papyrus: 2 }, vp: 6, chainReq: "pillar", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80", desc: "점토1, 나무1, 종이2 (연쇄 🏛️) | 6점" },
+    { id: "a3_civ_2", name: "정원", type: "civic", cost: 0, req: { clay: 2, wood: 2 }, vp: 6, chainReq: "statue", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=300&q=80", desc: "점토2, 나무2 | 6점" },
+    { id: "a3_civ_3", name: "궁전", type: "civic", cost: 0, req: { clay: 1, stone: 1, wood: 1, glass: 2 }, vp: 7, img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80", desc: "점토1, 돌1, 나무1, 유리2 | 7점" },
+    { id: "a3_civ_4", name: "시청", type: "civic", cost: 0, req: { stone: 3, clay: 2 }, vp: 7, img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80", desc: "돌3, 점토2 | 7점" },
+    { id: "a3_civ_5", name: "오벨리스크", type: "civic", cost: 0, req: { stone: 2, glass: 1 }, vp: 5, img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=300&q=80", desc: "돌2, 유리1 | 5점" },
+    // 상업
+    { id: "a3_com_1", name: "항구", type: "commerce", cost: 0, req: { wood: 1, clay: 1, glass: 1 }, vp: 3, coins: 6, img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=300&q=80", desc: "나무1, 점토1, 유리1 | 승점 3점, 코인 6개" },
+    { id: "a3_com_2", name: "무기고", type: "commerce", cost: 0, req: { stone: 2, glass: 1 }, vp: 3, shield: 1, img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80", desc: "돌2, 유리1 | 승점 3점, 방패 +1" },
+    { id: "a3_com_3", name: "등대", type: "commerce", cost: 0, req: { clay: 2, papyrus: 1 }, vp: 3, coins: 4, img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=300&q=80", desc: "점토2, 종이1 | 승점 3점, 코인 4개" }
+  ]
+};
+
+/* --------------------------------------------------------------------------
+   3. 게임 상태 객체
+   -------------------------------------------------------------------------- */
+let gameState = {
+  mode: 'ai',           // 'ai' or 'pvp'
+  phase: 'draft',       // 'draft' or 'play'
+  currentAge: 1,
+  turn: 1,              // 1 or 2
+  militaryTrack: 0,     // -9 (P2 수도 함락) ~ 0 ~ +9 (P1 수도 함락)
+  isGameOver: false,
+  selectedCardNode: null,
+  totalWondersBuilt: 0, // 누적 완공 수 (7개 완공 시 마지막 1개 폐기)
+  
+  lootTokens: {
+    p2_6: false, // -6칸 P1 코인 5개 약탈
+    p2_3: false, // -3칸 P1 코인 2개 약탈
+    p1_3: false, // +3칸 P2 코인 2개 약탈
+    p1_6: false  // +6칸 P2 코인 5개 약탈
+  },
+
+  progressTokensShelf: [], // 보드 상단에 공개된 무작위 5개 토큰
+
+  players: {
+    1: createPlayerObject("P1 (정종환)"),
+    2: createPlayerObject("AI 봇")
+  },
+
+  wonders: [], // 게임에 배정된 8장의 불가사의
+
+  draft: {
+    round: 1,
+    step: 0,
+    pool1: [],
+    pool2: [],
+    currentPool: [],
+    activePicker: 1
+  },
+
+  pyramid: []
+};
+
+function createPlayerObject(name) {
+  return {
+    name: name,
+    coins: 7,
+    vp: 0,
+    military: 0,
+    scienceCounts: { globe: 0, compass: 0, scale: 0, tablet: 0, gear: 0, mortar: 0, law: 0 },
+    sciencePairsClaimed: 0,
+    resources: { wood: 0, stone: 0, clay: 0, glass: 0, papyrus: 0 },
+    wildResources: 0,
+    discounts: { wood: false, stone: false, clay: false, manufactured: false },
+    chains: new Set(),
+    progressTokens: [],
+    builtCards: []
+  };
+}
+
+/* --------------------------------------------------------------------------
+   4. 공식 룰 동적 교역 비용 계산기 (calculateTradeCost)
+   -------------------------------------------------------------------------- */
+function calculateTradeCost(buyerNum, cardOrWonder) {
+  const buyer = gameState.players[buyerNum];
+  const seller = gameState.players[buyerNum === 1 ? 2 : 1];
+
+  // 1. 연쇄 무료 건설(Chaining) 체크
+  if (cardOrWonder.chainReq && buyer.chains.has(cardOrWonder.chainReq)) {
+    return {
+      canBuild: true,
+      isChainFree: true,
+      baseCoinCost: 0,
+      tradeCoinCost: 0,
+      totalCoinCost: 0,
+      missingList: [],
+      detailsText: "🔗 연쇄 심볼 보유! 자원 및 코인 비용 없이 0원 무료 건설 가능!"
+    };
+  }
+
+  // 기본 코인 비용
+  let baseCoinCost = cardOrWonder.cost || 0;
+
+  // 요구 자원 복사
+  let req = { ...(cardOrWonder.req || {}) };
+
+  // 진보 토큰 할인 적용 (석조기술: 시민 자원 2개 면제 / 건축: 불가사의 자원 2개 면제)
+  let discountQuota = 0;
+  if (cardOrWonder.type === 'civic' && buyer.progressTokens.some(t => t.id === 'masonry')) {
+    discountQuota += 2;
+  }
+  if (!cardOrWonder.type && buyer.progressTokens.some(t => t.id === 'architecture')) {
+    discountQuota += 2;
+  }
+
+  if (discountQuota > 0) {
+    for (let r in req) {
+      while (req[r] > 0 && discountQuota > 0) {
+        req[r]--;
+        discountQuota--;
       }
+    }
+  }
+
+  // 자원 충당 계산
+  let missing = {};
+  let totalMissingCount = 0;
+
+  for (let r of ['wood', 'stone', 'clay', 'glass', 'papyrus']) {
+    const needed = req[r] || 0;
+    const have = buyer.resources[r] || 0;
+    if (needed > have) {
+      missing[r] = needed - have;
+      totalMissingCount += missing[r];
+    } else {
+      missing[r] = 0;
+    }
+  }
+
+  // 와일드 자원(포럼, 카라반사라이)으로 가장 비싼 부족 자원부터 우선 차감
+  let availableWild = buyer.wildResources;
+  if (availableWild > 0 && totalMissingCount > 0) {
+    // 상대 생산량이 많은 순서대로 정렬하여 와일드 자원 소진
+    let sortedMissing = Object.keys(missing)
+      .filter(r => missing[r] > 0)
+      .sort((a, b) => {
+        let costA = (buyer.discounts[a] || (buyer.discounts.manufactured && (a==='glass'||a==='papyrus'))) ? 1 : (2 + (seller.resources[a] || 0));
+        let costB = (buyer.discounts[b] || (buyer.discounts.manufactured && (b==='glass'||b==='papyrus'))) ? 1 : (2 + (seller.resources[b] || 0));
+        return costB - costA;
+      });
+
+    for (let r of sortedMissing) {
+      while (missing[r] > 0 && availableWild > 0) {
+        missing[r]--;
+        availableWild--;
+        totalMissingCount--;
+      }
+    }
+  }
+
+  // 최종 부족 자원 교역 비용 계산
+  let tradeCoinCost = 0;
+  let tradeDetails = [];
+
+  for (let r of ['wood', 'stone', 'clay', 'glass', 'papyrus']) {
+    const count = missing[r];
+    if (count > 0) {
+      let isDiscounted = buyer.discounts[r] || (buyer.discounts.manufactured && (r === 'glass' || r === 'papyrus'));
+      let unitCost = isDiscounted ? 1 : (2 + (seller.resources[r] || 0));
+      let subTotal = count * unitCost;
+      tradeCoinCost += subTotal;
+
+      let rName = getResourceKoreanName(r);
+      tradeDetails.push(`${rName} ${count}개 (개당 ${unitCost}코인 = ${subTotal}코인)`);
+    }
+  }
+
+  let totalCoinCost = baseCoinCost + tradeCoinCost;
+  let canBuild = buyer.coins >= totalCoinCost;
+
+  let detailsText = "";
+  if (totalMissingCount === 0 && baseCoinCost === 0) {
+    detailsText = "✅ 내 보유 자원으로 추가 코인 교역 없이 건설 가능!";
+  } else if (totalMissingCount === 0 && baseCoinCost > 0) {
+    detailsText = `기본 건설 비용: ${baseCoinCost}코인 (자원은 전량 충족)`;
+  } else {
+    detailsText = `자원 교역: ${tradeDetails.join(', ')} ➔ 총 필요 코인: <strong>${totalCoinCost} 코인</strong>`;
+    if (!canBuild) {
+      detailsText += ` <span style="color: #E53E3E;">(보유 코인 ${buyer.coins}개로 부족!)</span>`;
+    }
+  }
+
+  return {
+    canBuild: canBuild,
+    isChainFree: false,
+    baseCoinCost: baseCoinCost,
+    tradeCoinCost: tradeCoinCost,
+    totalCoinCost: totalCoinCost,
+    missing: missing,
+    detailsText: detailsText
+  };
+}
+
+function getResourceKoreanName(r) {
+  if (r === 'wood') return '나무(🪵)';
+  if (r === 'stone') return '돌(🪨)';
+  if (r === 'clay') return '점토(🧱)';
+  if (r === 'glass') return '유리(🍷)';
+  if (r === 'papyrus') return '종이(📜)';
+  return r;
+}
+
+/* --------------------------------------------------------------------------
+   5. 불가사의 드래프트 (Wonder Draft) 페이즈
+   -------------------------------------------------------------------------- */
+function initWonderDraft() {
+  gameState.phase = 'draft';
+  gameState.wonders = [];
+  gameState.totalWondersBuilt = 0;
+  
+  // 10종 진보 토큰 중 무작위 5개 뽑아 상단에 전시
+  const shuffledProgress = [...ALL_PROGRESS_TOKENS_MASTER].sort(() => Math.random() - 0.5);
+  gameState.progressTokensShelf = shuffledProgress.slice(0, 5);
+  renderProgressShelf();
+
+  // 8종 불가사의 무작위 분할 (4장씩 2라운드)
+  const shuffledWonders = [...ALL_WONDERS_MASTER].sort(() => Math.random() - 0.5);
+  gameState.draft.pool1 = shuffledWonders.slice(0, 4);
+  gameState.draft.pool2 = shuffledWonders.slice(4, 8);
+  gameState.draft.round = 1;
+  gameState.draft.step = 0;
+  gameState.draft.currentPool = [...gameState.draft.pool1];
+  gameState.draft.activePicker = 1;
+
+  document.getElementById('wonder-draft-container').style.display = 'flex';
+  document.getElementById('main-gameplay-area').style.display = 'none';
+
+  renderWonderDraftUI();
+}
+
+function renderProgressShelf() {
+  const container = document.getElementById('progress-shelf-tokens');
+  container.innerHTML = '';
+
+  gameState.progressTokensShelf.forEach(token => {
+    const el = document.createElement('div');
+    el.className = `progress-token-item ${token.taken ? 'taken' : ''}`;
+    el.innerHTML = `
+      ${token.icon}
+      <div class="progress-token-tooltip">
+        <strong>${token.name}</strong><br>${token.desc}
+      </div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+function renderWonderDraftUI() {
+  const roundTag = document.getElementById('draft-round-tag');
+  const title = document.getElementById('draft-turn-title');
+  const desc = document.getElementById('draft-turn-desc');
+  const poolContainer = document.getElementById('draft-cards-pool');
+
+  roundTag.textContent = `불가사의 드래프트: 라운드 ${gameState.draft.round}/2`;
+
+  const pickerName = gameState.draft.activePicker === 1 ? "플레이어 1 (정종환)" : (gameState.mode === 'ai' ? "AI 봇" : "플레이어 2");
+  title.textContent = `${pickerName}의 선택 차례`;
+
+  if (gameState.draft.round === 1) {
+    desc.textContent = "라운드 1 (선택 순서: P1 1장 ➔ P2/AI 2장 ➔ P1 남은 1장)";
+  } else {
+    desc.textContent = "라운드 2 (선택 순서: P2/AI 1장 ➔ P1 2장 ➔ P2/AI 남은 1장)";
+  }
+
+  poolContainer.innerHTML = '';
+
+  gameState.draft.currentPool.forEach(wonder => {
+    const cardEl = document.createElement('div');
+    cardEl.className = 'draft-card';
+    cardEl.innerHTML = `
+      <div class="draft-card-img-wrap">
+        <img src="${wonder.img}" alt="${wonder.name}" loading="lazy">
+        <span class="draft-card-cost-pill">${wonder.repeatTurn ? '⚡추가턴' : '불가사의'}</span>
+      </div>
+      <div class="draft-card-body">
+        <h4 class="draft-card-title">${wonder.name}</h4>
+        <p class="draft-card-benefit">${wonder.desc}</p>
+        <div class="draft-select-btn">
+          <i class="fa-solid fa-hand-pointer"></i> 불가사의 선택
+        </div>
+      </div>
+    `;
+
+    cardEl.addEventListener('click', () => {
+      if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') return;
+      onWonderCardSelected(wonder);
     });
 
-    /* --------------------------------------------------------------------------
-       2. 세븐 원더스 듀얼 (7 Wonders Duel) 데이터 및 실제 사진 세팅
-       -------------------------------------------------------------------------- */
-    // 피라미드 일반 건물 카드 (실제 고화질 유적/건축 사진 매핑)
-    const CARD_DATABASE = {
-      1: [
-        { id: "a1_m1", name: "주둔지", type: "military", cost: 0, shield: 1, vp: 0, icon: "⚔️", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" },
-        { id: "a1_m2", name: "감시탑", type: "military", cost: 1, shield: 1, vp: 0, icon: "🏰", img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&q=80" },
-        { id: "a1_s1", name: "작업장", type: "science", symbol: "gear", cost: 0, vp: 1, icon: "⚙️", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80" },
-        { id: "a1_s2", name: "약초방", type: "science", symbol: "mortar", cost: 0, vp: 1, icon: "🧪", img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80" },
-        { id: "a1_s3", name: "필사실", type: "science", symbol: "tablet", cost: 1, vp: 1, icon: "📜", img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80" },
-        { id: "a1_c1", name: "극장", type: "civic", cost: 0, vp: 3, icon: "🎭", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80" },
-        { id: "a1_c2", name: "목욕탕", type: "civic", cost: 1, vp: 3, icon: "🏛️", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80" },
-        { id: "a1_k1", name: "선술집", type: "commerce", cost: 0, coins: 4, vp: 0, icon: "🍺", img: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=300&q=80" },
-        { id: "a1_k2", name: "시장", type: "commerce", cost: 0, coins: 3, vp: 0, icon: "🏺", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80" },
-        { id: "a1_r1", name: "벌목장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🪵", img: "https://images.unsplash.com/photo-1541888946425-d0fbb186f5f7?w=300&q=80" },
-        { id: "a1_r2", name: "점토 채취장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🧱", img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=300&q=80" },
-        { id: "a1_r3", name: "채석장", type: "resource", cost: 0, coins: 1, vp: 1, icon: "🪨", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300&q=80" },
-        { id: "a1_m3", name: "성벽", type: "military", cost: 2, shield: 1, vp: 1, icon: "🛡️", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80" },
-        { id: "a1_s4", name: "천문대", type: "science", symbol: "globe", cost: 2, vp: 1, icon: "🌐", img: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=300&q=80" }
-      ],
-      2: [
-        { id: "a2_m1", name: "연병장", type: "military", cost: 2, shield: 2, vp: 0, icon: "🛡️", img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&q=80" },
-        { id: "a2_m2", name: "궁술장", type: "military", cost: 3, shield: 2, vp: 0, icon: "🏹", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" },
-        { id: "a2_s1", name: "도서관", type: "science", symbol: "tablet", cost: 2, vp: 2, icon: "📜", img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=300&q=80" },
-        { id: "a2_s2", name: "법원", type: "science", symbol: "scale", cost: 2, vp: 2, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=300&q=80" },
-        { id: "a2_s3", name: "실험실", type: "science", symbol: "mortar", cost: 2, vp: 2, icon: "🧪", img: "https://images.unsplash.com/photo-1514733670139-4d87a1941d55?w=300&q=80" },
-        { id: "a2_c1", name: "신전", type: "civic", cost: 2, vp: 4, icon: "⛩️", img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=300&q=80" },
-        { id: "a2_c2", name: "조각상", type: "civic", cost: 3, vp: 5, icon: "🗿", img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=300&q=80" },
-        { id: "a2_k1", name: "세관", type: "commerce", cost: 1, coins: 4, vp: 1, icon: "🪙", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80" },
-        { id: "a2_k2", name: "양조장", type: "commerce", cost: 0, coins: 5, vp: 0, icon: "🍷", img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=300&q=80" },
-        { id: "a2_s4", name: "학당", type: "science", symbol: "compass", cost: 2, vp: 2, icon: "📐", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80" },
-        { id: "a2_m3", name: "병영", type: "military", cost: 2, shield: 1, vp: 1, icon: "⚔️", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80" },
-        { id: "a2_c3", name: "수로", type: "civic", cost: 2, vp: 5, icon: "⛲", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80" },
-        { id: "a2_s5", name: "연구소", type: "science", symbol: "gear", cost: 3, vp: 2, icon: "⚙️", img: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=300&q=80" },
-        { id: "a2_k3", name: "포럼", type: "commerce", cost: 2, coins: 3, vp: 2, icon: "🏛️", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80" }
-      ],
-      3: [
-        { id: "a3_m1", name: "요새", type: "military", cost: 4, shield: 2, vp: 1, icon: "🏰", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=300&q=80" },
-        { id: "a3_m2", name: "공성무기", type: "military", cost: 5, shield: 3, vp: 0, icon: "☄️", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" },
-        { id: "a3_s1", name: "아카데미", type: "science", symbol: "compass", cost: 3, vp: 3, icon: "📐", img: "https://images.unsplash.com/photo-1507668077129-56e32842fceb?w=300&q=80" },
-        { id: "a3_s2", name: "연구원", type: "science", symbol: "globe", cost: 3, vp: 3, icon: "🌐", img: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=300&q=80" },
-        { id: "a3_s3", name: "대법원", type: "science", symbol: "scale", cost: 3, vp: 3, icon: "⚖️", img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=300&q=80" },
-        { id: "a3_c1", name: "판테온", type: "civic", cost: 4, vp: 6, icon: "🏛️", img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=300&q=80" },
-        { id: "a3_c2", name: "궁전", type: "civic", cost: 5, vp: 7, icon: "👑", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=300&q=80" },
-        { id: "a3_c3", name: "정원", type: "civic", cost: 3, vp: 6, icon: "🌳", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=300&q=80" },
-        { id: "a3_k1", name: "항구", type: "commerce", cost: 2, coins: 6, vp: 3, icon: "⛵", img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=300&q=80" },
-        { id: "a3_k2", name: "상인길드", type: "commerce", cost: 3, coins: 5, vp: 4, icon: "🤝", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300&q=80" },
-        { id: "a3_m3", name: "경기장", type: "military", cost: 4, shield: 2, vp: 2, icon: "🏟️", img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=300&q=80" },
-        { id: "a3_s4", name: "대학", type: "science", symbol: "tablet", cost: 4, vp: 3, icon: "📜", img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=300&q=80" },
-        { id: "a3_c4", name: "오벨리스크", type: "civic", cost: 3, vp: 5, icon: "🗽", img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=300&q=80" },
-        { id: "a3_m4", name: "친위대", type: "military", cost: 3, shield: 2, vp: 1, icon: "🛡️", img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=300&q=80" }
-      ]
-    };
+    poolContainer.appendChild(cardEl);
+  });
 
-    // 8종 고대 세계의 불가사의 마스터 풀 (실제 사진 매핑)
-    const ALL_WONDERS_MASTER = [
-      { id: "w_pyramids", name: "기자의 대피라미드", cost: 4, vp: 9, shield: 0, coins: 0, built: false, img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?w=400&q=80", desc: "영원불멸의 피라미드: 승점 9점 획득" },
-      { id: "w_colossus", name: "로도스의 거상", cost: 3, vp: 3, shield: 2, coins: 0, built: false, img: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&q=80", desc: "태양신의 수호: 군사 방패 2개, 승점 3점" },
-      { id: "w_lighthouse", name: "알렉산드리아 등대", cost: 3, vp: 4, shield: 0, coins: 6, built: false, img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=400&q=80", desc: "파로스 섬의 빛: 코인 6개 즉시 획득, 승점 4점" },
-      { id: "w_zeus", name: "올림피아 제우스 신상", cost: 3, vp: 3, shield: 1, coins: 0, built: false, img: "https://images.unsplash.com/photo-1555993539-1732b37905f0?w=400&q=80", desc: "신들의 왕: 군사 방패 1개, 상대 코인 2개 파괴, 승점 3점" },
-      { id: "w_gardens", name: "바빌론의 공중정원", cost: 3, vp: 3, shield: 0, coins: 6, built: false, img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80", desc: "전설의 테라스 정원: 코인 6개 즉시 획득, 승점 3점" },
-      { id: "w_artemis", name: "아르테미스 신전", cost: 2, vp: 2, shield: 0, coins: 5, built: false, img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400&q=80", desc: "풍요의 여신: 코인 5개 즉시 획득, 승점 2점" },
-      { id: "w_library", name: "알렉산드리아 대도서관", cost: 4, vp: 4, shield: 0, coins: 0, built: false, img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=400&q=80", desc: "고대 지식의 전당: 승점 4점 획득" },
-      { id: "w_circus", name: "키르쿠스 막시무스", cost: 2, vp: 3, shield: 1, coins: 0, built: false, img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=400&q=80", desc: "로마 대경기장: 군사 방패 1개, 승점 3점" }
-    ];
+  renderWonders();
+  updateTurnBanner();
 
-    // 전체 게임 상태
-    let gameState = {
-      mode: 'ai',           // 'ai' or 'pvp'
-      phase: 'draft',       // 'draft' (초반 불가사의 선택) or 'play' (본게임 피라미드 드래프트)
-      currentAge: 1,
-      turn: 1,              // 1 (P1) or 2 (P2 / AI)
-      militaryTrack: 0,     // -9 (P2 win) ~ 0 ~ +9 (P1 win)
-      isGameOver: false,
-      selectedCardNode: null,
-      players: {
-        1: { name: "P1 (정종환)", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] },
-        2: { name: "AI 봇", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] }
-      },
-      wonders: [], // 게임에 배정된 8장의 불가사의
-      draft: {
-        round: 1,           // 라운드 1 or 라운드 2
-        step: 0,            // 드래프트 단계
-        pool1: [],          // 라운드 1 후보 4장
-        pool2: [],          // 라운드 2 후보 4장
-        currentPool: [],    // 현재 공개된 후보들
-        activePicker: 1     // 현재 집을 플레이어 (1 or 2)
-      },
-      pyramid: []
-    };
+  if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') {
+    setTimeout(playAIWonderPick, 600);
+  }
+}
 
-    /* --------------------------------------------------------------------------
-       3. 초반 불가사의 드래프트 (Wonder Draft Phase) 엔진
-       -------------------------------------------------------------------------- */
-    function initWonderDraft() {
-      gameState.phase = 'draft';
-      gameState.wonders = [];
+function onWonderCardSelected(wonder) {
+  const picker = gameState.draft.activePicker;
+  const clonedWonder = { ...wonder, owner: picker, built: false };
+  gameState.wonders.push(clonedWonder);
+
+  gameState.draft.currentPool = gameState.draft.currentPool.filter(w => w.id !== wonder.id);
+  gameState.draft.step++;
+
+  if (gameState.draft.round === 1) {
+    if (gameState.draft.step === 1) {
+      gameState.draft.activePicker = 2;
+    } else if (gameState.draft.step === 2) {
+      gameState.draft.activePicker = 2;
+    } else if (gameState.draft.step === 3) {
+      const lastWonder = gameState.draft.currentPool[0];
+      gameState.wonders.push({ ...lastWonder, owner: 1, built: false });
+      gameState.draft.currentPool = [];
       
-      // 8장의 불가사의를 무작위로 섞어 4장씩 분할
-      const shuffled = [...ALL_WONDERS_MASTER].sort(() => Math.random() - 0.5);
-      gameState.draft.pool1 = shuffled.slice(0, 4);
-      gameState.draft.pool2 = shuffled.slice(4, 8);
-      gameState.draft.round = 1;
+      gameState.draft.round = 2;
       gameState.draft.step = 0;
-      gameState.draft.currentPool = [...gameState.draft.pool1];
-      gameState.draft.activePicker = 1; // P1부터 시작
-
-      document.getElementById('wonder-draft-container').style.display = 'flex';
-      document.getElementById('main-gameplay-area').style.display = 'none';
-
-      renderWonderDraftUI();
+      gameState.draft.currentPool = [...gameState.draft.pool2];
+      gameState.draft.activePicker = 2;
     }
+  } else if (gameState.draft.round === 2) {
+    if (gameState.draft.step === 1) {
+      gameState.draft.activePicker = 1;
+    } else if (gameState.draft.step === 2) {
+      gameState.draft.activePicker = 1;
+    } else if (gameState.draft.step === 3) {
+      const lastWonder = gameState.draft.currentPool[0];
+      gameState.wonders.push({ ...lastWonder, owner: 2, built: false });
+      gameState.draft.currentPool = [];
 
-    function renderWonderDraftUI() {
-      const container = document.getElementById('wonder-draft-container');
-      const roundTag = document.getElementById('draft-round-tag');
-      const title = document.getElementById('draft-turn-title');
-      const desc = document.getElementById('draft-turn-desc');
-      const poolContainer = document.getElementById('draft-cards-pool');
+      finishWonderDraft();
+      return;
+    }
+  }
 
-      roundTag.textContent = `불가사의 드래프트: 라운드 ${gameState.draft.round}/2`;
+  renderWonderDraftUI();
+}
 
-      const pickerName = gameState.draft.activePicker === 1 ? "플레이어 1 (정종환)" : (gameState.mode === 'ai' ? "AI 봇" : "플레이어 2");
-      title.textContent = `${pickerName}의 선택 차례`;
+function playAIWonderPick() {
+  if (gameState.draft.currentPool.length === 0) return;
+  const pool = gameState.draft.currentPool;
+  const sorted = [...pool].sort((a, b) => (b.vp * 2 + (b.repeatTurn ? 8 : 0) + b.shield * 4 + b.coins) - (a.vp * 2 + (a.repeatTurn ? 8 : 0) + a.shield * 4 + a.coins));
+  onWonderCardSelected(sorted[0]);
+}
 
-      if (gameState.draft.round === 1) {
-        desc.textContent = "라운드 1 (선택 순서: P1 1장 ➔ P2/AI 2장 ➔ P1 남은 1장)";
-      } else {
-        desc.textContent = "라운드 2 (선택 순서: P2/AI 1장 ➔ P1 2장 ➔ P2/AI 남은 1장)";
-      }
+function finishWonderDraft() {
+  gameState.phase = 'play';
+  gameState.turn = 1;
+  gameState.currentAge = 1;
+  gameState.pyramid = buildPyramidForAge(1);
 
-      poolContainer.innerHTML = '';
+  document.getElementById('wonder-draft-container').style.display = 'none';
+  document.getElementById('main-gameplay-area').style.display = 'block';
 
-      gameState.draft.currentPool.forEach(wonder => {
-        const cardEl = document.createElement('div');
-        cardEl.className = 'draft-card';
-        cardEl.innerHTML = `
-          <div class="draft-card-img-wrap">
-            <img src="${wonder.img}" alt="${wonder.name}" loading="lazy">
-            <span class="draft-card-cost-pill">${wonder.cost} 코인</span>
-          </div>
-          <div class="draft-card-body">
-            <h4 class="draft-card-title">${wonder.name}</h4>
-            <p class="draft-card-benefit">${wonder.desc}</p>
-            <div class="draft-select-btn">
-              <i class="fa-solid fa-hand-pointer"></i> 불가사의 선택
-            </div>
-          </div>
-        `;
+  updatePyramidAccessibility();
+  renderGameUI();
+}
 
-        cardEl.addEventListener('click', () => {
-          if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') return; // AI 턴 동안 인간 클릭 차단
-          onWonderCardSelected(wonder);
+/* --------------------------------------------------------------------------
+   6. 시대별 피라미드 보드 빌더 (1시대 정피라미드, 2시대 역피라미드, 3시대 신전형)
+   -------------------------------------------------------------------------- */
+function buildPyramidForAge(age) {
+  let cards = [];
+  if (age === 1 || age === 2) {
+    cards = [...CARD_DATABASE[age]].sort(() => Math.random() - 0.5);
+  } else {
+    // 3시대: 17장 + 길드 3장 = 20장
+    const age3Base = [...CARD_DATABASE[3]].sort(() => Math.random() - 0.5);
+    const chosenGuilds = [...GUILD_CARDS_MASTER].sort(() => Math.random() - 0.5).slice(0, 3);
+    cards = [...age3Base, ...chosenGuilds].sort(() => Math.random() - 0.5);
+  }
+
+  const nodes = [];
+  let cardIdx = 0;
+
+  if (age === 1) {
+    // 1시대 (20장): Row 0(2장, 앞) -> 1(3장, 뒤) -> 2(4장, 앞) -> 3(5장, 뒤) -> 4(6장, 앞)
+    const rows = [2, 3, 4, 5, 6];
+    for (let r = 0; r < rows.length; r++) {
+      const count = rows[r];
+      const isFaceUp = (r % 2 === 0);
+      for (let c = 0; c < count; c++) {
+        nodes.push({
+          id: `a1_${r}_${c}`,
+          row: r,
+          col: c,
+          card: cards[cardIdx++],
+          isFaceUp: isFaceUp,
+          isTaken: false,
+          coveredBy: []
         });
-
-        poolContainer.appendChild(cardEl);
-      });
-
-      renderWonders();
-      updateTurnBanner();
-
-      // AI 차례일 경우 자동 선택 트리거
-      if (gameState.draft.activePicker === 2 && gameState.mode === 'ai') {
-        setTimeout(playAIWonderPick, 650);
       }
     }
-
-    function onWonderCardSelected(wonder) {
-      const picker = gameState.draft.activePicker;
-      
-      // 불가사의 소유자 배정 및 보관소 추가
-      const clonedWonder = { ...wonder, owner: picker, built: false };
-      gameState.wonders.push(clonedWonder);
-
-      // 현재 풀에서 제거
-      gameState.draft.currentPool = gameState.draft.currentPool.filter(w => w.id !== wonder.id);
-      gameState.draft.step++;
-
-      // 드래프트 순서 규칙:
-      // 라운드 1 (step 0: P1, step 1: P2, step 2: P2, step 3: P1 자동)
-      // 라운드 2 (step 0: P2, step 1: P1, step 2: P1, step 3: P2 자동)
-      if (gameState.draft.round === 1) {
-        if (gameState.draft.step === 1) {
-          gameState.draft.activePicker = 2; // P2 선택
-        } else if (gameState.draft.step === 2) {
-          gameState.draft.activePicker = 2; // P2 연속 선택
-        } else if (gameState.draft.step === 3) {
-          // 남은 1장은 자동으로 P1에 배정
-          const lastWonder = gameState.draft.currentPool[0];
-          gameState.wonders.push({ ...lastWonder, owner: 1, built: false });
-          gameState.draft.currentPool = [];
-          
-          // 라운드 2로 전환
-          gameState.draft.round = 2;
-          gameState.draft.step = 0;
-          gameState.draft.currentPool = [...gameState.draft.pool2];
-          gameState.draft.activePicker = 2; // 라운드 2는 P2부터 시작
-        }
-      } else if (gameState.draft.round === 2) {
-        if (gameState.draft.step === 1) {
-          gameState.draft.activePicker = 1; // P1 선택
-        } else if (gameState.draft.step === 2) {
-          gameState.draft.activePicker = 1; // P1 연속 선택
-        } else if (gameState.draft.step === 3) {
-          // 남은 1장은 자동으로 P2에 배정
-          const lastWonder = gameState.draft.currentPool[0];
-          gameState.wonders.push({ ...lastWonder, owner: 2, built: false });
-          gameState.draft.currentPool = [];
-
-          // 불가사의 드래프트 완료! 본게임 피라미드 보드로 진입!
-          finishWonderDraft();
-          return;
-        }
+    nodes.forEach(node => {
+      if (node.row < rows.length - 1) {
+        const nextR = node.row + 1;
+        node.coveredBy.push(`a1_${nextR}_${node.col}`, `a1_${nextR}_${node.col + 1}`);
       }
-
-      renderWonderDraftUI();
-    }
-
-    function playAIWonderPick() {
-      if (gameState.draft.currentPool.length === 0) return;
-      // AI는 승점(vp) 및 군사(shield) 가중치로 최선의 불가사의 선택
-      const pool = gameState.draft.currentPool;
-      const sorted = [...pool].sort((a, b) => (b.vp * 2 + b.shield * 4 + b.coins) - (a.vp * 2 + a.shield * 4 + a.coins));
-      onWonderCardSelected(sorted[0]);
-    }
-
-    function finishWonderDraft() {
-      gameState.phase = 'play';
-      gameState.turn = 1;
-      gameState.currentAge = 1;
-      gameState.pyramid = buildPyramidStructure(1);
-
-      document.getElementById('wonder-draft-container').style.display = 'none';
-      document.getElementById('main-gameplay-area').style.display = 'block';
-
-      updatePyramidAccessibility();
-      renderGameUI();
-    }
-
-    /* --------------------------------------------------------------------------
-       4. 피라미드 보드 빌드 및 렌더링 (실제 고화질 사진 탑재)
-       -------------------------------------------------------------------------- */
-    function buildPyramidStructure(age) {
-      const cards = [...CARD_DATABASE[age]].sort(() => Math.random() - 0.5);
-      const rows = [2, 3, 4, 5];
-      let cardIdx = 0;
-      const nodes = [];
-
-      for (let r = 0; r < rows.length; r++) {
-        const count = rows[r];
-        const isFaceUp = (r === 1 || r === 3);
-        for (let c = 0; c < count; c++) {
-          nodes.push({
-            id: `node_${r}_${c}`,
-            row: r,
-            col: c,
-            card: cards[cardIdx++] || cards[0],
-            isFaceUp: isFaceUp,
-            isTaken: false,
-            coveredBy: []
-          });
-        }
-      }
-
-      nodes.forEach(node => {
-        if (node.row < rows.length - 1) {
-          const nextRow = node.row + 1;
-          const leftChildId = `node_${nextRow}_${node.col}`;
-          const rightChildId = `node_${nextRow}_${node.col + 1}`;
-          node.coveredBy.push(leftChildId, rightChildId);
-        }
-      });
-
-      return nodes;
-    }
-
-    function updatePyramidAccessibility() {
-      gameState.pyramid.forEach(node => {
-        if (!node.isTaken) {
-          const activeCoveringCards = node.coveredBy.filter(childId => {
-            const childNode = gameState.pyramid.find(n => n.id === childId);
-            return childNode && !childNode.isTaken;
-          });
-          
-          if (activeCoveringCards.length === 0) {
-            node.isFaceUp = true;
-          }
-        }
-      });
-    }
-
-    function renderGameUI() {
-      renderDashboard();
-      renderPyramid();
-      renderWonders();
-      updateTurnBanner();
-    }
-
-    function renderDashboard() {
-      const p1 = gameState.players[1];
-      const p2 = gameState.players[2];
-
-      document.getElementById('p1-coins').textContent = p1.coins;
-      document.getElementById('p1-vp').textContent = calculatePlayerVP(1);
-      document.getElementById('p2-coins').textContent = p2.coins;
-      document.getElementById('p2-vp').textContent = calculatePlayerVP(2);
-
-      document.getElementById('p1-science-count').textContent = p1.science.size;
-      document.querySelectorAll('#p1-science-slots .science-slot').forEach(slot => {
-        const symbol = slot.dataset.symbol;
-        if (p1.science.has(symbol)) slot.classList.add('collected');
-        else slot.classList.remove('collected');
-      });
-
-      document.getElementById('p2-science-count').textContent = p2.science.size;
-      document.querySelectorAll('#p2-science-slots .science-slot').forEach(slot => {
-        const symbol = slot.dataset.symbol;
-        if (p2.science.has(symbol)) slot.classList.add('collected');
-        else slot.classList.remove('collected');
-      });
-
-      const milVal = Math.max(-9, Math.min(9, gameState.militaryTrack));
-      const percentage = 50 + (milVal / 9) * 46;
-      document.getElementById('military-token').style.left = `${percentage}%`;
-      
-      let statusDesc = `현재 트랙 수치: <strong>${milVal > 0 ? '+' + milVal : milVal}</strong> `;
-      if (milVal > 0) statusDesc += `(P1 쪽으로 ${milVal}칸 우세)`;
-      else if (milVal < 0) statusDesc += `(P2 쪽으로 ${Math.abs(milVal)}칸 우세)`;
-      else statusDesc += `(완전한 중립)`;
-      document.getElementById('military-status-desc').innerHTML = statusDesc;
-
-      if (gameState.turn === 1) {
-        document.getElementById('p1-stat-box').classList.add('active-turn');
-        document.getElementById('p2-stat-box').classList.remove('active-turn');
-      } else {
-        document.getElementById('p1-stat-box').classList.remove('active-turn');
-        document.getElementById('p2-stat-box').classList.add('active-turn');
+    });
+  } else if (age === 2) {
+    // 2시대 (20장 역피라미드): Row 0(6장, 앞) -> 1(5장, 뒤) -> 2(4장, 앞) -> 3(3장, 뒤) -> 4(2장, 앞)
+    // 아래 카드가 위 카드를 덮는 것이 아니라, 위 카드가 아래 카드를 덮고 있으므로
+    // Row r의 카드는 바로 위 Row r-1의 카드 2장이 치워져야 열림!
+    const rows = [6, 5, 4, 3, 2];
+    for (let r = 0; r < rows.length; r++) {
+      const count = rows[r];
+      const isFaceUp = (r % 2 === 0);
+      for (let c = 0; c < count; c++) {
+        nodes.push({
+          id: `a2_${r}_${c}`,
+          row: r,
+          col: c,
+          card: cards[cardIdx++],
+          isFaceUp: isFaceUp,
+          isTaken: false,
+          coveredBy: []
+        });
       }
     }
-
-    function updateTurnBanner() {
-      const bannerText = document.getElementById('turn-display-text');
-      const ageBadge = document.getElementById('current-age-badge');
-      
-      if (gameState.phase === 'draft') {
-        ageBadge.textContent = "초반 드래프트";
-        const picker = gameState.draft.activePicker === 1 ? "플레이어 1 (정종환)" : (gameState.mode === 'ai' ? "AI 봇" : "플레이어 2");
-        bannerText.textContent = `🏛️ 불가사의 선택 단계: [${picker}]의 선택 차례입니다.`;
-        return;
+    // 역피라미드에서는 Row r (r > 0)의 (r, c)는 바로 위 (r-1, c)와 (r-1, c+1)에 의해 덮여있음!
+    nodes.forEach(node => {
+      if (node.row > 0) {
+        const prevR = node.row - 1;
+        node.coveredBy.push(`a2_${prevR}_${node.col}`, `a2_${prevR}_${node.col + 1}`);
       }
-
-      ageBadge.textContent = `제 ${gameState.currentAge} 시대 (Age ${getRomanNumeral(gameState.currentAge)})`;
-
-      if (gameState.isGameOver) {
-        bannerText.textContent = "🏆 게임이 종료되었습니다.";
-        return;
+    });
+  } else if (age === 3) {
+    // 3시대 (20장 신전형):
+    // Row 0 (2장, 앞)
+    // Row 1 (3장, 뒤)
+    // Row 2 (4장, 앞)
+    // Row 3 (2장, 뒤 - 좌 1장, 우 1장 분할)
+    // Row 4 (4장, 앞)
+    // Row 5 (3장, 뒤)
+    // Row 6 (2장, 앞)
+    const rowCounts = [2, 3, 4, 2, 4, 3, 2];
+    for (let r = 0; r < rowCounts.length; r++) {
+      const count = rowCounts[r];
+      const isFaceUp = (r === 0 || r === 2 || r === 4 || r === 6);
+      for (let c = 0; c < count; c++) {
+        nodes.push({
+          id: `a3_${r}_${c}`,
+          row: r,
+          col: c,
+          card: cards[cardIdx++],
+          isFaceUp: isFaceUp,
+          isTaken: false,
+          coveredBy: []
+        });
       }
-
-      if (gameState.turn === 1) {
-        bannerText.textContent = "🚩 플레이어 1 (정종환)의 턴입니다.";
-      } else {
-        if (gameState.mode === 'ai') {
-          bannerText.textContent = "🤖 AI 봇이 최선의 수를 고민하고 있습니다...";
+    }
+    // 3시대 덮임 관계 (순차적 하향 덮임)
+    nodes.forEach(node => {
+      if (node.row < rowCounts.length - 1) {
+        const nextR = node.row + 1;
+        const nextCount = rowCounts[nextR];
+        if (nextCount > rowCounts[node.row]) {
+          node.coveredBy.push(`a3_${nextR}_${node.col}`, `a3_${nextR}_${node.col + 1}`);
         } else {
-          bannerText.textContent = "🚩 플레이어 2의 턴입니다.";
+          // 좁아질 때
+          if (node.col > 0) node.coveredBy.push(`a3_${nextR}_${node.col - 1}`);
+          if (node.col < nextCount) node.coveredBy.push(`a3_${nextR}_${node.col}`);
         }
       }
-    }
+    });
+  }
 
-    function getRomanNumeral(num) {
-      if (num === 1) return 'I';
-      if (num === 2) return 'II';
-      return 'III';
-    }
+  return nodes;
+}
 
-    // 피라미드 보드 렌더링 (실제 사진 탑재)
-    function renderPyramid() {
-      const board = document.getElementById('pyramid-board');
-      board.innerHTML = '';
-
-      const rowsCount = 4;
-      for (let r = 0; r < rowsCount; r++) {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'pyramid-row';
-
-        const rowNodes = gameState.pyramid.filter(n => n.row === r);
-        rowNodes.forEach(node => {
-          const cardEl = document.createElement('div');
-          cardEl.className = 'duel-card';
-          cardEl.id = node.id;
-
-          if (node.isTaken) {
-            cardEl.classList.add('taken');
-          } else if (!node.isFaceUp) {
-            cardEl.classList.add('face-down', 'covered');
-            cardEl.innerHTML = `
-              <div class="face-down-emblem">
-                <i class="fa-solid fa-lock"></i>
-              </div>
-            `;
-          } else {
-            const isAccessible = isNodeAccessible(node);
-            if (isAccessible) {
-              cardEl.classList.add('accessible', `card-type-${node.card.type}`);
-              cardEl.addEventListener('click', () => onCardClicked(node));
-            } else {
-              cardEl.classList.add('covered', `card-type-${node.card.type}`);
-            }
-
-            let typeIconClass = "fa-landmark";
-            if (node.card.type === 'military') typeIconClass = "fa-shield";
-            else if (node.card.type === 'science') typeIconClass = "fa-flask";
-            else if (node.card.type === 'civic') typeIconClass = "fa-trophy";
-            else if (node.card.type === 'commerce') typeIconClass = "fa-coins";
-            else if (node.card.type === 'resource') typeIconClass = "fa-cubes";
-
-            cardEl.innerHTML = `
-              <div class="card-photo-header">
-                <img src="${node.card.img}" alt="${node.card.name}" loading="lazy">
-                <span class="card-photo-cost ${node.card.cost === 0 ? 'free' : ''}">
-                  ${node.card.cost === 0 ? '무료' : node.card.cost + ' 🪙'}
-                </span>
-                <span class="card-photo-type-badge">
-                  <i class="fa-solid ${typeIconClass}"></i>
-                </span>
-              </div>
-              <div class="card-body-content">
-                <div class="card-title">${node.card.name}</div>
-                <div class="card-benefit-badge">${getCardBenefitSummary(node.card)}</div>
-              </div>
-            `;
-          }
-
-          rowDiv.appendChild(cardEl);
-        });
-
-        board.appendChild(rowDiv);
-      }
-    }
-
-    function getCardBenefitSummary(card) {
-      if (card.shield) return `군사 +${card.shield}`;
-      if (card.symbol) return `과학 (${card.vp}점)`;
-      if (card.type === 'civic') return `승점 +${card.vp}점`;
-      if (card.coins) return `코인 +${card.coins}개`;
-      return '자원 공급';
-    }
-
-    function isNodeAccessible(node) {
-      if (node.isTaken || !node.isFaceUp) return false;
-      return node.coveredBy.every(childId => {
+function updatePyramidAccessibility() {
+  gameState.pyramid.forEach(node => {
+    if (!node.isTaken) {
+      const activeCoveringCards = node.coveredBy.filter(childId => {
         const childNode = gameState.pyramid.find(n => n.id === childId);
-        return !childNode || childNode.isTaken;
+        return childNode && !childNode.isTaken;
       });
+      
+      if (activeCoveringCards.length === 0) {
+        node.isFaceUp = true;
+      }
     }
+  });
+}
 
-    // 하단 불가사의 렌더링 (실제 사진 탑재)
-    function renderWonders() {
-      const wondersContainer = document.getElementById('wonders-grid');
-      wondersContainer.innerHTML = '';
+/* --------------------------------------------------------------------------
+   7. UI 렌더링 (대시보드, 자원, 연쇄, 군사 트랙, 피라미드, 불가사의)
+   -------------------------------------------------------------------------- */
+function renderGameUI() {
+  renderDashboard();
+  renderPyramid();
+  renderWonders();
+  renderProgressShelf();
+  updateTurnBanner();
+}
 
-      if (gameState.wonders.length === 0) {
-        wondersContainer.innerHTML = `
-          <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 20px;">
-            상단의 불가사의 드래프트 단계를 완료하면 획득한 불가사의들이 이곳에 배치됩니다.
+function renderDashboard() {
+  const p1 = gameState.players[1];
+  const p2 = gameState.players[2];
+
+  // 코인 & VP
+  document.getElementById('p1-coins').textContent = p1.coins;
+  document.getElementById('p1-vp').textContent = calculatePlayerVP(1);
+  document.getElementById('p2-coins').textContent = p2.coins;
+  document.getElementById('p2-vp').textContent = calculatePlayerVP(2);
+
+  // 과학 상징 슬롯 & 쌍(Pair) 수
+  let p1Unique = Object.keys(p1.scienceCounts).filter(k => p1.scienceCounts[k] > 0).length;
+  let p2Unique = Object.keys(p2.scienceCounts).filter(k => p2.scienceCounts[k] > 0).length;
+  document.getElementById('p1-science-count').textContent = p1Unique;
+  document.getElementById('p2-science-count').textContent = p2Unique;
+  document.getElementById('p1-science-pairs').textContent = p1.sciencePairsClaimed;
+  document.getElementById('p2-science-pairs').textContent = p2.sciencePairsClaimed;
+
+  for (let s of ['globe', 'compass', 'scale', 'tablet', 'gear', 'mortar']) {
+    let slot1 = document.querySelector(`#p1-science-slots .science-slot[data-symbol="${s}"]`);
+    if (slot1) {
+      if (p1.scienceCounts[s] > 0) slot1.classList.add('collected');
+      else slot1.classList.remove('collected');
+    }
+    let slot2 = document.querySelector(`#p2-science-slots .science-slot[data-symbol="${s}"]`);
+    if (slot2) {
+      if (p2.scienceCounts[s] > 0) slot2.classList.add('collected');
+      else slot2.classList.remove('collected');
+    }
+  }
+
+  // P1 생산 자원
+  document.getElementById('p1-count-wood').textContent = p1.resources.wood;
+  document.getElementById('p1-count-stone').textContent = p1.resources.stone;
+  document.getElementById('p1-count-clay').textContent = p1.resources.clay;
+  document.getElementById('p1-count-glass').textContent = p1.resources.glass;
+  document.getElementById('p1-count-papyrus').textContent = p1.resources.papyrus;
+  document.getElementById('p1-count-wild').textContent = p1.wildResources;
+
+  // P2 생산 자원
+  document.getElementById('p2-count-wood').textContent = p2.resources.wood;
+  document.getElementById('p2-count-stone').textContent = p2.resources.stone;
+  document.getElementById('p2-count-clay').textContent = p2.resources.clay;
+  document.getElementById('p2-count-glass').textContent = p2.resources.glass;
+  document.getElementById('p2-count-papyrus').textContent = p2.resources.papyrus;
+  document.getElementById('p2-count-wild').textContent = p2.wildResources;
+
+  // 연쇄 심볼 렌더링
+  renderChainsDisplay(1);
+  renderChainsDisplay(2);
+
+  // 군사 트랙 토큰 위치
+  const milVal = Math.max(-9, Math.min(9, gameState.militaryTrack));
+  const percentage = 50 + (milVal / 9) * 46;
+  document.getElementById('military-token').style.left = `${percentage}%`;
+
+  let statusDesc = `현재 트랙: <strong>${milVal > 0 ? '+' + milVal : milVal}</strong> `;
+  if (milVal > 0) statusDesc += `(P1 방면으로 ${milVal}칸 우세)`;
+  else if (milVal < 0) statusDesc += `(P2 방면으로 ${Math.abs(milVal)}칸 우세)`;
+  else statusDesc += `(완전한 중립)`;
+  document.getElementById('military-status-desc').innerHTML = statusDesc;
+
+  // 약탈 토큰 상태 반영
+  document.getElementById('loot-p2-6').className = `loot-token p2-side ${gameState.lootTokens.p2_6 ? 'triggered' : ''}`;
+  document.getElementById('loot-p2-3').className = `loot-token p2-side ${gameState.lootTokens.p2_3 ? 'triggered' : ''}`;
+  document.getElementById('loot-p1-3').className = `loot-token p1-side ${gameState.lootTokens.p1_3 ? 'triggered' : ''}`;
+  document.getElementById('loot-p1-6').className = `loot-token p1-side ${gameState.lootTokens.p1_6 ? 'triggered' : ''}`;
+
+  // 턴 박스 활성화
+  if (gameState.turn === 1) {
+    document.getElementById('p1-stat-box').classList.add('active-turn');
+    document.getElementById('p2-stat-box').classList.remove('active-turn');
+  } else {
+    document.getElementById('p1-stat-box').classList.remove('active-turn');
+    document.getElementById('p2-stat-box').classList.add('active-turn');
+  }
+
+  // 7개 완공 현황
+  document.getElementById('total-wonders-built-count').textContent = gameState.totalWondersBuilt;
+}
+
+function renderChainsDisplay(playerNum) {
+  const p = gameState.players[playerNum];
+  const container = document.getElementById(`p${playerNum}-chains-wrap`);
+  container.innerHTML = '';
+
+  if (p.chains.size === 0 && p.progressTokens.length === 0) {
+    container.innerHTML = `<span style="font-size: 0.72rem; color: var(--text-muted);">보유 심볼 없음</span>`;
+    return;
+  }
+
+  p.chains.forEach(c => {
+    const chip = document.createElement('span');
+    chip.className = 'chain-tag-chip';
+    chip.innerHTML = `${getChainIcon(c)} ${c}`;
+    container.appendChild(chip);
+  });
+
+  p.progressTokens.forEach(t => {
+    const chip = document.createElement('span');
+    chip.className = 'chain-tag-chip';
+    chip.style.background = '#F0FFF4';
+    chip.style.borderColor = '#68D391';
+    chip.style.color = '#22543D';
+    chip.innerHTML = `${t.icon} ${t.name.split(' ')[0]}`;
+    container.appendChild(chip);
+  });
+}
+
+function getChainIcon(symbol) {
+  const icons = {
+    sword: "⚔️", tower: "🗼", gear: "⚙️", mortar: "🧪", book: "📖",
+    mask: "🎭", moon: "🌙", drop: "💧", jar: "🏺", horseshoe: "🐎",
+    target: "🎯", pillar: "🏛️", sun: "☀️", harp: "🎵"
+  };
+  return icons[symbol] || "🔗";
+}
+
+function updateTurnBanner() {
+  const bannerText = document.getElementById('turn-display-text');
+  const ageBadge = document.getElementById('current-age-badge');
+  
+  if (gameState.phase === 'draft') {
+    ageBadge.textContent = "초반 드래프트";
+    const picker = gameState.draft.activePicker === 1 ? "플레이어 1 (정종환)" : (gameState.mode === 'ai' ? "AI 봇" : "플레이어 2");
+    bannerText.textContent = `🏛️ 불가사의 드래프트 단계: [${picker}]의 선택 차례입니다.`;
+    return;
+  }
+
+  ageBadge.textContent = `제 ${gameState.currentAge} 시대 (Age ${getRomanNumeral(gameState.currentAge)})`;
+
+  if (gameState.isGameOver) {
+    bannerText.textContent = "🏆 게임이 종료되었습니다.";
+    return;
+  }
+
+  if (gameState.turn === 1) {
+    bannerText.textContent = "🚩 플레이어 1 (정종환)의 턴입니다.";
+  } else {
+    if (gameState.mode === 'ai') {
+      bannerText.textContent = "🤖 AI 봇이 교역 비용과 최적의 수를 분석하고 있습니다...";
+    } else {
+      bannerText.textContent = "🚩 플레이어 2의 턴입니다.";
+    }
+  }
+}
+
+function getRomanNumeral(num) {
+  if (num === 1) return 'I';
+  if (num === 2) return 'II';
+  return 'III';
+}
+
+// 20장 피라미드 보드 렌더링
+function renderPyramid() {
+  const board = document.getElementById('pyramid-board');
+  board.innerHTML = '';
+
+  // 행(Row)별 그룹화
+  const maxRow = Math.max(...gameState.pyramid.map(n => n.row));
+
+  for (let r = 0; r <= maxRow; r++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'pyramid-row';
+
+    const rowNodes = gameState.pyramid.filter(n => n.row === r);
+    rowNodes.forEach(node => {
+      const cardEl = document.createElement('div');
+      cardEl.className = 'duel-card';
+      cardEl.id = node.id;
+
+      if (node.isTaken) {
+        cardEl.classList.add('taken');
+      } else if (!node.isFaceUp) {
+        cardEl.classList.add('face-down', 'covered');
+        cardEl.innerHTML = `
+          <div class="face-down-emblem">
+            <i class="fa-solid fa-lock"></i>
           </div>
         `;
+      } else {
+        const isAccessible = isNodeAccessible(node);
+        if (isAccessible) {
+          cardEl.classList.add('accessible', `card-type-${node.card.type}`);
+          cardEl.addEventListener('click', () => onCardClicked(node));
+        } else {
+          cardEl.classList.add('covered', `card-type-${node.card.type}`);
+        }
+
+        // 연쇄 무료 건설 가능 여부 사전 체크
+        const tradeInfo = calculateTradeCost(gameState.turn, node.card);
+        let chainBadgeHtml = "";
+        if (tradeInfo.isChainFree) {
+          chainBadgeHtml = `<div class="free-chain-indicator"><i class="fa-solid fa-link"></i> 무료!</div>`;
+        } else if (node.card.chainReq) {
+          chainBadgeHtml = `<div class="chain-symbol-indicator" title="연쇄 필요: ${node.card.chainReq}">${getChainIcon(node.card.chainReq)}</div>`;
+        }
+
+        // 자원 비용 표시
+        let costHtml = "";
+        if (node.card.cost > 0) {
+          costHtml = `<span class="card-photo-cost">${node.card.cost}🪙</span>`;
+        } else if (node.card.req && Object.keys(node.card.req).length > 0) {
+          let resIcons = Object.keys(node.card.req).map(r => `${getResourceEmoji(r)}${node.card.req[r]}`).join(' ');
+          costHtml = `<span class="card-photo-cost" style="font-size:0.62rem;">${resIcons}</span>`;
+        } else {
+          costHtml = `<span class="card-photo-cost free">무료</span>`;
+        }
+
+        let typeIcon = "fa-landmark";
+        if (node.card.type === 'military') typeIcon = "fa-shield";
+        else if (node.card.type === 'science') typeIcon = "fa-flask";
+        else if (node.card.type === 'civic') typeIcon = "fa-trophy";
+        else if (node.card.type === 'commerce') typeIcon = "fa-coins";
+        else if (node.card.type === 'resource' || node.card.type === 'manufactured') typeIcon = "fa-cubes";
+        else if (node.card.type === 'guild') typeIcon = "fa-crown";
+
+        cardEl.innerHTML = `
+          <div class="card-photo-header">
+            <img src="${node.card.img}" alt="${node.card.name}" loading="lazy">
+            ${costHtml}
+            <span class="card-photo-type-badge"><i class="fa-solid ${typeIcon}"></i></span>
+            ${chainBadgeHtml}
+          </div>
+          <div class="card-body-content">
+            <div class="card-title">${node.card.name}</div>
+            <div class="card-benefit-badge">${getCardBenefitSummary(node.card)}</div>
+          </div>
+        `;
+      }
+
+      rowDiv.appendChild(cardEl);
+    });
+
+    board.appendChild(rowDiv);
+  }
+}
+
+function getResourceEmoji(r) {
+  if (r === 'wood') return '🪵';
+  if (r === 'stone') return '🪨';
+  if (r === 'clay') return '🧱';
+  if (r === 'glass') return '🍷';
+  if (r === 'papyrus') return '📜';
+  return r;
+}
+
+function getCardBenefitSummary(card) {
+  if (card.shield) return `군사 방패 +${card.shield}`;
+  if (card.symbol) return `과학 (${card.symbol})`;
+  if (card.vp) return `승점 +${card.vp}점`;
+  if (card.produce) {
+    let p = Object.keys(card.produce).map(r => `${getResourceEmoji(r)}x${card.produce[r]}`).join(' ');
+    return `생산: ${p}`;
+  }
+  if (card.wild) return `와일드 자원 +1`;
+  if (card.coins) return `코인 +${card.coins}개`;
+  if (card.discount) return `${card.discount} 교역 할인`;
+  if (card.type === 'guild') return `길드 보너스 점수`;
+  return '특수 효과';
+}
+
+function isNodeAccessible(node) {
+  if (node.isTaken || !node.isFaceUp) return false;
+  return node.coveredBy.every(childId => {
+    const childNode = gameState.pyramid.find(n => n.id === childId);
+    return !childNode || childNode.isTaken;
+  });
+}
+
+function renderWonders() {
+  const container = document.getElementById('wonders-grid');
+  container.innerHTML = '';
+
+  if (gameState.wonders.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 20px;">
+        상단의 불가사의 드래프트 단계를 완료하면 획득한 불가사의들이 이곳에 배치됩니다.
+      </div>
+    `;
+    return;
+  }
+
+  gameState.wonders.forEach(w => {
+    const isAbandoned = !w.built && gameState.totalWondersBuilt >= 7;
+    const el = document.createElement('div');
+    el.className = `wonder-card ${w.built ? 'built' : ''} ${isAbandoned ? 'abandoned' : ''}`;
+    
+    let resIcons = Object.keys(w.req || {}).map(r => `${getResourceEmoji(r)}${w.req[r]}`).join(' ');
+
+    el.innerHTML = `
+      <img src="${w.img}" alt="${w.name}" class="wonder-card-img" loading="lazy">
+      <div class="wonder-card-body">
+        <div class="wonder-card-top">
+          <span class="wonder-owner-tag">소유: ${w.owner === 1 ? 'P1' : 'P2/AI'}</span>
+          <span class="wonder-cost">${resIcons}</span>
+        </div>
+        <div class="wonder-name">
+          <i class="fa-solid fa-monument" style="color: #8E44AD;"></i>
+          <span>${w.name}</span>
+        </div>
+        <p class="wonder-benefit">${w.desc}</p>
+        ${w.built ? '<span class="wonder-stamp"><i class="fa-solid fa-check"></i> 건설 완료</span>' : ''}
+        ${isAbandoned ? '<span class="wonder-stamp" style="color:#718096; background:#EDF2F7;"><i class="fa-solid fa-ban"></i> 7개 완공으로 폐기</span>' : ''}
+      </div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+/* --------------------------------------------------------------------------
+   8. 카드 클릭 & 액션 처리 (동적 교역 비용 반영)
+   -------------------------------------------------------------------------- */
+function onCardClicked(node) {
+  if (gameState.isGameOver || gameState.phase !== 'play') return;
+  if (gameState.mode === 'ai' && gameState.turn === 2) return;
+
+  gameState.selectedCardNode = node;
+  openActionModal(node);
+}
+
+function openActionModal(node) {
+  const modal = document.getElementById('action-modal');
+  const preview = document.getElementById('action-card-preview');
+  const tradeBox = document.getElementById('trade-cost-detail-box');
+  const buildBtn = document.getElementById('btn-action-build');
+  const buildCostText = document.getElementById('action-build-cost-text');
+  const discardCoinsText = document.getElementById('action-discard-coins-text');
+  const wonderBtn = document.getElementById('btn-action-wonder');
+  const wonderCostText = document.getElementById('action-wonder-cost-text');
+
+  const card = node.card;
+  const pNum = gameState.turn;
+  const player = gameState.players[pNum];
+
+  // 1. 카드 미리보기
+  preview.innerHTML = `
+    <div class="preview-card-img-wrap">
+      <img src="${card.img}" alt="${card.name}">
+    </div>
+    <div class="preview-card-info">
+      <h4>${card.name} (${getCardTypeName(card.type)})</h4>
+      <p>효과: <strong>${getCardBenefitSummary(card)}</strong></p>
+    </div>
+  `;
+
+  // 2. 동적 교역 비용 계산
+  const tradeInfo = calculateTradeCost(pNum, card);
+  tradeBox.innerHTML = tradeInfo.detailsText;
+
+  if (tradeInfo.isChainFree) {
+    tradeBox.className = "trade-cost-detail-box free-chain";
+  } else if (tradeInfo.canBuild) {
+    tradeBox.className = "trade-cost-detail-box affordable";
+  } else {
+    tradeBox.className = "trade-cost-detail-box unaffordable";
+  }
+
+  // 건설 버튼 활성화
+  buildBtn.disabled = !tradeInfo.canBuild;
+  buildCostText.textContent = tradeInfo.isChainFree ? "0코인 (무료)" : `${tradeInfo.totalCoinCost} 코인 지불`;
+
+  // 3. 버리기 획득 코인 공식: 2 + 노란색 카드 수
+  const yellowCount = player.builtCards.filter(c => c.type === 'commerce').length;
+  const discardGain = 2 + yellowCount;
+  discardCoinsText.textContent = `+${discardGain} 코인 획득 (기본2 + 상업${yellowCount})`;
+
+  // 4. 불가사의 건설 가능 여부 체크 (7개 제한 포함)
+  const availableWonder = gameState.wonders.find(w => w.owner === pNum && !w.built);
+  if (gameState.totalWondersBuilt >= 7) {
+    wonderBtn.disabled = true;
+    wonderCostText.textContent = "7개 완공 한도 도달";
+  } else if (!availableWonder) {
+    wonderBtn.disabled = true;
+    wonderCostText.textContent = "남은 불가사의 없음";
+  } else {
+    const wonderTrade = calculateTradeCost(pNum, availableWonder);
+    if (wonderTrade.canBuild) {
+      wonderBtn.disabled = false;
+      wonderCostText.textContent = `${availableWonder.name} (${wonderTrade.totalCoinCost} 코인)`;
+    } else {
+      wonderBtn.disabled = true;
+      wonderCostText.textContent = `코인 부족 (${wonderTrade.totalCoinCost}코인 필요)`;
+    }
+  }
+
+  modal.classList.add('active');
+}
+
+function closeActionModal() {
+  document.getElementById('action-modal').classList.remove('active');
+  gameState.selectedCardNode = null;
+}
+
+function getCardTypeName(type) {
+  if (type === 'military') return '군사';
+  if (type === 'science') return '과학';
+  if (type === 'civic') return '시민';
+  if (type === 'commerce') return '상업';
+  if (type === 'resource') return '원자재';
+  if (type === 'manufactured') return '제조품';
+  if (type === 'guild') return '길드';
+  return '일반';
+}
+
+document.getElementById('btn-action-build').addEventListener('click', () => {
+  if (!gameState.selectedCardNode) return;
+  executeCardAction('build', gameState.selectedCardNode);
+  closeActionModal();
+});
+
+document.getElementById('btn-action-discard').addEventListener('click', () => {
+  if (!gameState.selectedCardNode) return;
+  executeCardAction('discard', gameState.selectedCardNode);
+  closeActionModal();
+});
+
+document.getElementById('btn-action-wonder').addEventListener('click', () => {
+  if (!gameState.selectedCardNode) return;
+  executeCardAction('wonder', gameState.selectedCardNode);
+  closeActionModal();
+});
+
+document.getElementById('close-action-modal-btn').addEventListener('click', closeActionModal);
+
+/* --------------------------------------------------------------------------
+   9. 행동 실행 코어 엔진 (자원, 교역, 연쇄, 진보, 약탈, 추가턴)
+   -------------------------------------------------------------------------- */
+function executeCardAction(actionType, node) {
+  const pNum = gameState.turn;
+  const opponentNum = pNum === 1 ? 2 : 1;
+  const player = gameState.players[pNum];
+  const opponent = gameState.players[opponentNum];
+  const card = node.card;
+  let grantRepeatTurn = false;
+
+  if (actionType === 'build') {
+    const tradeInfo = calculateTradeCost(pNum, card);
+    
+    // 코인 지불
+    player.coins -= tradeInfo.totalCoinCost;
+
+    // 상대방이 '경제(Economy)' 진보 토큰을 가지고 있다면, 교역 지불액 전액을 상대가 받음!
+    if (tradeInfo.tradeCoinCost > 0 && opponent.progressTokens.some(t => t.id === 'economy')) {
+      opponent.coins += tradeInfo.tradeCoinCost;
+    }
+
+    // 연쇄 무료 건설 시 '도시계획(Urbanism)' 토큰 효과: 즉시 4코인 획득
+    if (tradeInfo.isChainFree && player.progressTokens.some(t => t.id === 'urbanism')) {
+      player.coins += 4;
+    }
+
+    player.builtCards.push(card);
+
+    // 자원 생산 등록
+    if (card.produce) {
+      for (let r in card.produce) {
+        player.resources[r] = (player.resources[r] || 0) + card.produce[r];
+      }
+    }
+    if (card.wild) {
+      player.wildResources += card.wild;
+    }
+    // 자원 할인 등록
+    if (card.discount) {
+      player.discounts[card.discount] = true;
+    }
+    // 연쇄 심볼 획득
+    if (card.chainProvide) {
+      player.chains.add(card.chainProvide);
+    }
+    // 즉시 코인 획득
+    if (card.coins) {
+      player.coins += card.coins;
+    }
+    // 군사 방패 적용 ('전략' 토큰 보유 시 방패 +1)
+    if (card.shield) {
+      let shieldGained = card.shield;
+      if (player.progressTokens.some(t => t.id === 'strategy')) {
+        shieldGained += 1;
+      }
+      applyMilitaryAdvance(pNum, shieldGained);
+    }
+    // 과학 상징 적용 & 과학 페어 체크
+    if (card.symbol) {
+      player.scienceCounts[card.symbol] = (player.scienceCounts[card.symbol] || 0) + 1;
+      if (player.scienceCounts[card.symbol] === 2) {
+        // 똑같은 과학 상징 2개 도달! 과학 페어 보너스 획득
+        player.sciencePairsClaimed++;
+        triggerProgressTokenChoice(pNum);
+      }
+    }
+
+  } else if (actionType === 'discard') {
+    // 버리기: 2 + 노란색 상업 카드 수
+    const yellowCount = player.builtCards.filter(c => c.type === 'commerce').length;
+    player.coins += (2 + yellowCount);
+
+  } else if (actionType === 'wonder') {
+    const wonder = gameState.wonders.find(w => w.owner === pNum && !w.built);
+    if (wonder && gameState.totalWondersBuilt < 7) {
+      const wonderTrade = calculateTradeCost(pNum, wonder);
+      player.coins -= wonderTrade.totalCoinCost;
+
+      if (wonderTrade.tradeCoinCost > 0 && opponent.progressTokens.some(t => t.id === 'economy')) {
+        opponent.coins += wonderTrade.tradeCoinCost;
+      }
+
+      wonder.built = true;
+      gameState.totalWondersBuilt++;
+
+      if (wonder.coins) player.coins += wonder.coins;
+      if (wonder.destroyCoin) opponent.coins = Math.max(0, opponent.coins - wonder.destroyCoin);
+
+      if (wonder.shield) {
+        let shieldGained = wonder.shield;
+        if (player.progressTokens.some(t => t.id === 'strategy')) shieldGained += 1;
+        applyMilitaryAdvance(pNum, shieldGained);
+      }
+
+      if (wonder.giveProgressToken) {
+        triggerProgressTokenChoice(pNum);
+      }
+
+      // 추가 턴 체크 (원더 고유 repeatTurn 또는 '신학(Theology)' 토큰)
+      if (wonder.repeatTurn || player.progressTokens.some(t => t.id === 'theology')) {
+        grantRepeatTurn = true;
+      }
+    }
+  }
+
+  // 카드 제거 처리
+  node.isTaken = true;
+  updatePyramidAccessibility();
+  renderGameUI();
+
+  // 즉시 승리 조건 판정 (군사 9칸, 과학 6종)
+  if (checkImmediateVictory()) return;
+
+  // 시대 종료 체크
+  const remainingNodes = gameState.pyramid.filter(n => !n.isTaken);
+  if (remainingNodes.length === 0) {
+    handleAgeEnd();
+    return;
+  }
+
+  // 턴 전환 (추가 턴일 경우 유지)
+  if (grantRepeatTurn) {
+    alert(`⚡ [${player.name}] 님이 불가사의 효과로 추가 턴을 한 번 더 진행합니다!`);
+    updateTurnBanner();
+  } else {
+    gameState.turn = (gameState.turn === 1) ? 2 : 1;
+    updateTurnBanner();
+  }
+
+  renderGameUI();
+
+  // AI 턴 실행
+  if (gameState.mode === 'ai' && gameState.turn === 2 && !gameState.isGameOver) {
+    setTimeout(playAITurn, 750);
+  }
+}
+
+// 군사 트랙 전진 및 약탈 토큰 판정
+function applyMilitaryAdvance(pNum, shields) {
+  const prevTrack = gameState.militaryTrack;
+  if (pNum === 1) gameState.militaryTrack += shields;
+  else gameState.militaryTrack -= shields;
+
+  const curTrack = gameState.militaryTrack;
+
+  // P1이 +3, +6 돌파 시 P2 코인 약탈
+  if (pNum === 1) {
+    if (curTrack >= 3 && !gameState.lootTokens.p1_3) {
+      gameState.lootTokens.p1_3 = true;
+      gameState.players[2].coins = Math.max(0, gameState.players[2].coins - 2);
+    }
+    if (curTrack >= 6 && !gameState.lootTokens.p1_6) {
+      gameState.lootTokens.p1_6 = true;
+      gameState.players[2].coins = Math.max(0, gameState.players[2].coins - 5);
+    }
+  } else {
+    // P2가 -3, -6 돌파 시 P1 코인 약탈
+    if (curTrack <= -3 && !gameState.lootTokens.p2_3) {
+      gameState.lootTokens.p2_3 = true;
+      gameState.players[1].coins = Math.max(0, gameState.players[1].coins - 2);
+    }
+    if (curTrack <= -6 && !gameState.lootTokens.p2_6) {
+      gameState.lootTokens.p2_6 = true;
+      gameState.players[1].coins = Math.max(0, gameState.players[1].coins - 5);
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. 진보 토큰 선택 모달 (과학 상징 1쌍 달성 시)
+   -------------------------------------------------------------------------- */
+function triggerProgressTokenChoice(playerNum) {
+  const availableTokens = gameState.progressTokensShelf.filter(t => !t.taken);
+  if (availableTokens.length === 0) return;
+
+  if (playerNum === 2 && gameState.mode === 'ai') {
+    // AI 봇 자동 선택
+    const chosen = availableTokens[0];
+    applyProgressToken(2, chosen);
+    return;
+  }
+
+  // P1 플레이어 모달창 팝업
+  const modal = document.getElementById('progress-select-modal');
+  const list = document.getElementById('progress-choice-list');
+  list.innerHTML = '';
+
+  availableTokens.forEach(token => {
+    const item = document.createElement('div');
+    item.className = 'action-choice-btn wonder';
+    item.style.background = '#F0FFF4';
+    item.style.borderColor = '#68D391';
+    item.style.color = '#22543D';
+    item.innerHTML = `
+      <div>
+        <strong>${token.icon} ${token.name}</strong>
+        <div style="font-size:0.8rem; font-weight:normal; margin-top:2px;">${token.desc}</div>
+      </div>
+      <i class="fa-solid fa-check"></i>
+    `;
+    item.addEventListener('click', () => {
+      applyProgressToken(1, token);
+      modal.classList.remove('active');
+    });
+    list.appendChild(item);
+  });
+
+  modal.classList.add('active');
+}
+
+function applyProgressToken(playerNum, token) {
+  token.taken = true;
+  const p = gameState.players[playerNum];
+  p.progressTokens.push(token);
+
+  if (token.coins) p.coins += token.coins;
+  if (token.symbol) {
+    p.scienceCounts[token.symbol] = (p.scienceCounts[token.symbol] || 0) + 1;
+  }
+
+  renderGameUI();
+  checkImmediateVictory();
+}
+
+/* --------------------------------------------------------------------------
+   11. 시대 종료 & 선 플레이어 결정 & 승리 판정
+   -------------------------------------------------------------------------- */
+function handleAgeEnd() {
+  if (gameState.currentAge < 3) {
+    const nextAge = gameState.currentAge + 1;
+    gameState.currentAge = nextAge;
+
+    // 선 플레이어 공식 룰 결정:
+    // 군사 트랙에서 뒤처지고 있는 플레이어가 다음 시대의 첫 턴(선)을 갖는다!
+    // 동점(0)일 경우 직전 턴을 마친 플레이어가 계속 첫 턴을 함.
+    let nextTurn = 1;
+    if (gameState.militaryTrack > 0) {
+      nextTurn = 2; // P1이 앞서고 있으므로 P2가 선
+    } else if (gameState.militaryTrack < 0) {
+      nextTurn = 1; // P2가 앞서고 있으므로 P1이 선
+    } else {
+      nextTurn = gameState.turn;
+    }
+
+    gameState.turn = nextTurn;
+    gameState.pyramid = buildPyramidForAge(nextAge);
+    updatePyramidAccessibility();
+
+    alert(`🏛️ 제 ${nextAge - 1}시대가 종료되었습니다! 군사 트랙 상황에 따라 [${gameState.players[nextTurn].name}] 님이 제 ${nextAge}시대의 선 플레이어로 시작합니다.`);
+
+    renderGameUI();
+
+    if (gameState.mode === 'ai' && gameState.turn === 2) {
+      setTimeout(playAITurn, 750);
+    }
+  } else {
+    // 3시대 종료 -> 최종 승점 집계 (시민 승리)
+    endGameByCivilianVictory();
+  }
+}
+
+function checkImmediateVictory() {
+  // 1. 군사 우위 승리
+  if (gameState.militaryTrack >= 9) {
+    showVictoryModal("플레이어 1 (정종환) 승리!", "군사 트랙 끝에 도달하여 상대 수도를 점령했습니다! (군사 우위 승리 🛡️)");
+    return true;
+  } else if (gameState.militaryTrack <= -9) {
+    showVictoryModal(gameState.mode === 'ai' ? "AI 봇 승리!" : "플레이어 2 승리!", "상대방이 군사 트랙 끝에 도달하여 수도가 함락되었습니다. (군사 우위 패배 🛡️)");
+    return true;
+  }
+
+  // 2. 과학 우위 승리 (서로 다른 과학 상징 6종 달성)
+  const p1Unique = Object.keys(gameState.players[1].scienceCounts).filter(k => gameState.players[1].scienceCounts[k] > 0).length;
+  const p2Unique = Object.keys(gameState.players[2].scienceCounts).filter(k => gameState.players[2].scienceCounts[k] > 0).length;
+
+  if (p1Unique >= 6) {
+    showVictoryModal("플레이어 1 (정종환) 승리!", "서로 다른 6종의 과학 상징을 모두 완성했습니다! (과학 우위 승리 🌐)");
+    return true;
+  } else if (p2Unique >= 6) {
+    showVictoryModal(gameState.mode === 'ai' ? "AI 봇 승리!" : "플레이어 2 승리!", "상대가 서로 다른 6종의 과학 상징을 먼저 완성했습니다. (과학 우위 패배 🌐)");
+    return true;
+  }
+
+  return false;
+}
+
+function calculatePlayerVP(playerNum) {
+  const p = gameState.players[playerNum];
+  const opp = gameState.players[playerNum === 1 ? 2 : 1];
+  let vp = 0;
+
+  // 1. 카드 건물 순수 VP
+  p.builtCards.forEach(c => {
+    if (c.vp) vp += c.vp;
+  });
+
+  // 2. 완공된 불가사의 VP
+  gameState.wonders.filter(w => w.owner === playerNum && w.built).forEach(w => {
+    vp += (w.vp || 0);
+  });
+
+  // 3. 진보 토큰 VP (농업, 철학, 수학 토큰당 3점 등)
+  p.progressTokens.forEach(t => {
+    if (t.vp) vp += t.vp;
+    if (t.vpPerToken) vp += (t.vpPerToken * p.progressTokens.length);
+  });
+
+  // 4. 코인 환산 VP (3코인당 1VP)
+  vp += Math.floor(p.coins / 3);
+
+  // 5. 군사 트랙 우위 점수
+  const mil = gameState.militaryTrack;
+  if (playerNum === 1 && mil > 0) {
+    if (mil >= 6) vp += 10;
+    else if (mil >= 3) vp += 5;
+    else if (mil >= 1) vp += 2;
+  } else if (playerNum === 2 && mil < 0) {
+    const absM = Math.abs(mil);
+    if (absM >= 6) vp += 10;
+    else if (absM >= 3) vp += 5;
+    else if (absM >= 1) vp += 2;
+  }
+
+  // 6. 길드 카드 점수
+  p.builtCards.filter(c => c.type === 'guild').forEach(g => {
+    if (g.evalVp) {
+      vp += g.evalVp(p, opp, gameState.wonders);
+    }
+  });
+
+  return vp;
+}
+
+function endGameByCivilianVictory() {
+  const p1VP = calculatePlayerVP(1);
+  const p2VP = calculatePlayerVP(2);
+
+  let winnerText = "";
+  let reasonText = "";
+
+  if (p1VP > p2VP) {
+    winnerText = "플레이어 1 (정종환) 승리!";
+    reasonText = `3시대 종료 후 총점 ${p1VP}점 vs ${p2VP}점으로 승리했습니다! (시민 승리 🏛️)`;
+  } else if (p2VP > p1VP) {
+    winnerText = gameState.mode === 'ai' ? "AI 봇 승리!" : "플레이어 2 승리!";
+    reasonText = `3시대 종료 후 총점 ${p2VP}점 vs ${p1VP}점으로 상대가 승리했습니다. (시민 승리 🏛️)`;
+  } else {
+    winnerText = "무승부 (Draw)!";
+    reasonText = `총점 ${p1VP}점 대 ${p2VP}점으로 팽팽한 명승부를 기록했습니다!`;
+  }
+
+  showVictoryModal(winnerText, reasonText);
+}
+
+function showVictoryModal(title, reason) {
+  gameState.isGameOver = true;
+
+  document.getElementById('victory-title').textContent = title;
+  document.getElementById('victory-reason').textContent = reason;
+
+  const p1 = gameState.players[1];
+  const p2 = gameState.players[2];
+
+  const p1CardsVP = p1.builtCards.reduce((acc, c) => acc + (c.vp || 0), 0) + gameState.wonders.filter(w=>w.owner===1&&w.built).reduce((acc,w)=>acc+w.vp, 0);
+  const p2CardsVP = p2.builtCards.reduce((acc, c) => acc + (c.vp || 0), 0) + gameState.wonders.filter(w=>w.owner===2&&w.built).reduce((acc,w)=>acc+w.vp, 0);
+
+  const p1GuildVP = p1.builtCards.filter(c=>c.type==='guild').reduce((acc,g)=>acc + (g.evalVp ? g.evalVp(p1,p2,gameState.wonders) : 0), 0);
+  const p2GuildVP = p2.builtCards.filter(c=>c.type==='guild').reduce((acc,g)=>acc + (g.evalVp ? g.evalVp(p2,p1,gameState.wonders) : 0), 0);
+
+  const p1ProgVP = p1.progressTokens.reduce((acc, t) => acc + (t.vp || 0) + (t.vpPerToken ? t.vpPerToken * p1.progressTokens.length : 0), 0);
+  const p2ProgVP = p2.progressTokens.reduce((acc, t) => acc + (t.vp || 0) + (t.vpPerToken ? t.vpPerToken * p2.progressTokens.length : 0), 0);
+
+  const p1CoinVP = Math.floor(p1.coins / 3);
+  const p2CoinVP = Math.floor(p2.coins / 3);
+
+  let p1MilVP = 0;
+  let p2MilVP = 0;
+  if (gameState.militaryTrack > 0) {
+    if (gameState.militaryTrack >= 6) p1MilVP = 10;
+    else if (gameState.militaryTrack >= 3) p1MilVP = 5;
+    else p1MilVP = 2;
+  } else if (gameState.militaryTrack < 0) {
+    const absM = Math.abs(gameState.militaryTrack);
+    if (absM >= 6) p2MilVP = 10;
+    else if (absM >= 3) p2MilVP = 5;
+    else p2MilVP = 2;
+  }
+
+  document.getElementById('final-p1-cards-vp').textContent = `${p1CardsVP}점`;
+  document.getElementById('final-p2-cards-vp').textContent = `${p2CardsVP}점`;
+  document.getElementById('final-p1-guild-vp').textContent = `${p1GuildVP}점`;
+  document.getElementById('final-p2-guild-vp').textContent = `${p2GuildVP}점`;
+  document.getElementById('final-p1-prog-vp').textContent = `${p1ProgVP}점`;
+  document.getElementById('final-p2-prog-vp').textContent = `${p2ProgVP}점`;
+  document.getElementById('final-p1-coins-vp').textContent = `${p1CoinVP}점 (${p1.coins}🪙)`;
+  document.getElementById('final-p2-coins-vp').textContent = `${p2CoinVP}점 (${p2.coins}🪙)`;
+  document.getElementById('final-p1-mil-vp').textContent = `${p1MilVP}점`;
+  document.getElementById('final-p2-mil-vp').textContent = `${p2MilVP}점`;
+
+  document.getElementById('final-p1-total').textContent = `${calculatePlayerVP(1)}점`;
+  document.getElementById('final-p2-total').textContent = `${calculatePlayerVP(2)}점`;
+
+  document.getElementById('table-p2-header').textContent = gameState.mode === 'ai' ? 'AI 봇' : 'P2';
+
+  document.getElementById('victory-modal').classList.add('active');
+}
+
+/* --------------------------------------------------------------------------
+   12. 스마트 AI 봇 결정 엔진 (교역 비용, 연쇄, 군사/과학 승리 및 방어)
+   -------------------------------------------------------------------------- */
+function playAITurn() {
+  if (gameState.isGameOver || gameState.phase !== 'play') return;
+
+  const aiPlayer = gameState.players[2];
+  const human = gameState.players[1];
+  const accessibleNodes = gameState.pyramid.filter(isNodeAccessible);
+
+  if (accessibleNodes.length === 0) return;
+
+  let bestNode = accessibleNodes[0];
+  let bestAction = 'discard';
+  let highestScore = -99999;
+
+  accessibleNodes.forEach(node => {
+    const card = node.card;
+    const trade = calculateTradeCost(2, card);
+
+    // 1. 군사 우위 승리 가능한 카드?
+    if (card.shield && (gameState.militaryTrack - card.shield) <= -9 && trade.canBuild) {
+      bestNode = node;
+      bestAction = 'build';
+      highestScore = 100000;
+      return;
+    }
+
+    // 2. 과학 6종 완성 즉시 승리 가능한 카드?
+    if (card.symbol && aiPlayer.scienceCounts[card.symbol] === 0) {
+      const uniqueCount = Object.keys(aiPlayer.scienceCounts).filter(k => aiPlayer.scienceCounts[k] > 0).length;
+      if (uniqueCount === 5 && trade.canBuild) {
+        bestNode = node;
+        bestAction = 'build';
+        highestScore = 90000;
         return;
       }
-
-      gameState.wonders.forEach(w => {
-        const wonderEl = document.createElement('div');
-        wonderEl.className = `wonder-card ${w.built ? 'built' : ''}`;
-        
-        wonderEl.innerHTML = `
-          <img src="${w.img}" alt="${w.name}" class="wonder-card-img" loading="lazy">
-          <div class="wonder-card-body">
-            <div class="wonder-card-top">
-              <span class="wonder-owner-tag">소유: ${w.owner === 1 ? 'P1' : 'P2/AI'}</span>
-              <span class="wonder-cost">${w.cost} 코인</span>
-            </div>
-            <div class="wonder-name">
-              <i class="fa-solid fa-monument" style="color: #8E44AD;"></i>
-              <span>${w.name}</span>
-            </div>
-            <p class="wonder-benefit">${w.desc}</p>
-            ${w.built ? '<span class="wonder-stamp"><i class="fa-solid fa-check"></i> 건설 완료</span>' : ''}
-          </div>
-        `;
-        wondersContainer.appendChild(wonderEl);
-      });
     }
 
-    function calculatePlayerVP(playerNum) {
-      const p = gameState.players[playerNum];
-      let vp = 0;
-
-      p.builtCards.forEach(c => {
-        if (c.vp) vp += c.vp;
-      });
-
-      gameState.wonders.filter(w => w.owner === playerNum && w.built).forEach(w => {
-        vp += w.vp;
-      });
-
-      vp += Math.floor(p.coins / 3);
-
-      const mil = gameState.militaryTrack;
-      if (playerNum === 1 && mil > 0) {
-        if (mil >= 6) vp += 10;
-        else if (mil >= 3) vp += 5;
-        else if (mil >= 1) vp += 2;
-      } else if (playerNum === 2 && mil < 0) {
-        const absMil = Math.abs(mil);
-        if (absMil >= 6) vp += 10;
-        else if (absMil >= 3) vp += 5;
-        else if (absMil >= 1) vp += 2;
-      }
-
-      return vp;
+    // 3. 상대 군사 승리 결사 방어
+    if (gameState.militaryTrack >= 6 && card.shield && trade.canBuild) {
+      let score = 5000 + card.shield * 1000;
+      if (score > highestScore) { highestScore = score; bestNode = node; bestAction = 'build'; }
     }
 
-    /* --------------------------------------------------------------------------
-       5. 카드 액션 모달 & 플레이 실행
-       -------------------------------------------------------------------------- */
-    function onCardClicked(node) {
-      if (gameState.isGameOver || gameState.phase !== 'play') return;
-      if (gameState.mode === 'ai' && gameState.turn === 2) return;
-
-      gameState.selectedCardNode = node;
-      openActionModal(node);
-    }
-
-    function openActionModal(node) {
-      const modal = document.getElementById('action-modal');
-      const preview = document.getElementById('action-card-preview');
-      const buildBtn = document.getElementById('btn-action-build');
-      const buildCostText = document.getElementById('action-build-cost-text');
-      const wonderBtn = document.getElementById('btn-action-wonder');
-      const wonderCostText = document.getElementById('action-wonder-cost-text');
-
-      const card = node.card;
-      const player = gameState.players[gameState.turn];
-
-      preview.innerHTML = `
-        <div class="preview-card-img-wrap">
-          <img src="${card.img}" alt="${card.name}">
-        </div>
-        <div class="preview-card-info">
-          <h4>${card.name} (${getCardTypeName(card.type)})</h4>
-          <p>효과: <strong>${getCardBenefitSummary(card)}</strong> / 비용: <strong>${card.cost === 0 ? '무료' : card.cost + ' 코인'}</strong></p>
-        </div>
-      `;
-
-      if (player.coins >= card.cost) {
-        buildBtn.disabled = false;
-        buildCostText.textContent = `${card.cost} 코인 지불`;
-      } else {
-        buildBtn.disabled = true;
-        buildCostText.textContent = `코인 부족 (${card.cost} 필요)`;
-      }
-
-      const availableWonder = gameState.wonders.find(w => w.owner === gameState.turn && !w.built);
-      if (availableWonder && player.coins >= availableWonder.cost) {
-        wonderBtn.disabled = false;
-        wonderCostText.textContent = `${availableWonder.name} (${availableWonder.cost} 코인)`;
-      } else if (availableWonder) {
-        wonderBtn.disabled = true;
-        wonderCostText.textContent = `코인 부족 (${availableWonder.cost} 필요)`;
-      } else {
-        wonderBtn.disabled = true;
-        wonderCostText.textContent = `모든 불가사의 완료`;
-      }
-
-      modal.classList.add('active');
-    }
-
-    function closeActionModal() {
-      document.getElementById('action-modal').classList.remove('active');
-      gameState.selectedCardNode = null;
-    }
-
-    function getCardTypeName(type) {
-      if (type === 'military') return '군사';
-      if (type === 'science') return '과학';
-      if (type === 'civic') return '시민';
-      if (type === 'commerce') return '상업';
-      return '자원';
-    }
-
-    document.getElementById('btn-action-build').addEventListener('click', () => {
-      if (!gameState.selectedCardNode) return;
-      executeCardAction('build', gameState.selectedCardNode);
-      closeActionModal();
-    });
-
-    document.getElementById('btn-action-discard').addEventListener('click', () => {
-      if (!gameState.selectedCardNode) return;
-      executeCardAction('discard', gameState.selectedCardNode);
-      closeActionModal();
-    });
-
-    document.getElementById('btn-action-wonder').addEventListener('click', () => {
-      if (!gameState.selectedCardNode) return;
-      executeCardAction('wonder', gameState.selectedCardNode);
-      closeActionModal();
-    });
-
-    document.getElementById('close-action-modal-btn').addEventListener('click', closeActionModal);
-
-    function executeCardAction(actionType, node) {
-      const pNum = gameState.turn;
-      const player = gameState.players[pNum];
-      const card = node.card;
-
-      if (actionType === 'build') {
-        player.coins -= card.cost;
-        player.builtCards.push(card);
-
-        if (card.shield) {
-          if (pNum === 1) gameState.militaryTrack += card.shield;
-          else gameState.militaryTrack -= card.shield;
-        }
-        if (card.symbol) {
-          player.science.add(card.symbol);
-        }
-        if (card.coins) {
-          player.coins += card.coins;
-        }
-      } else if (actionType === 'discard') {
-        player.coins += 2;
-      } else if (actionType === 'wonder') {
-        const wonder = gameState.wonders.find(w => w.owner === pNum && !w.built);
-        if (wonder) {
-          player.coins -= wonder.cost;
-          wonder.built = true;
-          if (wonder.shield) {
-            if (pNum === 1) gameState.militaryTrack += wonder.shield;
-            else gameState.militaryTrack -= wonder.shield;
-          }
-          if (wonder.coins) {
-            player.coins += wonder.coins;
-          }
-        }
-      }
-
-      node.isTaken = true;
-      updatePyramidAccessibility();
-      renderGameUI();
-
-      if (checkImmediateVictory()) return;
-
-      const remainingCards = gameState.pyramid.filter(n => !n.isTaken);
-      if (remainingCards.length === 0) {
-        if (gameState.currentAge < 3) {
-          gameState.currentAge++;
-          gameState.pyramid = buildPyramidStructure(gameState.currentAge);
-          updatePyramidAccessibility();
-          renderGameUI();
-        } else {
-          endGameByCivilianVictory();
-          return;
-        }
-      }
-
-      gameState.turn = (gameState.turn === 1) ? 2 : 1;
-      renderGameUI();
-
-      if (gameState.mode === 'ai' && gameState.turn === 2 && !gameState.isGameOver) {
-        setTimeout(playAITurn, 700);
-      }
-    }
-
-    /* --------------------------------------------------------------------------
-       6. AI 봇 엔진 (Heuristic Evaluation)
-       -------------------------------------------------------------------------- */
-    function playAITurn() {
-      if (gameState.isGameOver || gameState.phase !== 'play') return;
-
-      const aiPlayer = gameState.players[2];
-      const accessibleNodes = gameState.pyramid.filter(isNodeAccessible);
-
-      if (accessibleNodes.length === 0) return;
-
-      let bestNode = accessibleNodes[0];
-      let bestAction = 'discard';
-      let highestScore = -9999;
-
-      accessibleNodes.forEach(node => {
-        const card = node.card;
-
-        if (card.shield && (gameState.militaryTrack - card.shield) <= -9 && aiPlayer.coins >= card.cost) {
+    // 4. 불가사의 건설 가능한지 체크
+    const availWonder = gameState.wonders.find(w => w.owner === 2 && !w.built);
+    if (availWonder && gameState.totalWondersBuilt < 7) {
+      const wonderTrade = calculateTradeCost(2, availWonder);
+      if (wonderTrade.canBuild) {
+        let wonderScore = 400 + (availWonder.repeatTurn ? 800 : 0) + (availWonder.vp || 0) * 100;
+        if (wonderScore > highestScore) {
+          highestScore = wonderScore;
           bestNode = node;
-          bestAction = 'build';
-          highestScore = 10000;
-          return;
+          bestAction = 'wonder';
         }
-
-        if (card.symbol && !aiPlayer.science.has(card.symbol) && aiPlayer.science.size === 5 && aiPlayer.coins >= card.cost) {
-          bestNode = node;
-          bestAction = 'build';
-          highestScore = 9000;
-          return;
-        }
-
-        if (card.shield && gameState.militaryTrack >= 6 && aiPlayer.coins >= card.cost) {
-          const score = 500;
-          if (score > highestScore) { highestScore = score; bestNode = node; bestAction = 'build'; }
-        }
-
-        const availableWonder = gameState.wonders.find(w => w.owner === 2 && !w.built);
-        if (availableWonder && aiPlayer.coins >= availableWonder.cost) {
-          const wonderScore = 120 + availableWonder.vp * 10;
-          if (wonderScore > highestScore) {
-            highestScore = wonderScore;
-            bestNode = node;
-            bestAction = 'wonder';
-          }
-        }
-
-        if (aiPlayer.coins >= card.cost) {
-          let buildScore = 20;
-          if (card.shield) buildScore += card.shield * 40;
-          if (card.symbol && !aiPlayer.science.has(card.symbol)) buildScore += 45;
-          if (card.vp) buildScore += card.vp * 15;
-          if (card.coins) buildScore += card.coins * 8;
-          buildScore -= card.cost * 5;
-
-          if (buildScore > highestScore) {
-            highestScore = buildScore;
-            bestNode = node;
-            bestAction = 'build';
-          }
-        } else {
-          const discardScore = 15;
-          if (discardScore > highestScore) {
-            highestScore = discardScore;
-            bestNode = node;
-            bestAction = 'discard';
-          }
-        }
-      });
-
-      executeCardAction(bestAction, bestNode);
-    }
-
-    /* --------------------------------------------------------------------------
-       7. 승리 판정 및 게임 재시작
-       -------------------------------------------------------------------------- */
-    function checkImmediateVictory() {
-      if (gameState.militaryTrack >= 9) {
-        showVictoryModal("플레이어 1 (정종환) 승리!", "군사 트랙 끝에 도달하여 상대 수도를 함락시켰습니다! (군사 우위 승리 🛡️)");
-        return true;
-      } else if (gameState.militaryTrack <= -9) {
-        showVictoryModal(gameState.mode === 'ai' ? "AI 봇 승리!" : "플레이어 2 승리!", "군사 트랙 끝에 도달하여 수도가 점령되었습니다. (군사 우위 패배 🛡️)");
-        return true;
       }
+    }
 
-      if (gameState.players[1].science.size >= 6) {
-        showVictoryModal("플레이어 1 (정종환) 승리!", "서로 다른 6가지 과학 상징을 모두 수집했습니다! (과학 우위 승리 🌐)");
-        return true;
-      } else if (gameState.players[2].science.size >= 6) {
-        showVictoryModal(gameState.mode === 'ai' ? "AI 봇 승리!" : "플레이어 2 승리!", "상대가 서로 다른 6가지 과학 상징을 먼저 완성했습니다. (과학 우위 패배 🌐)");
-        return true;
+    // 5. 일반 건설 점수 평가
+    if (trade.canBuild) {
+      let score = 100;
+      if (trade.isChainFree) score += 300; // 연쇄 무료 우대
+      if (card.produce) score += 250;     // 자원 생산 우대
+      if (card.shield) score += card.shield * 150;
+      if (card.symbol && aiPlayer.scienceCounts[card.symbol] === 1) score += 350; // 과학 페어 완성 진보 토큰 획득 우대
+      if (card.vp) score += card.vp * 50;
+      if (card.coins) score += card.coins * 30;
+      score -= trade.totalCoinCost * 20;
+
+      if (score > highestScore) {
+        highestScore = score;
+        bestNode = node;
+        bestAction = 'build';
       }
-
-      return false;
-    }
-
-    function endGameByCivilianVictory() {
-      const p1VP = calculatePlayerVP(1);
-      const p2VP = calculatePlayerVP(2);
-
-      let winnerText = "";
-      let reasonText = "";
-
-      if (p1VP > p2VP) {
-        winnerText = "플레이어 1 (정종환) 승리!";
-        reasonText = `3시대 종료 후 총점 ${p1VP}점 vs ${p2VP}점으로 승리했습니다! (시민 승리 🏛️)`;
-      } else if (p2VP > p1VP) {
-        winnerText = gameState.mode === 'ai' ? "AI 봇 승리!" : "플레이어 2 승리!";
-        reasonText = `3시대 종료 후 총점 ${p2VP}점 vs ${p1VP}점으로 상대가 승리했습니다. (시민 승리 🏛️)`;
-      } else {
-        winnerText = "무승부 (Draw)!";
-        reasonText = `총점 ${p1VP}점 대 ${p2VP}점으로 팽팽한 명승부를 기록했습니다!`;
+    } else {
+      // 버리기 점수
+      const yellowCount = aiPlayer.builtCards.filter(c => c.type === 'commerce').length;
+      const gainCoins = 2 + yellowCount;
+      let discardScore = 50 + gainCoins * 25;
+      if (discardScore > highestScore) {
+        highestScore = discardScore;
+        bestNode = node;
+        bestAction = 'discard';
       }
-
-      showVictoryModal(winnerText, reasonText);
     }
+  });
 
-    function showVictoryModal(title, reason) {
-      gameState.isGameOver = true;
+  executeCardAction(bestAction, bestNode);
+}
 
-      document.getElementById('victory-title').textContent = title;
-      document.getElementById('victory-reason').textContent = reason;
+/* --------------------------------------------------------------------------
+   13. 게임 초기화 및 이벤트 리스너
+   -------------------------------------------------------------------------- */
+function initNewGame() {
+  gameState.currentAge = 1;
+  gameState.turn = 1;
+  gameState.militaryTrack = 0;
+  gameState.isGameOver = false;
+  gameState.selectedCardNode = null;
+  gameState.totalWondersBuilt = 0;
 
-      const p1 = gameState.players[1];
-      const p2 = gameState.players[2];
+  gameState.lootTokens = { p2_6: false, p2_3: false, p1_3: false, p1_6: false };
 
-      const p1CardVP = p1.builtCards.reduce((acc, c) => acc + (c.vp || 0), 0) + gameState.wonders.filter(w => w.owner === 1 && w.built).reduce((acc, w) => acc + w.vp, 0);
-      const p2CardVP = p2.builtCards.reduce((acc, c) => acc + (c.vp || 0), 0) + gameState.wonders.filter(w => w.owner === 2 && w.built).reduce((acc, w) => acc + w.vp, 0);
+  gameState.players = {
+    1: createPlayerObject("P1 (정종환)"),
+    2: createPlayerObject(gameState.mode === 'ai' ? "AI 봇" : "플레이어 2")
+  };
 
-      const p1CoinVP = Math.floor(p1.coins / 3);
-      const p2CoinVP = Math.floor(p2.coins / 3);
+  document.getElementById('p2-name-label').textContent = gameState.mode === 'ai' ? "AI 봇" : "플레이어 2";
+  document.getElementById('p2-icon').className = gameState.mode === 'ai' ? "fa-solid fa-robot" : "fa-solid fa-user";
 
-      let p1MilVP = 0;
-      let p2MilVP = 0;
-      if (gameState.militaryTrack > 0) {
-        if (gameState.militaryTrack >= 6) p1MilVP = 10;
-        else if (gameState.militaryTrack >= 3) p1MilVP = 5;
-        else p1MilVP = 2;
-      } else if (gameState.militaryTrack < 0) {
-        const absM = Math.abs(gameState.militaryTrack);
-        if (absM >= 6) p2MilVP = 10;
-        else if (absM >= 3) p2MilVP = 5;
-        else p2MilVP = 2;
-      }
+  document.getElementById('victory-modal').classList.remove('active');
+  document.getElementById('action-modal').classList.remove('active');
+  document.getElementById('progress-select-modal').classList.remove('active');
 
-      document.getElementById('final-p1-cards-vp').textContent = `${p1CardVP}점`;
-      document.getElementById('final-p2-cards-vp').textContent = `${p2CardVP}점`;
-      document.getElementById('final-p1-coins-vp').textContent = `${p1CoinVP}점 (${p1.coins}코인)`;
-      document.getElementById('final-p2-coins-vp').textContent = `${p2CoinVP}점 (${p2.coins}코인)`;
-      document.getElementById('final-p1-mil-vp').textContent = `${p1MilVP}점`;
-      document.getElementById('final-p2-mil-vp').textContent = `${p2MilVP}점`;
-      document.getElementById('final-p1-total').textContent = `${calculatePlayerVP(1)}점`;
-      document.getElementById('final-p2-total').textContent = `${calculatePlayerVP(2)}점`;
+  initWonderDraft();
+}
 
-      document.getElementById('table-p2-header').textContent = gameState.mode === 'ai' ? 'AI 봇' : 'P2';
+// 모드 버튼
+document.getElementById('mode-ai-btn').addEventListener('click', () => {
+  document.getElementById('mode-ai-btn').classList.add('active');
+  document.getElementById('mode-pvp-btn').classList.remove('active');
+  gameState.mode = 'ai';
+  initNewGame();
+});
 
-      document.getElementById('victory-modal').classList.add('active');
-    }
+document.getElementById('mode-pvp-btn').addEventListener('click', () => {
+  document.getElementById('mode-pvp-btn').classList.add('active');
+  document.getElementById('mode-ai-btn').classList.remove('active');
+  gameState.mode = 'pvp';
+  initNewGame();
+});
 
-    function initNewGame() {
-      gameState.currentAge = 1;
-      gameState.turn = 1;
-      gameState.militaryTrack = 0;
-      gameState.isGameOver = false;
-      gameState.selectedCardNode = null;
-      gameState.players = {
-        1: { name: "P1 (정종환)", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] },
-        2: { name: gameState.mode === 'ai' ? "AI 봇" : "플레이어 2", coins: 7, vp: 0, military: 0, science: new Set(), builtCards: [] }
-      };
+document.getElementById('game-reset-btn').addEventListener('click', initNewGame);
+document.getElementById('victory-restart-btn').addEventListener('click', initNewGame);
 
-      document.getElementById('p2-name-label').textContent = gameState.mode === 'ai' ? "AI 봇" : "플레이어 2";
-      document.getElementById('p2-icon').className = gameState.mode === 'ai' ? "fa-solid fa-robot" : "fa-solid fa-user";
+// 룰북 모달
+document.getElementById('game-rules-btn').addEventListener('click', () => {
+  document.getElementById('rules-modal').classList.add('active');
+});
+document.getElementById('close-rules-modal-btn').addEventListener('click', () => {
+  document.getElementById('rules-modal').classList.remove('active');
+});
+document.getElementById('rules-confirm-btn').addEventListener('click', () => {
+  document.getElementById('rules-modal').classList.remove('active');
+});
 
-      document.getElementById('victory-modal').classList.remove('active');
-      document.getElementById('action-modal').classList.remove('active');
+// 시작
+initNewGame();
 
-      // 초반 불가사의 드래프트부터 시작!
-      initWonderDraft();
-    }
-
-    // 모드 토글
-    document.getElementById('mode-ai-btn').addEventListener('click', () => {
-      document.getElementById('mode-ai-btn').classList.add('active');
-      document.getElementById('mode-pvp-btn').classList.remove('active');
-      gameState.mode = 'ai';
-      initNewGame();
-    });
-
-    document.getElementById('mode-pvp-btn').addEventListener('click', () => {
-      document.getElementById('mode-pvp-btn').classList.add('active');
-      document.getElementById('mode-ai-btn').classList.remove('active');
-      gameState.mode = 'pvp';
-      initNewGame();
-    });
-
-    document.getElementById('game-reset-btn').addEventListener('click', initNewGame);
-    document.getElementById('victory-restart-btn').addEventListener('click', initNewGame);
-
-    // 룰 모달
-    document.getElementById('game-rules-btn').addEventListener('click', () => {
-      document.getElementById('rules-modal').classList.add('active');
-    });
-    document.getElementById('close-rules-modal-btn').addEventListener('click', () => {
-      document.getElementById('rules-modal').classList.remove('active');
-    });
-    document.getElementById('rules-confirm-btn').addEventListener('click', () => {
-      document.getElementById('rules-modal').classList.remove('active');
-    });
-
-    // 시작 시 새 게임 개시
-    initNewGame();
   </script>
 </body>
 </html>
